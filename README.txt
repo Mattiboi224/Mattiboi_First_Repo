@@ -1,3 +1,3 @@
 This is my repo
 
-I ahev some test stuff in here
+I have some test stuff in here
