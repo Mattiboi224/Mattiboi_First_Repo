@@ -983,7 +983,7 @@ def scoring(points_ranking, move_place, insect_type, new_pos, orig_pos, own_quee
 
         # Win Game
         if len(filled_opp_queen_mat) == 5:
-            points_ranking += 95
+            points_ranking += 500
 
         # Win Game
         if len(filled_opp_queen_mat) == 4:
@@ -994,18 +994,18 @@ def scoring(points_ranking, move_place, insect_type, new_pos, orig_pos, own_quee
             points_ranking += 0
 
         elif len(slideable) - len(slideable_mod) == 1:
-            points_ranking += 10
+            points_ranking += 20
             
         # Blocking a slide
         elif len(slideable) - len(slideable_mod) == 2:
-            points_ranking += 15
+            points_ranking += 35
 
         # Blocking an exit
         elif len(slideable) - len(slideable_mod) == 3:
-            points_ranking += 20
+            points_ranking += 40
 
         else:
-            points_ranking += 25
+            points_ranking += 55
 
     # Move Bettle on a piece which next to the opposing queen!
     if move_place == 1 and new_pos in opp_queen_mat and orig_pos not in opp_queen_mat and insect_type != 'Queen' and new_pos in current_tile_mat:
@@ -1016,7 +1016,7 @@ def scoring(points_ranking, move_place, insect_type, new_pos, orig_pos, own_quee
 
         # Win Game
         if len(filled_opp_queen_mat) == 5:
-            points_ranking += 95
+            points_ranking += 300
 
         # Adding Bonus Point based on location
         if len(slideable) == len(slideable_mod):
@@ -1067,7 +1067,7 @@ def scoring(points_ranking, move_place, insect_type, new_pos, orig_pos, own_quee
 
     # Move a piece that loses the game
     if move_place == 1 and new_pos in own_queen_mat and len(filled_own_queen_mat) == 5:
-        points_ranking += -50
+        points_ranking += -100
 
     #ava_pos_new, final_pos_new, place_move_mat_new, place_move_insect_new, original_position_mat_new = available_moves(game, current_tile_mat, current_bug_mat, opp_tiles, own_tiles, z_p1_tiles, z_p2_tiles, opp_insect_mat, own_insect_mat)
 
@@ -1310,6 +1310,11 @@ def main():
                 print('Grasshopper Bug')
                 print(ava_pos[i])
                 print(current_tile_mat)
+                print(current_bug_mat)
+                print(p1_tiles)
+                print(p2_tiles)
+                print(p1_insect_mat)
+                print(p2_insect_mat)
                 
 
 ## Criteria
@@ -1411,9 +1416,14 @@ def main():
 
             if place_move_mat[m] == 0 and len(ava_pos) <= 100:
                 ava_pos_new, final_pos_new, place_move_mat_new, place_move_insect_new, original_position_mat_new = available_moves(game, current_tile_mat_copy, current_bug_mat, p1_tiles, p2_tiles, z_p1_tiles, z_p2_tiles, p1_insect_mat, p2_insect_mat)
+
+                if game % 2 == 0 and game <= 8 and 'Queen' not in p2_insect_mat:
+                    print('Testing Length of Moves')
+                    print(len(ava_pos_new))
+                    print(len(ava_pos))
             
-                # 5 Extra Positions
-                if len(ava_pos_new) - len(ava_pos) >= 5:
+                # 4 Extra Positions
+                if len(ava_pos_new) - len(ava_pos) >= 4:
                     points_ranking += 5
 
                 # No Real Change
@@ -1481,6 +1491,7 @@ def main():
         print(game)
         print(points[ran_loc])
         print(ran_loc)
+        print(placement)
 
 
         if game == 14:
@@ -1562,30 +1573,15 @@ def main():
             
             if game % 2 == 0:
 
-                if z_p1_tiles.count(0) != len(z_p1_tiles) or z_p2_tiles.count(0) != len(z_p2_tiles):
-                    print(z_p1_tiles)
-                    print(z_p2_tiles)
-                    print(p1_tiles)
-                    print(p2_tiles)
-                    print(p1_insect_mat)
-                    print(p2_insect_mat)
-                    print(current_tile_mat)
-                    
                 insect = place_move_insect[ran_loc]
                 tile = original_position_mat[ran_loc]
                 loc = final_pos[ran_loc]
-
+                
                 for b in range(len(p2_tiles)):
-                    if p2_tiles[b] == tile and p2_insect_mat[b] == insect and z_p2_tiles[b] >= 0:
-
-                        # Update to new location
-                        for c in range(len(current_tile_mat)):
-                            if current_tile_mat[c] == p2_tiles[b] and z_p2_tiles[b] >= 0:
-                                current_tile_mat[c][0] = final_pos[ran_loc][0]
-                                current_tile_mat[c][1] = final_pos[ran_loc][1]                        
+                    if p2_tiles[b] == tile and p2_insect_mat[b] == insect and z_p2_tiles[b] >= 0:               
 
                         # If Beetle going on top of another tile change the z axis
-                        if place_move_insect[ran_loc] == 'Beetle':
+                        if insect == 'Beetle':
 
                             # If Currently on a tile
                             if z_p2_tiles[b] == 1:
@@ -1599,7 +1595,7 @@ def main():
                                         # If not the original_tile cause it's on top
                                         if z_p1_tiles[filled_indicesp1[i]] != 1:
                                             # Determine if it's a stack of 3 or more
-                                            if len(filled_indicesp1) + len(filled_indicesp2) > 3:
+                                            if len(filled_indicesp1) + len(filled_indicesp2) >= 3:
                                                 # Promote the Highest Beetle to be on top
                                                 if z_p1_tiles[filled_indicesp1[i]] == -1:
                                                     z_p1_tiles[filled_indicesp1[i]] = 1
@@ -1617,7 +1613,7 @@ def main():
                                         # If not the original_tile cause it's on top
                                         if z_p2_tiles[filled_indicesp2[i]] != 1:
                                             # Determine if it's a stack of 3 or more
-                                            if len(filled_indicesp1) + len(filled_indicesp2) > 3:
+                                            if len(filled_indicesp1) + len(filled_indicesp2) >= 3:
                                                 # Promote the Highest Beetle to be on top
                                                 if z_p2_tiles[filled_indicesp2[i]] == -1:
                                                     z_p2_tiles[filled_indicesp2[i]] = 1
@@ -1630,11 +1626,11 @@ def main():
 
 
                             # If moving onto something
-                            if final_pos[ran_loc] in p1_tiles or final_pos[ran_loc] in p2_tiles:
+                            if loc in p1_tiles or loc in p2_tiles:
                                 
                                 z_p2_tiles[b] = 1
-                                indicesp1 = [i for i, x in enumerate(p1_tiles) if x == final_pos[ran_loc]]
-                                indicesp2 = [i for i, x in enumerate(p2_tiles) if x == final_pos[ran_loc]]
+                                indicesp1 = [i for i, x in enumerate(p1_tiles) if x == loc]
+                                indicesp2 = [i for i, x in enumerate(p2_tiles) if x == loc]
                                 if len(indicesp1) + len(indicesp2) > 0:
                                     if len(indicesp1) > 0:
                                         for i in range(len(indicesp1)):
@@ -1656,36 +1652,28 @@ def main():
                             # If moving onto empty space
                             else:
                                 z_p2_tiles[b] = 0
-    
-                        p2_tiles[b][0] = final_pos[ran_loc][0]
-                        p2_tiles[b][1] = final_pos[ran_loc][1]
+##                        # Update to new location
+##                        for c in range(len(current_tile_mat)):
+##                            if current_tile_mat[c] == p2_tiles[b] and z_p2_tiles[b] >= 0:
+##                                current_tile_mat[c][0] = loc[0]
+##                                current_tile_mat[c][1] = loc[1]         
+
+                        #Fucked
+                        
+                        p2_tiles[b][0] = loc[0]
+                        p2_tiles[b][1] = loc[1]
 
             elif game % 2 == 1:
 
-                if z_p1_tiles.count(0) != len(z_p1_tiles) or z_p2_tiles.count(0) != len(z_p2_tiles):
-                    print(z_p1_tiles)
-                    print(z_p2_tiles)
-                    print(p1_tiles)
-                    print(p2_tiles)
-                    print(p1_insect_mat)
-                    print(p2_insect_mat)
-                    print(current_tile_mat)
-                    
                 insect = place_move_insect[ran_loc]
                 tile = original_position_mat[ran_loc]
                 loc = final_pos[ran_loc]
 
                 for b in range(len(p1_tiles)):
                     if p1_tiles[b] == tile and p1_insect_mat[b] == insect and z_p1_tiles[b] >= 0:
-                        
-                        # Update to new location
-                        for a in range(len(current_tile_mat)):
-                            if current_tile_mat[a] == p1_tiles[b] and z_p1_tiles[b] >= 0:
-                                current_tile_mat[a][0] = final_pos[ran_loc][0]
-                                current_tile_mat[a][1] = final_pos[ran_loc][1]
 
                         # If Beetle going on top of another tile change the z axis
-                        if place_move_insect[ran_loc] == 'Beetle':
+                        if insect == 'Beetle':
 
                             # If Currently on a tile
                             if z_p1_tiles[b] == 1:
@@ -1699,7 +1687,7 @@ def main():
                                         # If not the original_tile cause it's on top
                                         if z_p1_tiles[filled_indicesp1[i]] != 1:
                                             # Determine if it's a stack of 3 or more
-                                            if len(filled_indicesp1) + len(filled_indicesp2) > 3:
+                                            if len(filled_indicesp1) + len(filled_indicesp2) >= 3:
                                                 # Promote the Highest Beetle to be on top
                                                 if z_p1_tiles[filled_indicesp1[i]] == -1:
                                                     z_p1_tiles[filled_indicesp1[i]] = 1
@@ -1717,7 +1705,7 @@ def main():
                                         # If not the original_tile cause it's on top
                                         if z_p2_tiles[filled_indicesp2[i]] != 1:
                                             # Determine if it's a stack of 3 or more
-                                            if len(filled_indicesp1) + len(filled_indicesp2) > 3:
+                                            if len(filled_indicesp1) + len(filled_indicesp2) >= 3:
                                                 # Promote the Highest Beetle to be on top
                                                 if z_p2_tiles[filled_indicesp2[i]] == -1:
                                                     z_p2_tiles[filled_indicesp2[i]] = 1
@@ -1729,11 +1717,11 @@ def main():
                                                     z_p2_tiles[filled_indicesp2[i]] = 0
 
                             # If moving onto something
-                            if final_pos[ran_loc] in p1_tiles or final_pos[ran_loc] in p2_tiles:
+                            if loc in p1_tiles or loc in p2_tiles:
                                 
                                 z_p1_tiles[b] = 1
-                                indicesp1 = [i for i, x in enumerate(p1_tiles) if x == final_pos[ran_loc]]
-                                indicesp2 = [i for i, x in enumerate(p2_tiles) if x == final_pos[ran_loc]]
+                                indicesp1 = [i for i, x in enumerate(p1_tiles) if x == loc]
+                                indicesp2 = [i for i, x in enumerate(p2_tiles) if x == loc]
                                 if len(indicesp1) + len(indicesp2) > 0:
                                     if len(indicesp1) > 0:
                                         for i in range(len(indicesp1)):
@@ -1756,22 +1744,22 @@ def main():
                             else:
                                 z_p1_tiles[b] = 0                      
 
-                        p1_tiles[b][0] = final_pos[ran_loc][0]
-                        p1_tiles[b][1] = final_pos[ran_loc][1]
+                        
+##                        # Update to new location
+##                        for a in range(len(current_tile_mat)):
+##                            if current_tile_mat[a] == p1_tiles[b]:
+##                                current_tile_mat[a][0] = loc[0]
+##                                current_tile_mat[a][1] = loc[1]
+
+                        p1_tiles[b][0] = loc[0]
+                        p1_tiles[b][1] = loc[1]
 
 
 ##            if p1_insect_mat[pick_a_tile] == 'Grasshopper' or p2_insect_mat[pick_a_tile] == 'Grasshopper':
 ##                time.sleep(2)
             redraw_tiles(p1_tiles, p1_insect_mat, p2_tiles, p2_insect_mat, z_p1_tiles, z_p2_tiles)
 
-            if z_p1_tiles.count(0) != len(z_p1_tiles) or z_p2_tiles.count(0) != len(z_p2_tiles):
-                print(z_p1_tiles)
-                print(z_p2_tiles)
-                print(p1_tiles)
-                print(p2_tiles)
-                print(p1_insect_mat)
-                print(p2_insect_mat)
-                print(current_tile_mat)
+            current_tile_mat = p1_tiles + p2_tiles
 
             #print(game)
             #time.sleep(0.25)
@@ -1792,6 +1780,26 @@ def main():
                 print('Player 1''s Queen is surrounded')
                 
                 break
+
+            if len(open_slot_p1) == 5 or len(open_slot_p2) == 5:
+                print('About to Win')
+                print(current_tile_mat)
+                print('Ava_Pos')
+                print(ava_pos)
+                print('Points')
+                print(points)
+                print('Place_move_mat')
+                print(place_move_mat)
+                print('Place_move_insect')
+                print(place_move_insect)
+                print('Original_position_mat')
+                print(original_position_mat)
+                print('Ran Loc')
+                print(ran_loc)
+                print('Point Value')
+                print(points[ran_loc])
+                print('End')
+                
 
             if len(open_slot_p2) == 6 and len(open_slot_p1) != 6:
                 print('Player 1 Wins')
