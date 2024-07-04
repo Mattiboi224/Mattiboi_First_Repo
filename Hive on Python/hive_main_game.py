@@ -1224,6 +1224,231 @@ def scoring(points_ranking, move_place, insect_type, new_pos, orig_pos, own_quee
                     current_tile_mat_copy.pop(-1)
     return points_ranking
 
+def board_updates(game, placement, tile, loc, insect, p1_tiles, p2_tiles, p1_insect_mat, p2_insect_mat, z_p1_tiles, z_p2_tiles, current_tile_mat, current_bug_mat):
+
+##    insect = place_move_insect[ran_loc]
+##    tile = original_position_mat[ran_loc]
+##    loc = final_pos[ran_loc]
+##    placement = place_move_mat[ran_loc]
+
+    # Placing Tiles Logic
+    if placement == 0 or game == 0 or game == 1:
+        #time.sleep(0.25)
+        turtle.tracer(False)
+        main_turtle.goto(loc[0],loc[1])
+        # Draw shape and put assigned name
+        hexagon_shape(loc[0],loc[1])
+
+        main_turtle.color('black')
+        
+        main_turtle.goto(loc[0],loc[1])
+        current_tile_mat.append([loc[0],loc[1]])
+        
+        assign_tile(insect, game)
+        
+        if game % 2 == 1:
+            p1_tiles.append([loc[0],loc[1]])
+            p1_insect_mat.append(insect)
+            current_bug_mat.append(insect)
+            z_p1_tiles.append(0)
+
+            #print(p1_tiles)
+        else:
+            p2_tiles.append([loc[0],loc[1]])
+            p2_insect_mat.append(insect)
+            current_bug_mat.append(insect)
+            z_p2_tiles.append(0)
+
+        turtle.tracer(True)
+        #time.sleep(0.25)
+        
+    else:
+        #time.sleep(0.25)
+        #print(ava_pos)
+        # If P2
+        
+        if game % 2 == 0:
+
+            for b in range(len(p2_tiles)):
+                if p2_tiles[b] == tile and p2_insect_mat[b] == insect and z_p2_tiles[b] >= 0:               
+
+                    # If Beetle going on top of another tile change the z axis
+                    if insect == 'Beetle':
+
+                        # If Currently on a tile
+                        if z_p2_tiles[b] == 1:
+                            # Find Everything it's sitting on top of
+                            filled_indicesp1 = [i for i, x in enumerate(p1_tiles) if x == p2_tiles[b]]
+                            filled_indicesp2 = [i for i, x in enumerate(p2_tiles) if x == p2_tiles[b]]
+                            
+                            # Re-adjust everything underneath
+                            if len(filled_indicesp1) > 0:
+                                for i in range(len(filled_indicesp1)):
+                                    # If not the original_tile cause it's on top
+                                    if z_p1_tiles[filled_indicesp1[i]] != 1:
+                                        # Determine if it's a stack of 3 or more
+                                        if len(filled_indicesp1) + len(filled_indicesp2) >= 3:
+                                            # Promote the Highest Beetle to be on top
+                                            if z_p1_tiles[filled_indicesp1[i]] == -1:
+                                                z_p1_tiles[filled_indicesp1[i]] = 1
+                                            else:
+                                                z_p1_tiles[filled_indicesp1[i]] += 1
+                                        # Not a stack of beetles
+                                        else:
+                                            if z_p1_tiles[filled_indicesp1[i]] == -1:
+                                                z_p1_tiles[filled_indicesp1[i]] = 0
+                                        
+
+                            # Re-adjust everything underneath
+                            if len(filled_indicesp2) > 0:
+                                for i in range(len(filled_indicesp2)):
+                                    # If not the original_tile cause it's on top
+                                    if z_p2_tiles[filled_indicesp2[i]] != 1:
+                                        # Determine if it's a stack of 3 or more
+                                        if len(filled_indicesp1) + len(filled_indicesp2) >= 3:
+                                            # Promote the Highest Beetle to be on top
+                                            if z_p2_tiles[filled_indicesp2[i]] == -1:
+                                                z_p2_tiles[filled_indicesp2[i]] = 1
+                                            else:
+                                                z_p2_tiles[filled_indicesp2[i]] += 1
+                                        # Not a stack of beetles
+                                        else:
+                                            if z_p2_tiles[filled_indicesp2[i]] == -1:
+                                                z_p2_tiles[filled_indicesp2[i]] = 0
+
+
+                        # If moving onto something
+                        if loc in p1_tiles or loc in p2_tiles:
+                            
+                            z_p2_tiles[b] = 1
+                            indicesp1 = [i for i, x in enumerate(p1_tiles) if x == loc]
+                            indicesp2 = [i for i, x in enumerate(p2_tiles) if x == loc]
+                            if len(indicesp1) + len(indicesp2) > 0:
+                                if len(indicesp1) > 0:
+                                    for i in range(len(indicesp1)):
+                                        if z_p1_tiles[indicesp1[i]] == 1:
+                                            z_p1_tiles[indicesp1[i]] = -1
+                                        else:
+                                            z_p1_tiles[indicesp1[i]] -= 1
+
+                                if len(indicesp2) > 0:
+                                    for i in range(len(indicesp2)):
+                                        if z_p2_tiles[indicesp2[i]] == 1:
+                                            z_p2_tiles[indicesp2[i]] = -1
+                                        else:
+                                            z_p2_tiles[indicesp2[i]] -= 1
+
+                            else:
+                                z_p2_tiles[b] = 0
+
+                        # If moving onto empty space
+                        else:
+                            z_p2_tiles[b] = 0
+##                        # Update to new location
+##                        for c in range(len(current_tile_mat)):
+##                            if current_tile_mat[c] == p2_tiles[b] and z_p2_tiles[b] >= 0:
+##                                current_tile_mat[c][0] = loc[0]
+##                                current_tile_mat[c][1] = loc[1]         
+                    
+                    p2_tiles[b][0] = loc[0]
+                    p2_tiles[b][1] = loc[1]
+
+        elif game % 2 == 1:
+
+            for b in range(len(p1_tiles)):
+                if p1_tiles[b] == tile and p1_insect_mat[b] == insect and z_p1_tiles[b] >= 0:
+
+                    # If Beetle going on top of another tile change the z axis
+                    if insect == 'Beetle':
+
+                        # If Currently on a tile
+                        if z_p1_tiles[b] == 1:
+                            # Find Everything it's sitting on top of
+                            filled_indicesp1 = [i for i, x in enumerate(p1_tiles) if x == p1_tiles[b]]
+                            filled_indicesp2 = [i for i, x in enumerate(p2_tiles) if x == p1_tiles[b]]
+                            
+                            # Re-adjust everything underneath
+                            if len(filled_indicesp1) > 0:
+                                for i in range(len(filled_indicesp1)):
+                                    # If not the original_tile cause it's on top
+                                    if z_p1_tiles[filled_indicesp1[i]] != 1:
+                                        # Determine if it's a stack of 3 or more
+                                        if len(filled_indicesp1) + len(filled_indicesp2) >= 3:
+                                            # Promote the Highest Beetle to be on top
+                                            if z_p1_tiles[filled_indicesp1[i]] == -1:
+                                                z_p1_tiles[filled_indicesp1[i]] = 1
+                                            else:
+                                                z_p1_tiles[filled_indicesp1[i]] += 1
+                                        # Not a stack of beetles
+                                        else:
+                                            if z_p1_tiles[filled_indicesp1[i]] == -1:
+                                                z_p1_tiles[filled_indicesp1[i]] = 0
+                                        
+
+                            # Re-adjust everything underneath
+                            if len(filled_indicesp2) > 0:
+                                for i in range(len(filled_indicesp2)):
+                                    # If not the original_tile cause it's on top
+                                    if z_p2_tiles[filled_indicesp2[i]] != 1:
+                                        # Determine if it's a stack of 3 or more
+                                        if len(filled_indicesp1) + len(filled_indicesp2) >= 3:
+                                            # Promote the Highest Beetle to be on top
+                                            if z_p2_tiles[filled_indicesp2[i]] == -1:
+                                                z_p2_tiles[filled_indicesp2[i]] = 1
+                                            else:
+                                                z_p2_tiles[filled_indicesp2[i]] += 1
+                                        # Not a stack of beetles
+                                        else:
+                                            if z_p2_tiles[filled_indicesp2[i]] == -1:
+                                                z_p2_tiles[filled_indicesp2[i]] = 0
+
+                        # If moving onto something
+                        if loc in p1_tiles or loc in p2_tiles:
+                            
+                            z_p1_tiles[b] = 1
+                            indicesp1 = [i for i, x in enumerate(p1_tiles) if x == loc]
+                            indicesp2 = [i for i, x in enumerate(p2_tiles) if x == loc]
+                            if len(indicesp1) + len(indicesp2) > 0:
+                                if len(indicesp1) > 0:
+                                    for i in range(len(indicesp1)):
+                                        if z_p1_tiles[indicesp1[i]] == 1:
+                                            z_p1_tiles[indicesp1[i]] = -1
+                                        else:
+                                            z_p1_tiles[indicesp1[i]] -= 1
+
+                                if len(indicesp2) > 0:
+                                    for i in range(len(indicesp2)):
+                                        if z_p2_tiles[indicesp2[i]] == 1:
+                                            z_p2_tiles[indicesp2[i]] = -1
+                                        else:
+                                            z_p2_tiles[indicesp2[i]] -= 1
+
+                            else:
+                                z_p1_tiles[b] = 0
+
+                        # If moving onto empty space
+                        else:
+                            z_p1_tiles[b] = 0                      
+
+                    
+##                        # Update to new location
+##                        for a in range(len(current_tile_mat)):
+##                            if current_tile_mat[a] == p1_tiles[b]:
+##                                current_tile_mat[a][0] = loc[0]
+##                                current_tile_mat[a][1] = loc[1]
+
+                    p1_tiles[b][0] = loc[0]
+                    p1_tiles[b][1] = loc[1]
+
+
+##            if p1_insect_mat[pick_a_tile] == 'Grasshopper' or p2_insect_mat[pick_a_tile] == 'Grasshopper':
+##                time.sleep(2)
+        redraw_tiles(p1_tiles, p1_insect_mat, p2_tiles, p2_insect_mat, z_p1_tiles, z_p2_tiles)
+
+        current_tile_mat = p1_tiles + p2_tiles
+
+    return p1_tiles, p2_tiles, p1_insect_mat, p2_insect_mat, z_p1_tiles, z_p2_tiles, current_tile_mat, current_bug_mat
+
 # Main Loop
 def main():
 
@@ -1315,6 +1540,7 @@ def main():
                 print(p2_tiles)
                 print(p1_insect_mat)
                 print(p2_insect_mat)
+
                 
 
 ## Criteria
@@ -1417,10 +1643,10 @@ def main():
             if place_move_mat[m] == 0 and len(ava_pos) <= 100:
                 ava_pos_new, final_pos_new, place_move_mat_new, place_move_insect_new, original_position_mat_new = available_moves(game, current_tile_mat_copy, current_bug_mat, p1_tiles, p2_tiles, z_p1_tiles, z_p2_tiles, p1_insect_mat, p2_insect_mat)
 
-                if game % 2 == 0 and game <= 8 and 'Queen' not in p2_insect_mat:
-                    print('Testing Length of Moves')
-                    print(len(ava_pos_new))
-                    print(len(ava_pos))
+##                if game % 2 == 0 and game <= 8 and 'Queen' not in p2_insect_mat:
+##                    print('Testing Length of Moves')
+##                    print(len(ava_pos_new))
+##                    print(len(ava_pos))
             
                 # 4 Extra Positions
                 if len(ava_pos_new) - len(ava_pos) >= 4:
@@ -1486,12 +1712,15 @@ def main():
             random_lowest = random.randint(0,len(index)-1)
             ran_loc = index[random_lowest]
         
+        insect = place_move_insect[ran_loc]
+        tile = original_position_mat[ran_loc]
+        loc = final_pos[ran_loc]
         placement = place_move_mat[ran_loc]
         
         print(game)
-        print(points[ran_loc])
-        print(ran_loc)
-        print(placement)
+##        print(points[ran_loc])
+##        print(ran_loc)
+##        print(placement)
 
 
         if game == 14:
@@ -1529,237 +1758,18 @@ def main():
 
 ###################################### Placement #######################
 
+        p1_tiles, p2_tiles, p1_insect_mat, \
+                  p2_insect_mat, z_p1_tiles, \
+                  z_p2_tiles, current_tile_mat, \
+                  current_bug_mat = board_updates(game, placement, tile, loc, insect, p1_tiles, p2_tiles, \
+                                                               p1_insect_mat, p2_insect_mat, z_p1_tiles, z_p2_tiles, current_tile_mat, current_bug_mat)
 
 
 ##        if place_move_rand == 1 and game == 7:
 ##            print(game)
 ##            print(final_pos[ran_loc])   
 
-        # Placing Tiles Logic
-        if placement == 0 or game == 0 or game == 1:
-            #time.sleep(0.25)
-            turtle.tracer(False)
-            main_turtle.goto(final_pos[ran_loc][0],final_pos[ran_loc][1])
-            # Draw shape and put assigned name
-            hexagon_shape(final_pos[ran_loc][0],final_pos[ran_loc][1])
 
-            main_turtle.color('black')
-            
-            main_turtle.goto(final_pos[ran_loc][0],final_pos[ran_loc][1])
-            current_tile_mat.append([final_pos[ran_loc][0],final_pos[ran_loc][1]])
-            
-            assign_tile(place_move_insect[ran_loc], game)
-            
-            if game % 2 == 1:
-                p1_tiles.append([final_pos[ran_loc][0],final_pos[ran_loc][1]])
-                p1_insect_mat.append(place_move_insect[ran_loc])
-                current_bug_mat.append(place_move_insect[ran_loc])
-                z_p1_tiles.append(0)
-
-                #print(p1_tiles)
-            else:
-                p2_tiles.append([final_pos[ran_loc][0],final_pos[ran_loc][1]])
-                p2_insect_mat.append(place_move_insect[ran_loc])
-                current_bug_mat.append(place_move_insect[ran_loc])
-                z_p2_tiles.append(0)
-
-            turtle.tracer(True)
-            #time.sleep(0.25)
-            
-        else:
-            #time.sleep(0.25)
-            #print(ava_pos)
-            # If P2
-            
-            if game % 2 == 0:
-
-                insect = place_move_insect[ran_loc]
-                tile = original_position_mat[ran_loc]
-                loc = final_pos[ran_loc]
-                
-                for b in range(len(p2_tiles)):
-                    if p2_tiles[b] == tile and p2_insect_mat[b] == insect and z_p2_tiles[b] >= 0:               
-
-                        # If Beetle going on top of another tile change the z axis
-                        if insect == 'Beetle':
-
-                            # If Currently on a tile
-                            if z_p2_tiles[b] == 1:
-                                # Find Everything it's sitting on top of
-                                filled_indicesp1 = [i for i, x in enumerate(p1_tiles) if x == p2_tiles[b]]
-                                filled_indicesp2 = [i for i, x in enumerate(p2_tiles) if x == p2_tiles[b]]
-                                
-                                # Re-adjust everything underneath
-                                if len(filled_indicesp1) > 0:
-                                    for i in range(len(filled_indicesp1)):
-                                        # If not the original_tile cause it's on top
-                                        if z_p1_tiles[filled_indicesp1[i]] != 1:
-                                            # Determine if it's a stack of 3 or more
-                                            if len(filled_indicesp1) + len(filled_indicesp2) >= 3:
-                                                # Promote the Highest Beetle to be on top
-                                                if z_p1_tiles[filled_indicesp1[i]] == -1:
-                                                    z_p1_tiles[filled_indicesp1[i]] = 1
-                                                else:
-                                                    z_p1_tiles[filled_indicesp1[i]] += 1
-                                            # Not a stack of beetles
-                                            else:
-                                                if z_p1_tiles[filled_indicesp1[i]] == -1:
-                                                    z_p1_tiles[filled_indicesp1[i]] = 0
-                                            
-
-                                # Re-adjust everything underneath
-                                if len(filled_indicesp2) > 0:
-                                    for i in range(len(filled_indicesp2)):
-                                        # If not the original_tile cause it's on top
-                                        if z_p2_tiles[filled_indicesp2[i]] != 1:
-                                            # Determine if it's a stack of 3 or more
-                                            if len(filled_indicesp1) + len(filled_indicesp2) >= 3:
-                                                # Promote the Highest Beetle to be on top
-                                                if z_p2_tiles[filled_indicesp2[i]] == -1:
-                                                    z_p2_tiles[filled_indicesp2[i]] = 1
-                                                else:
-                                                    z_p2_tiles[filled_indicesp2[i]] += 1
-                                            # Not a stack of beetles
-                                            else:
-                                                if z_p2_tiles[filled_indicesp2[i]] == -1:
-                                                    z_p2_tiles[filled_indicesp2[i]] = 0
-
-
-                            # If moving onto something
-                            if loc in p1_tiles or loc in p2_tiles:
-                                
-                                z_p2_tiles[b] = 1
-                                indicesp1 = [i for i, x in enumerate(p1_tiles) if x == loc]
-                                indicesp2 = [i for i, x in enumerate(p2_tiles) if x == loc]
-                                if len(indicesp1) + len(indicesp2) > 0:
-                                    if len(indicesp1) > 0:
-                                        for i in range(len(indicesp1)):
-                                            if z_p1_tiles[indicesp1[i]] == 1:
-                                                z_p1_tiles[indicesp1[i]] = -1
-                                            else:
-                                                z_p1_tiles[indicesp1[i]] -= 1
-
-                                    if len(indicesp2) > 0:
-                                        for i in range(len(indicesp2)):
-                                            if z_p2_tiles[indicesp2[i]] == 1:
-                                                z_p2_tiles[indicesp2[i]] = -1
-                                            else:
-                                                z_p2_tiles[indicesp2[i]] -= 1
-
-                                else:
-                                    z_p2_tiles[b] = 0
-
-                            # If moving onto empty space
-                            else:
-                                z_p2_tiles[b] = 0
-##                        # Update to new location
-##                        for c in range(len(current_tile_mat)):
-##                            if current_tile_mat[c] == p2_tiles[b] and z_p2_tiles[b] >= 0:
-##                                current_tile_mat[c][0] = loc[0]
-##                                current_tile_mat[c][1] = loc[1]         
-
-                        #Fucked
-                        
-                        p2_tiles[b][0] = loc[0]
-                        p2_tiles[b][1] = loc[1]
-
-            elif game % 2 == 1:
-
-                insect = place_move_insect[ran_loc]
-                tile = original_position_mat[ran_loc]
-                loc = final_pos[ran_loc]
-
-                for b in range(len(p1_tiles)):
-                    if p1_tiles[b] == tile and p1_insect_mat[b] == insect and z_p1_tiles[b] >= 0:
-
-                        # If Beetle going on top of another tile change the z axis
-                        if insect == 'Beetle':
-
-                            # If Currently on a tile
-                            if z_p1_tiles[b] == 1:
-                                # Find Everything it's sitting on top of
-                                filled_indicesp1 = [i for i, x in enumerate(p1_tiles) if x == p1_tiles[b]]
-                                filled_indicesp2 = [i for i, x in enumerate(p2_tiles) if x == p1_tiles[b]]
-                                
-                                # Re-adjust everything underneath
-                                if len(filled_indicesp1) > 0:
-                                    for i in range(len(filled_indicesp1)):
-                                        # If not the original_tile cause it's on top
-                                        if z_p1_tiles[filled_indicesp1[i]] != 1:
-                                            # Determine if it's a stack of 3 or more
-                                            if len(filled_indicesp1) + len(filled_indicesp2) >= 3:
-                                                # Promote the Highest Beetle to be on top
-                                                if z_p1_tiles[filled_indicesp1[i]] == -1:
-                                                    z_p1_tiles[filled_indicesp1[i]] = 1
-                                                else:
-                                                    z_p1_tiles[filled_indicesp1[i]] += 1
-                                            # Not a stack of beetles
-                                            else:
-                                                if z_p1_tiles[filled_indicesp1[i]] == -1:
-                                                    z_p1_tiles[filled_indicesp1[i]] = 0
-                                            
-
-                                # Re-adjust everything underneath
-                                if len(filled_indicesp2) > 0:
-                                    for i in range(len(filled_indicesp2)):
-                                        # If not the original_tile cause it's on top
-                                        if z_p2_tiles[filled_indicesp2[i]] != 1:
-                                            # Determine if it's a stack of 3 or more
-                                            if len(filled_indicesp1) + len(filled_indicesp2) >= 3:
-                                                # Promote the Highest Beetle to be on top
-                                                if z_p2_tiles[filled_indicesp2[i]] == -1:
-                                                    z_p2_tiles[filled_indicesp2[i]] = 1
-                                                else:
-                                                    z_p2_tiles[filled_indicesp2[i]] += 1
-                                            # Not a stack of beetles
-                                            else:
-                                                if z_p2_tiles[filled_indicesp2[i]] == -1:
-                                                    z_p2_tiles[filled_indicesp2[i]] = 0
-
-                            # If moving onto something
-                            if loc in p1_tiles or loc in p2_tiles:
-                                
-                                z_p1_tiles[b] = 1
-                                indicesp1 = [i for i, x in enumerate(p1_tiles) if x == loc]
-                                indicesp2 = [i for i, x in enumerate(p2_tiles) if x == loc]
-                                if len(indicesp1) + len(indicesp2) > 0:
-                                    if len(indicesp1) > 0:
-                                        for i in range(len(indicesp1)):
-                                            if z_p1_tiles[indicesp1[i]] == 1:
-                                                z_p1_tiles[indicesp1[i]] = -1
-                                            else:
-                                                z_p1_tiles[indicesp1[i]] -= 1
-
-                                    if len(indicesp2) > 0:
-                                        for i in range(len(indicesp2)):
-                                            if z_p2_tiles[indicesp2[i]] == 1:
-                                                z_p2_tiles[indicesp2[i]] = -1
-                                            else:
-                                                z_p2_tiles[indicesp2[i]] -= 1
-
-                                else:
-                                    z_p1_tiles[b] = 0
-
-                            # If moving onto empty space
-                            else:
-                                z_p1_tiles[b] = 0                      
-
-                        
-##                        # Update to new location
-##                        for a in range(len(current_tile_mat)):
-##                            if current_tile_mat[a] == p1_tiles[b]:
-##                                current_tile_mat[a][0] = loc[0]
-##                                current_tile_mat[a][1] = loc[1]
-
-                        p1_tiles[b][0] = loc[0]
-                        p1_tiles[b][1] = loc[1]
-
-
-##            if p1_insect_mat[pick_a_tile] == 'Grasshopper' or p2_insect_mat[pick_a_tile] == 'Grasshopper':
-##                time.sleep(2)
-            redraw_tiles(p1_tiles, p1_insect_mat, p2_tiles, p2_insect_mat, z_p1_tiles, z_p2_tiles)
-
-            current_tile_mat = p1_tiles + p2_tiles
 
             #print(game)
             #time.sleep(0.25)
