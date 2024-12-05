@@ -1,3 +1,18 @@
+## Known Bugs
+# Ant Logic missing close tile
+# Placement needs modifying when on top of a tile
+# Mis-clicks break the game
+# Human can break rules i.e. placement breaks -- Show where legal placements can go
+
+
+## Improvements
+# You Win/You Lose if Human is playing displayed on the end screen -- Complete
+# Something to identify what is under a tile esp a queen
+# Way to identify your colour/AI Colour -- Complete
+# Pieces Left for both players -- Complete
+# Show Last Movement (Maybe like an arrow in that colour?)
+
+
 
 # Imports
 import turtle
@@ -20,6 +35,7 @@ angle = 360.0 / num_sides
 
 # Initialize the screen and main turtle
 wn = turtle.Screen()
+wn.setup(1200,900)
 main_turtle = turtle.Turtle()
 main_turtle.hideturtle()
 board_turtle = turtle.Turtle()
@@ -28,12 +44,15 @@ move_place_turtle = turtle.Turtle()
 move_place_turtle.hideturtle()
 selection_turtle = turtle.Turtle()
 selection_turtle.hideturtle()
+announcer_turtle = turtle.Turtle()
+announcer_turtle.hideturtle()
 
 # Putting Everything Up
 main_turtle.up()
 board_turtle.up()
 move_place_turtle.up()
 selection_turtle.up()
+announcer_turtle.up()
 
 
 # Draw a hexagon
@@ -141,6 +160,21 @@ def draw_rectangle(x, y, w, h, sel_turtle):
             move_place_turtle.forward(h)
             move_place_turtle.left(90)
         move_place_turtle.up()
+        turtle.tracer(True)
+
+    elif sel_turtle == 'Board':
+    
+        turtle.tracer(False)
+        board_turtle.up()
+        board_turtle.goto(x, y)
+        board_turtle.right(board_turtle.heading())
+        board_turtle.down()
+        for _ in range(2):
+            board_turtle.forward(w)
+            board_turtle.left(90)
+            board_turtle.forward(h)
+            board_turtle.left(90)
+        board_turtle.up()
         turtle.tracer(True)
 
 # Build the board
@@ -741,16 +775,16 @@ def placement(game, place_move_rand, current_tile_mat, ava_pos, place_move_mat, 
                     elif 'Queen' in team_insect and random_num == 1:
                         continue
 
-                    elif team_insect.count('Beetle') == 2 and random_num == 2:
+                    elif team_insect.count('Beetle') == total_beetle and random_num == 2:
                         continue   
                     
-                    elif team_insect.count('Spider') == 2 and random_num == 3:
+                    elif team_insect.count('Spider') == total_spider and random_num == 3:
                         continue
 
-                    elif team_insect.count('Ant') == 3 and random_num == 4:
+                    elif team_insect.count('Ant') == total_ant and random_num == 4:
                         continue
 
-                    elif team_insect.count('Grasshopper') == 3 and random_num == 5:
+                    elif team_insect.count('Grasshopper') == total_grasshopper and random_num == 5:
                         continue                    
 
                     else:
@@ -1587,23 +1621,23 @@ def select_tile(x, y):
     
     while counter == 0:
 
-        if x >= -450 and x <= -400 and y >= -350 and y <= -250:
+        if x >= -550 and x <= -500 and y >= -350 and y <= -250:
             chose_tile = 'Beetle'
             break
 
-        if x >= -450 and x <= -400 and y >= -200 and y <= -100:
+        if x >= -550 and x <= -500 and y >= -200 and y <= -100:
             chose_tile = 'Spider'
             break
 
-        if x >= -450 and x <= -400 and y >= -50 and y <= 50:
+        if x >= -550 and x <= -500 and y >= -50 and y <= 50:
             chose_tile = 'Grasshopper'
             break
 
-        if x >= -450 and x <= -400 and y >= 100 and y <= 200:
+        if x >= -550 and x <= -500 and y >= 100 and y <= 200:
             chose_tile = 'Ant'
             break
 
-        if x >= -450 and x <= -400 and y >= 250 and y <= 350:
+        if x >= -550 and x <= -500 and y >= 250 and y <= 350:
             chose_tile = 'Queen'
             break
 
@@ -1677,7 +1711,7 @@ def Human_Player(own_tiles, opp_tiles, own_insect, opp_insect, z_own, z_opp, cur
 
     move_place_turtle.clear()
 
-    print(move_type)
+    #print(move_type)
 
 
     if move_type == 'Place':
@@ -1699,9 +1733,9 @@ def Human_Player(own_tiles, opp_tiles, own_insect, opp_insect, z_own, z_opp, cur
         letters = ["Q", "A", "G", "S", "B"]
 
         for y, letter in zip(positions, letters):
-            draw_rectangle(-450, y, 50, 100, 'Selection')
+            draw_rectangle(-550, y, 50, 100, 'Selection')
             turtle.tracer(False)
-            selection_turtle.goto(-423, y + 50)
+            selection_turtle.goto(-523, y + 50)
             selection_turtle.right(90)
             selection_turtle.forward(20)
             selection_turtle.write(letter, False, align="center", font=("Arial", 30, "normal"))
@@ -1743,8 +1777,8 @@ def Human_Player(own_tiles, opp_tiles, own_insect, opp_insect, z_own, z_opp, cur
             main_turtle.right(main_turtle.heading())
             beetle_drawing()
 
-        print(chose_tile)
-        print(close_position)
+        #print(chose_tile)
+        #print(close_position)
 
         orig_position = close_position
         
@@ -1807,6 +1841,39 @@ def Human_Player(own_tiles, opp_tiles, own_insect, opp_insect, z_own, z_opp, cur
 
                 return own_insect[i], close_position, move_type, orig_position
 
+# Drawing Announcers
+def draw_board(color, x, y, label):
+    board_turtle.color(color)
+    board_turtle.begin_fill()
+    draw_rectangle(x, y, 150, 50, 'Board')
+    board_turtle.end_fill()
+    
+    turtle.tracer(False)
+    board_turtle.color('white')
+    board_turtle.goto(x + 75, y + 10)
+    board_turtle.write(label, False, align="center", font=("Arial", 20, "normal"))
+    
+    board_turtle.color(color)
+    y_positions = [385, 370, 355, 340, 325]
+    labels = ["Queen remaining: ", "Ants remaining: ", "Grasshoppers remaining: ", "Spiders remaining: ", "Beetles remaining: "]
+    
+    for i in range(len(y_positions)):
+        board_turtle.goto(x + (0 if label == "Comp" else 145), y_positions[i])
+        board_turtle.write(labels[i], False, align=("left" if label == "Comp" else "right"), font=("Arial", 10, "normal"))
+    
+    turtle.tracer(True)
+
+
+# Announce Remaining Insects
+def announce_remaining_insects(color, x_positions, y_positions, insect_types, totals, player_insects):
+    announcer_turtle.color(color)
+    for i, insect in enumerate(insect_types):
+        turtle.tracer(False)
+        message = player_insects.count(insect)
+        message = totals[i] - message
+        announcer_turtle.goto(x_positions[i], y_positions[i])
+        announcer_turtle.write(message, False, align="left", font=("Arial", 10, "normal"))
+        turtle.tracer(True)
 
 # Main Loop
 def main():
@@ -1829,9 +1896,25 @@ def main():
 
     turtle.tracer(False)
 
+    human = 0
 
+    draw_board('Green', -390, 400, "Comp")
+    draw_board('Red', 240, 400, "You")
 
     for game in range(50):
+
+        announcer_turtle.clear()
+
+        y_positions = [385, 370, 355, 340, 325]
+        insect_types = ['Queen', 'Ant', 'Grasshopper', 'Spider', 'Beetle']
+        totals = [total_queen, total_ant, total_grasshopper, total_spider, total_beetle]
+
+        # Announce for player 2
+        announce_remaining_insects('Green', [-283, -292, -242, -278, -278], y_positions, insect_types, totals, p2_insect_mat)
+
+        # Announce for player 1
+        announce_remaining_insects('Red', [385] * len(insect_types), y_positions, insect_types, totals, p1_insect_mat)
+
 
         # Whether Human is playing
         if game % 2 == 1:
@@ -2036,8 +2119,8 @@ def main():
 
             ################# SELECTION ##################
 
-            # Player 1 is the Best AI
-            if game % 2 == 1:
+            # Player 2 is the Best AI
+            if game % 2 == 0:
                 max_tile = max(points)
 
                 index = [i for i, x in enumerate(points) if x == max_tile]
@@ -2046,8 +2129,8 @@ def main():
 
                 ran_loc = index[random_highest]
 
-            # Player 2 is completely random
-            if game % 2 == 0:
+            # Player 1 is completely random
+            if game % 2 == 1:
                 min_tile = min(points)
 
                 index = [i for i, x in enumerate(points) if x == min_tile]
@@ -2078,38 +2161,38 @@ def main():
 ##        print(placement)
 
 
-        if game == 14:
-            print('Current')
-            print(current_tile_mat)
-            print('Ava_Pos')
-            print(ava_pos)
-            print('Points')
-            print(points)
-            print('Place_move_mat')
-            print(place_move_mat)
-            print('Place_move_insect')
-            print(place_move_insect)
-            print('Original_position_mat')
-            print(original_position_mat)
-            print('Ran Loc')
-            print(ran_loc)
-            print('Point Value')
-            print(points[ran_loc])
-            print('End')
-            
-        if len(ava_pos) == 0:
-            print(ava_pos)
-            print(game)
-            print(place_move_mat)
-            print(place_move_insect)
-            print(original_position_mat)
-            print(p1_tiles)
-            print(p2_tiles)
-            print(p1_insect_mat)
-            print(p2_insect_mat)
-            print(z_p1_tiles)
-            print(z_p2_tiles)
-            print(points)
+##        if game == 14:
+##            print('Current')
+##            print(current_tile_mat)
+##            print('Ava_Pos')
+##            print(ava_pos)
+##            print('Points')
+##            print(points)
+##            print('Place_move_mat')
+##            print(place_move_mat)
+##            print('Place_move_insect')
+##            print(place_move_insect)
+##            print('Original_position_mat')
+##            print(original_position_mat)
+##            print('Ran Loc')
+##            print(ran_loc)
+##            print('Point Value')
+##            print(points[ran_loc])
+##            print('End')
+##            
+##        if len(ava_pos) == 0:
+##            print(ava_pos)
+##            print(game)
+##            print(place_move_mat)
+##            print(place_move_insect)
+##            print(original_position_mat)
+##            print(p1_tiles)
+##            print(p2_tiles)
+##            print(p1_insect_mat)
+##            print(p2_insect_mat)
+##            print(z_p1_tiles)
+##            print(z_p2_tiles)
+##            print(points)
 
 ###################################### Placement #######################
 
@@ -2140,9 +2223,13 @@ def main():
             open_slot_p1 = filled_loc(p1_tiles[index_q_p1], current_tile_mat)
             open_slot_p2 = filled_loc(p2_tiles[index_q_p2], current_tile_mat)
 
-            if len(open_slot_p1) == 6 and len(open_slot_2) != 6:
+            if len(open_slot_p1) == 6 and len(open_slot_p2) != 6:
                 print('Player 2 Wins')
                 print('Player 1''s Queen is surrounded')
+                print('Player 2 wins in ' + str(game) + ' moves')
+                main_turtle.goto(0,0)
+                main_turtle.color('Green')
+                main_turtle.write("You Lose!", False, align="center", font=("Arial", 100, "normal"))
                 
                 break
 
@@ -2169,26 +2256,19 @@ def main():
             if len(open_slot_p2) == 6 and len(open_slot_p1) != 6:
                 print('Player 1 Wins')
                 print('Player 2''s Queen is surrounded')
-                print('Player 1 in ' + str(game) + ' moves')
-                print(points)
-                print(final_pos)
-                print(ran_loc)
-                print(place_move_mat)
-                print(original_position_mat)
-                print(place_move_insect)
-                print(current_tile_mat)
-                print(current_bug_mat)
+                print('Player 1 wins in ' + str(game) + ' moves')
+                main_turtle.goto(0,0)
+                main_turtle.color('red')
+                main_turtle.write("You Win!", False, align="center", font=("Arial", 100, "normal"))
                 break
 
             if len(open_slot_p2) == 6 and len(open_slot_p1) == 6:
-                print('It'' a tie')
+                print('It''s a tie')
                 print('Both Queen''s are surrounded')
-                print(points)
-                print(final_pos)
-                print(ran_loc)
-                print(place_move_mat)
-                print(original_position_mat)
-                print(place_move_insect)
+                print('The game lasted ' + str(game) + ' moves')
+                main_turtle.goto(0,0)
+                main_turtle.color('black')
+                main_turtle.write("It's a tie!", False, align="center", font=("Arial", 100, "normal"))
                 break
 
             #Player 1's Turn
