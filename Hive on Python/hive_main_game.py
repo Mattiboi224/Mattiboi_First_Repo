@@ -1618,6 +1618,10 @@ def select_tile(x, y):
     global picking_pos, chose_tile
 
     counter = 0
+    chose_tile = None
+
+    print(x)
+    print(y)
     
     while counter == 0:
 
@@ -1625,22 +1629,22 @@ def select_tile(x, y):
             chose_tile = 'Beetle'
             break
 
-        if x >= -550 and x <= -500 and y >= -200 and y <= -100:
+        elif x >= -550 and x <= -500 and y >= -200 and y <= -100:
             chose_tile = 'Spider'
             break
 
-        if x >= -550 and x <= -500 and y >= -50 and y <= 50:
+        elif x >= -550 and x <= -500 and y >= -50 and y <= 50:
             chose_tile = 'Grasshopper'
             break
 
-        if x >= -550 and x <= -500 and y >= 100 and y <= 200:
+        elif x >= -550 and x <= -500 and y >= 100 and y <= 200:
             chose_tile = 'Ant'
             break
 
-        if x >= -550 and x <= -500 and y >= 250 and y <= 350:
+        elif x >= -550 and x <= -500 and y >= 250 and y <= 350:
             chose_tile = 'Queen'
             break
-
+    
     picking_pos = True
 
 def select_move_type(x, y):
