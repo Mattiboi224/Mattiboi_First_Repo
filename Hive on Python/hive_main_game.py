@@ -1,3 +1,20 @@
+## Known Bugs
+# Ant Logic missing close tile
+# Placement needs modifying when on top of a tile
+# Mis-clicks break the game
+# Human can break rules i.e. placement breaks -- Show where legal placements can go
+
+
+## Improvements
+# You Win/You Lose if Human is playing displayed on the end screen -- Complete
+# Something to identify what is under a tile esp a queen
+# Way to identify your colour/AI Colour -- Complete
+# Pieces Left for both players -- Complete
+# Show Last Movement (Maybe like an arrow in that colour?)
+
+
+
+# Imports
 import turtle
 import random
 import sys
@@ -6,8 +23,7 @@ from collections import deque
 import time
 import math
 
-wn = turtle.Screen()
-main_turtle = turtle.Turtle()
+# Constants
 total_ant = 3
 total_grasshopper = 3
 total_beetle = 2
@@ -16,37 +32,185 @@ total_queen = 1
 side_length = 40
 num_sides = 6
 angle = 360.0 / num_sides
+
+# Initialize the screen and main turtle
+wn = turtle.Screen()
+wn.setup(1200,900)
+main_turtle = turtle.Turtle()
 main_turtle.hideturtle()
-##print(angle)
+board_turtle = turtle.Turtle()
+board_turtle.hideturtle()
+move_place_turtle = turtle.Turtle()
+move_place_turtle.hideturtle()
+selection_turtle = turtle.Turtle()
+selection_turtle.hideturtle()
+announcer_turtle = turtle.Turtle()
+announcer_turtle.hideturtle()
 
-def hexagon_shape (position_x, position_y):
-    
-    turtle.tracer(False)
-    # Start Location to Start of Hexagon
-    main_turtle.color('black')
-    main_turtle.goto(position_x, position_y)
-    main_turtle.right(main_turtle.heading())
-    main_turtle.up()
-    main_turtle.left(angle * 2)
-    main_turtle.forward(side_length)
-    #main_turtle.right(angle * 2)
-    main_turtle.right(main_turtle.heading())
-    main_turtle.down()
+# Putting Everything Up
+main_turtle.up()
+board_turtle.up()
+move_place_turtle.up()
+selection_turtle.up()
+announcer_turtle.up()
 
-    # Draw Hexagon
-    for i in range(num_sides):
+
+# Draw a hexagon
+def hexagon_shape(position_x, position_y, sel_turtle):
+
+    if sel_turtle == 'Main':
+        turtle.tracer(False)
+        # Start Location to Start of Hexagon
+        main_turtle.color('black')
+        main_turtle.goto(position_x, position_y)
+        main_turtle.right(main_turtle.heading())
+        main_turtle.up()
+        main_turtle.left(angle * 2)
         main_turtle.forward(side_length)
+        #main_turtle.right(angle * 2)
+        main_turtle.right(main_turtle.heading())
+        main_turtle.down()
+
+        # Draw Hexagon
+        for i in range(num_sides):
+            main_turtle.forward(side_length)
+            main_turtle.right(angle)
+
+        # Back to Start Location
+        main_turtle.up()
         main_turtle.right(angle)
+        main_turtle.forward(side_length)
+        main_turtle.left(angle)
 
-    # Back to Start Location
-    main_turtle.up()
-    main_turtle.right(angle)
-    main_turtle.forward(side_length)
-    main_turtle.left(angle)
+        main_turtle.goto(position_x, position_y)
+        main_turtle.right(main_turtle.heading())
+        turtle.tracer(True)
 
-    main_turtle.goto(position_x, position_y)
-    main_turtle.right(main_turtle.heading())
+    if sel_turtle == 'Board':
+        turtle.tracer(False)
+        # Start Location to Start of Hexagon
+        board_turtle.color('black')
+        board_turtle.goto(position_x, position_y)
+        board_turtle.right(board_turtle.heading())
+        board_turtle.up()
+        board_turtle.left(angle * 2)
+        board_turtle.forward(side_length)
+        #main_turtle.right(angle * 2)
+        board_turtle.right(board_turtle.heading())
+        board_turtle.down()
+
+        # Draw Hexagon
+        for i in range(num_sides):
+            board_turtle.forward(side_length)
+            board_turtle.right(angle)
+
+        # Back to Start Location
+        board_turtle.up()
+        board_turtle.right(angle)
+        board_turtle.forward(side_length)
+        board_turtle.left(angle)
+
+        board_turtle.goto(position_x, position_y)
+        board_turtle.right(board_turtle.heading())
+        turtle.tracer(True)
+
+# Draw a rectangle
+def draw_rectangle(x, y, w, h, sel_turtle):
+
+    if sel_turtle == 'Main':
+    
+        turtle.tracer(False)
+        main_turtle.up()
+        main_turtle.goto(x, y)
+        main_turtle.right(main_turtle.heading())
+        main_turtle.down()
+        for _ in range(2):
+            main_turtle.forward(w)
+            main_turtle.left(90)
+            main_turtle.forward(h)
+            main_turtle.left(90)
+        main_turtle.up()
+        turtle.tracer(True)
+
+    elif sel_turtle == 'Selection':
+    
+        turtle.tracer(False)
+        selection_turtle.up()
+        selection_turtle.goto(x, y)
+        selection_turtle.right(selection_turtle.heading())
+        selection_turtle.down()
+        for _ in range(2):
+            selection_turtle.forward(w)
+            selection_turtle.left(90)
+            selection_turtle.forward(h)
+            selection_turtle.left(90)
+        selection_turtle.up()
+        turtle.tracer(True)
+
+    elif sel_turtle == 'Move_Place':
+    
+        turtle.tracer(False)
+        move_place_turtle.up()
+        move_place_turtle.goto(x, y)
+        move_place_turtle.right(move_place_turtle.heading())
+        move_place_turtle.down()
+        for _ in range(2):
+            move_place_turtle.forward(w)
+            move_place_turtle.left(90)
+            move_place_turtle.forward(h)
+            move_place_turtle.left(90)
+        move_place_turtle.up()
+        turtle.tracer(True)
+
+    elif sel_turtle == 'Board':
+    
+        turtle.tracer(False)
+        board_turtle.up()
+        board_turtle.goto(x, y)
+        board_turtle.right(board_turtle.heading())
+        board_turtle.down()
+        for _ in range(2):
+            board_turtle.forward(w)
+            board_turtle.left(90)
+            board_turtle.forward(h)
+            board_turtle.left(90)
+        board_turtle.up()
+        turtle.tracer(True)
+
+# Build the board
+def build_the_board():
+    turtle.tracer(False)
+    position = getlocations(0, 0)
+    position = [tuple(inner_list) for inner_list in position]
+    
+    visited = set()
+    queue = deque([(0, 0)] + position)
+    
+    final_loc = []
+    
+    while queue:
+        current = queue.popleft()
+        
+        if current in visited:
+            continue
+        
+        hexagon_shape(current[0], current[1], 'Board')
+        final_loc.append([current[0], current[1]])
+        
+        visited.add(current)
+        
+        neighbors = getlocations(current[0], current[1])
+        neighbors = [tuple(inner_list) for inner_list in neighbors]
+        
+        for neighbor in neighbors:
+            if neighbor not in visited:
+                queue.append(neighbor)
+        
+        if len(final_loc) == 91:
+            break
+    
     turtle.tracer(True)
+    return final_loc
 
 #Redraw All the Tiles
 def redraw_tiles(p1_tiles, p1_insect_mat, p2_tiles, p2_insect_mat, z_p1_tiles, z_p2_tiles):
@@ -78,7 +242,7 @@ def redraw_tiles(p1_tiles, p1_insect_mat, p2_tiles, p2_insect_mat, z_p1_tiles, z
     
     for i in range(len(p1_tiles_copy)):
         
-        hexagon_shape(p1_tiles_copy[i][0],p1_tiles_copy[i][1])
+        hexagon_shape(p1_tiles_copy[i][0],p1_tiles_copy[i][1], 'Main')
 
         main_turtle.color('red')
 
@@ -100,7 +264,7 @@ def redraw_tiles(p1_tiles, p1_insect_mat, p2_tiles, p2_insect_mat, z_p1_tiles, z
 
     for i in range(len(p2_tiles_copy)):
 
-        hexagon_shape(p2_tiles_copy[i][0],p2_tiles_copy[i][1])
+        hexagon_shape(p2_tiles_copy[i][0],p2_tiles_copy[i][1], 'Main')
 
         main_turtle.color('green')
 
@@ -288,11 +452,11 @@ def slideable_locs(location,current_tile_mat):
 
 def filled_loc(location, current_tile_mat):
 
-    all_locs = getlocations(location[0],location[1])
+    surround_loc = getlocations(location[0],location[1])
     filled_mat = []
-    for i in range(len(all_locs)):
-        if all_locs[i] in current_tile_mat:
-            filled_mat.append(all_locs[i])
+    for i in range(len(surround_loc)):
+        if surround_loc[i] in current_tile_mat:
+            filled_mat.append(surround_loc[i])
 
     return filled_mat
 
@@ -611,16 +775,16 @@ def placement(game, place_move_rand, current_tile_mat, ava_pos, place_move_mat, 
                     elif 'Queen' in team_insect and random_num == 1:
                         continue
 
-                    elif team_insect.count('Beetle') == 2 and random_num == 2:
+                    elif team_insect.count('Beetle') == total_beetle and random_num == 2:
                         continue   
                     
-                    elif team_insect.count('Spider') == 2 and random_num == 3:
+                    elif team_insect.count('Spider') == total_spider and random_num == 3:
                         continue
 
-                    elif team_insect.count('Ant') == 3 and random_num == 4:
+                    elif team_insect.count('Ant') == total_ant and random_num == 4:
                         continue
 
-                    elif team_insect.count('Grasshopper') == 3 and random_num == 5:
+                    elif team_insect.count('Grasshopper') == total_grasshopper and random_num == 5:
                         continue                    
 
                     else:
@@ -1237,7 +1401,7 @@ def board_updates(game, placement, tile, loc, insect, p1_tiles, p2_tiles, p1_ins
         turtle.tracer(False)
         main_turtle.goto(loc[0],loc[1])
         # Draw shape and put assigned name
-        hexagon_shape(loc[0],loc[1])
+        hexagon_shape(loc[0],loc[1], 'Main')
 
         main_turtle.color('black')
         
@@ -1449,6 +1613,272 @@ def board_updates(game, placement, tile, loc, insect, p1_tiles, p2_tiles, p1_ins
 
     return p1_tiles, p2_tiles, p1_insect_mat, p2_insect_mat, z_p1_tiles, z_p2_tiles, current_tile_mat, current_bug_mat
 
+# Select a tile
+def select_tile(x, y):
+    global picking_pos, chose_tile
+
+    counter = 0
+    chose_tile = None
+
+    print(x)
+    print(y)
+    
+    while counter == 0:
+
+        if x >= -550 and x <= -500 and y >= -350 and y <= -250:
+            chose_tile = 'Beetle'
+            break
+
+        elif x >= -550 and x <= -500 and y >= -200 and y <= -100:
+            chose_tile = 'Spider'
+            break
+
+        elif x >= -550 and x <= -500 and y >= -50 and y <= 50:
+            chose_tile = 'Grasshopper'
+            break
+
+        elif x >= -550 and x <= -500 and y >= 100 and y <= 200:
+            chose_tile = 'Ant'
+            break
+
+        elif x >= -550 and x <= -500 and y >= 250 and y <= 350:
+            chose_tile = 'Queen'
+            break
+    
+    picking_pos = True
+
+def select_move_type(x, y):
+    global move_type, picking_pos
+
+    counter = 0
+    
+    while counter == 0:
+        
+        if x >= 400 and x <= 450 and y >= 25 and y <= 125:
+            move_type = 'Place'
+            break
+
+        if x >= 400 and x <= 450 and y >= -125 and y <= -25:
+            move_type = 'Move'
+            break
+    else:
+        counter = 0
+
+    picking_pos = True
+
+# Place a tile
+def place_tile(x, y):
+    global close_position, picking_pos
+    
+    pos_points = []
+    for loc in all_locs:
+        dist = math.sqrt((x - loc[0])**2 + (y - loc[1])**2)
+        pos_points.append(dist)
+    
+    min_pos_points = min(pos_points)
+    index = pos_points.index(min_pos_points)
+    
+    close_position = all_locs[index]
+    picking_pos = True
+
+# Human Player
+def Human_Player(own_tiles, opp_tiles, own_insect, opp_insect, z_own, z_opp, current_tile_mat):
+    # Initialize variables
+    global all_locs, picking_pos, close_position, chose_tile, move_type
+
+    picking_pos = False
+    close_position = None
+    chose_tile = None
+    move_type = None
+    # all_locs = build_the_board()
+
+    draw_rectangle(400, 25, 50, 100, 'Move_Place')
+    turtle.tracer(False)
+    move_place_turtle.goto(425,75)
+    move_place_turtle.right(90)
+    move_place_turtle.forward(20)
+    move_place_turtle.write("P", False, align="center", font=("Arial", 30, "normal"))
+    turtle.tracer(True)
+
+    draw_rectangle(400, -125, 50, 100, 'Move_Place')
+    turtle.tracer(False)
+    move_place_turtle.goto(425,-75)
+    move_place_turtle.right(90)
+    move_place_turtle.forward(20)
+    move_place_turtle.write("M", False, align="center", font=("Arial", 30, "normal"))
+    turtle.tracer(True)
+
+    turtle.onscreenclick(select_move_type)
+
+    while not picking_pos and move_type is None:
+        wn.update()
+
+    move_place_turtle.clear()
+
+    #print(move_type)
+
+
+    if move_type == 'Place':
+        picking_pos = False
+
+        # Main loop
+        turtle.onscreenclick(place_tile)
+
+        while not picking_pos:
+            wn.update()
+
+        #print(all_locs)
+
+        selection_turtle.up()
+        selection_turtle.goto(close_position[0], close_position[1])
+        selection_turtle.dot(10, "Red")
+
+        positions = [250, 100, -50, -200, -350]
+        letters = ["Q", "A", "G", "S", "B"]
+
+        for y, letter in zip(positions, letters):
+            draw_rectangle(-550, y, 50, 100, 'Selection')
+            turtle.tracer(False)
+            selection_turtle.goto(-523, y + 50)
+            selection_turtle.right(90)
+            selection_turtle.forward(20)
+            selection_turtle.write(letter, False, align="center", font=("Arial", 30, "normal"))
+            turtle.tracer(True)
+            
+        picking_pos = False
+
+        turtle.onscreenclick(select_tile)
+
+        turtle.tracer(True)
+
+        while not picking_pos and chose_tile is None:
+            wn.update()
+
+        selection_turtle.clear()
+
+        if chose_tile == 'Queen':
+            main_turtle.goto(close_position[0], close_position[1])
+            main_turtle.right(main_turtle.heading())
+            queen_drawing()
+
+        elif chose_tile == 'Ant':
+            main_turtle.goto(close_position[0], close_position[1])
+            main_turtle.right(main_turtle.heading())
+            ant_drawing()
+
+        elif chose_tile == 'Grasshopper':
+            main_turtle.goto(close_position[0], close_position[1])
+            main_turtle.right(main_turtle.heading())
+            grasshopper_drawing()
+
+        elif chose_tile == 'Spider':
+            main_turtle.goto(close_position[0], close_position[1])
+            main_turtle.right(main_turtle.heading())
+            spider_drawing()
+
+        elif chose_tile == 'Beetle':
+            main_turtle.goto(close_position[0], close_position[1])
+            main_turtle.right(main_turtle.heading())
+            beetle_drawing()
+
+        #print(chose_tile)
+        #print(close_position)
+
+        orig_position = close_position
+        
+        return chose_tile, close_position, move_type, orig_position
+
+    elif move_type == 'Move':
+
+        picking_pos = False
+
+        # Pick the Tile you want to move
+        turtle.onscreenclick(place_tile)
+
+        while not picking_pos:
+            wn.update()
+
+        orig_position = close_position
+
+        # Find the Tile that has been placed
+        for i in range(len(own_tiles)):
+
+            if own_tiles[i] == close_position and z_own[i] >= 0:
+
+                # Find the avaliable moves of the piece
+
+                if own_insect[i] == 'Queen':
+                    ava_pos = queen_logic(close_position, current_tile_mat)
+
+
+                elif own_insect[i] == 'Ant':
+                    ava_pos = ant_logic(close_position, current_tile_mat)
+                    
+
+                elif own_insect[i] == 'Grasshopper':
+                    ava_pos = grasshopper_pathway(close_position, current_tile_mat)
+                    
+
+                elif own_insect[i] == 'Spider':
+                    ava_pos = spider_logic(close_position, current_tile_mat)
+                    
+
+                elif own_insect[i] == 'Beetle':
+                    ava_pos = beetle_logic(close_position, current_tile_mat)
+
+                for j in range(len(ava_pos)):
+                    turtle.tracer(False)
+                    selection_turtle.up()
+                    selection_turtle.goto(ava_pos[j][0], ava_pos[j][1])
+                    selection_turtle.dot(10, 'Blue')
+                    turtle.tracer(True)
+
+                picking_pos = False
+
+                # Pick the Tile the position you want to move to
+                turtle.onscreenclick(place_tile)
+
+                while not picking_pos:
+                    wn.update()
+
+                selection_turtle.clear()
+
+                return own_insect[i], close_position, move_type, orig_position
+
+# Drawing Announcers
+def draw_board(color, x, y, label):
+    board_turtle.color(color)
+    board_turtle.begin_fill()
+    draw_rectangle(x, y, 150, 50, 'Board')
+    board_turtle.end_fill()
+    
+    turtle.tracer(False)
+    board_turtle.color('white')
+    board_turtle.goto(x + 75, y + 10)
+    board_turtle.write(label, False, align="center", font=("Arial", 20, "normal"))
+    
+    board_turtle.color(color)
+    y_positions = [385, 370, 355, 340, 325]
+    labels = ["Queen remaining: ", "Ants remaining: ", "Grasshoppers remaining: ", "Spiders remaining: ", "Beetles remaining: "]
+    
+    for i in range(len(y_positions)):
+        board_turtle.goto(x + (0 if label == "Comp" else 145), y_positions[i])
+        board_turtle.write(labels[i], False, align=("left" if label == "Comp" else "right"), font=("Arial", 10, "normal"))
+    
+    turtle.tracer(True)
+
+
+# Announce Remaining Insects
+def announce_remaining_insects(color, x_positions, y_positions, insect_types, totals, player_insects):
+    announcer_turtle.color(color)
+    for i, insect in enumerate(insect_types):
+        turtle.tracer(False)
+        message = player_insects.count(insect)
+        message = totals[i] - message
+        announcer_turtle.goto(x_positions[i], y_positions[i])
+        announcer_turtle.write(message, False, align="left", font=("Arial", 10, "normal"))
+        turtle.tracer(True)
+
 # Main Loop
 def main():
 
@@ -1462,42 +1892,42 @@ def main():
     p1_insect_mat = []
     p2_insect_mat = []
 
+    global all_locs
+    all_locs = build_the_board()
+
     # Get the starting position's tile and put it in the matrix
     main_turtle.goto(0,0)
-##    current_pos_x = main_turtle.xcor()
-##    current_pos_y = main_turtle.ycor()
+
     turtle.tracer(False)
-##    # Draw Starting Tile
-##    hexagon_shape(current_pos_x, current_pos_y)
-##    
-##
-##    # Assign the tile
-##    random_num = random.randint(1,5)
-##    insect = assign_tile(random_num, -1)
-##    turtle.tracer(True)
-##    
-##    
-##    
-##    current_tile_mat.append([round(current_pos_x, 3), round(current_pos_y, 3)])
-##    current_bug_mat.append(insect)
-##    p1_tiles.append([round(current_pos_x, 3), round(current_pos_y, 3)])
-##    p1_insect_mat.append(insect)
-##    z_p1_tiles.append(0)
-    
 
-    #print(main_turtle.xcor())
-    #print(main_turtle.ycor())
+    human = 0
 
-    
-    
-    
-
-        ##main_turtle.goto(current_pos_x, current_pos_y)
+    draw_board('Green', -390, 400, "Comp")
+    draw_board('Red', 240, 400, "You")
 
     for game in range(50):
-        #print(game)
 
-        ava_pos, final_pos, place_move_mat, place_move_insect, original_position_mat = available_moves(game, current_tile_mat, current_bug_mat, p1_tiles, p2_tiles, z_p1_tiles, z_p2_tiles, p1_insect_mat, p2_insect_mat)
+        announcer_turtle.clear()
+
+        y_positions = [385, 370, 355, 340, 325]
+        insect_types = ['Queen', 'Ant', 'Grasshopper', 'Spider', 'Beetle']
+        totals = [total_queen, total_ant, total_grasshopper, total_spider, total_beetle]
+
+        # Announce for player 2
+        announce_remaining_insects('Green', [-283, -292, -242, -278, -278], y_positions, insect_types, totals, p2_insect_mat)
+
+        # Announce for player 1
+        announce_remaining_insects('Red', [385] * len(insect_types), y_positions, insect_types, totals, p1_insect_mat)
+
+
+        # Whether Human is playing
+        if game % 2 == 1:
+            human = 1
+        else:
+            human = 0
+
+        if human == 0:
+            ava_pos, final_pos, place_move_mat, place_move_insect, original_position_mat = available_moves(game, current_tile_mat, current_bug_mat, p1_tiles, p2_tiles, z_p1_tiles, z_p2_tiles, p1_insect_mat, p2_insect_mat)
 
                                                                     
 ##                if len(ava_pos) >= 1:
@@ -1510,36 +1940,36 @@ def main():
 
 ####################################### Selection Calculations #############################################################################
 
-        #print(ava_pos)
-        
-        # Select one of avaliable locations
-        if game == 0 or game == 1:
-            final_pos = ava_pos
-        else:
-            for m in range(len(ava_pos)):
-                if ava_pos[m] not in current_tile_mat and game != 0 or \
-                   (place_move_mat[m] == 1 and place_move_insect[m] == 'Beetle'):
-                    final_pos.append(ava_pos[m])
+            #print(ava_pos)
+            
+            # Select one of avaliable locations
+            if game == 0 or game == 1:
+                final_pos = ava_pos
+            else:
+                for m in range(len(ava_pos)):
+                    if ava_pos[m] not in current_tile_mat and game != 0 or \
+                       (place_move_mat[m] == 1 and place_move_insect[m] == 'Beetle'):
+                        final_pos.append(ava_pos[m])
 
-        if len(ava_pos) != len(final_pos):
-            print('Different Moves')
-            print(len(ava_pos))
-            print(len(final_pos))
+            if len(ava_pos) != len(final_pos):
+                print('Different Moves')
+                print(len(ava_pos))
+                print(len(final_pos))
 
-        if len(final_pos) == 0:
-            print('No Moves Avaliable')
-            continue
+            if len(final_pos) == 0:
+                print('No Moves Avaliable')
+                continue
 
-        for i in range(len(place_move_insect)):
-            if place_move_insect[i] == 'Grasshopper' and place_move_mat[i] == 1 and (ava_pos[i] in p1_tiles or ava_pos[i] in p2_tiles):
-                print('Grasshopper Bug')
-                print(ava_pos[i])
-                print(current_tile_mat)
-                print(current_bug_mat)
-                print(p1_tiles)
-                print(p2_tiles)
-                print(p1_insect_mat)
-                print(p2_insect_mat)
+            for i in range(len(place_move_insect)):
+                if place_move_insect[i] == 'Grasshopper' and place_move_mat[i] == 1 and (ava_pos[i] in p1_tiles or ava_pos[i] in p2_tiles):
+                    print('Grasshopper Bug')
+                    print(ava_pos[i])
+                    print(current_tile_mat)
+                    print(current_bug_mat)
+                    print(p1_tiles)
+                    print(p2_tiles)
+                    print(p1_insect_mat)
+                    print(p2_insect_mat)
 
                 
 
@@ -1557,165 +1987,177 @@ def main():
 ##            if place_move_mat[i] == 1 and place_move_insect[i] == 'Grasshopper':
 ##                print("Place : " + str(ava_pos[i]) + '  Insect: ' + str(place_move_insect[i]))
     
-        points = []
+            points = []
 
 
-        # Queen in play
-        if 'Queen' in p1_insect_mat and 'Queen' in p2_insect_mat:
+            # Queen in play
+            if 'Queen' in p1_insect_mat and 'Queen' in p2_insect_mat:
 
-            index_q_p1 = p1_insect_mat.index('Queen')
-            next_to_p1_queen = getlocations(p1_tiles[index_q_p1][0], p1_tiles[index_q_p1][1])
-            filled_next_to_p1_queen = filled_loc(p1_tiles[index_q_p1], current_tile_mat)
+                index_q_p1 = p1_insect_mat.index('Queen')
+                next_to_p1_queen = getlocations(p1_tiles[index_q_p1][0], p1_tiles[index_q_p1][1])
+                filled_next_to_p1_queen = filled_loc(p1_tiles[index_q_p1], current_tile_mat)
 
-            index_q_p2 = p2_insect_mat.index('Queen')
-            next_to_p2_queen = getlocations(p2_tiles[index_q_p2][0], p2_tiles[index_q_p2][1])
-            filled_next_to_p2_queen = filled_loc(p2_tiles[index_q_p2], current_tile_mat)
+                index_q_p2 = p2_insect_mat.index('Queen')
+                next_to_p2_queen = getlocations(p2_tiles[index_q_p2][0], p2_tiles[index_q_p2][1])
+                filled_next_to_p2_queen = filled_loc(p2_tiles[index_q_p2], current_tile_mat)
 
-            connected_p1 = connected_tiles(p1_tiles[index_q_p1], current_tile_mat)
-            connected_p2 = connected_tiles(p2_tiles[index_q_p2], current_tile_mat)
+                connected_p1 = connected_tiles(p1_tiles[index_q_p1], current_tile_mat)
+                connected_p2 = connected_tiles(p2_tiles[index_q_p2], current_tile_mat)
 
-        elif 'Queen' not in p1_insect_mat and 'Queen' in p2_insect_mat:
+            elif 'Queen' not in p1_insect_mat and 'Queen' in p2_insect_mat:
 
-            index_q_p2 = p2_insect_mat.index('Queen')
-            next_to_p2_queen = getlocations(p2_tiles[index_q_p2][0], p2_tiles[index_q_p2][1])
-            filled_next_to_p2_queen = filled_loc(p2_tiles[index_q_p2], current_tile_mat)
-            
-            next_to_p1_queen = []
-            filled_next_to_p1_queen = []
-
-            connected_p2 = connected_tiles(p2_tiles[index_q_p2], current_tile_mat)
-            connected_p1 = True
-            
-
-        elif 'Queen' in p1_insect_mat and 'Queen' not in p2_insect_mat:  
-
-            index_q_p1 = p1_insect_mat.index('Queen')
-            next_to_p1_queen = getlocations(p1_tiles[index_q_p1][0], p1_tiles[index_q_p1][1])
-            filled_next_to_p1_queen = filled_loc(p1_tiles[index_q_p1], current_tile_mat)
-
-            next_to_p2_queen = []
-            filled_next_to_p2_queen = []
-
-            
-            connected_p1 = connected_tiles(p1_tiles[index_q_p1], current_tile_mat)
-            connected_p2 = True
-
-            
-        else:
-            next_to_p1_queen = []
-            filled_next_to_p1_queen = []
-            next_to_p2_queen = []
-            filled_next_to_p2_queen = []
-            connected_p1 = False
-            connected_p2 = False
-            index_q_p1 = 0
-            index_q_p2 = 0
-            
-        for m in range(len(final_pos)):
-            points_ranking = 0
+                index_q_p2 = p2_insect_mat.index('Queen')
+                next_to_p2_queen = getlocations(p2_tiles[index_q_p2][0], p2_tiles[index_q_p2][1])
+                filled_next_to_p2_queen = filled_loc(p2_tiles[index_q_p2], current_tile_mat)
                 
-            current_tile_mat_copy = current_tile_mat.copy()
-            current_tile_mat_copy.append(final_pos[m])
+                next_to_p1_queen = []
+                filled_next_to_p1_queen = []
 
-            current_bug_mat_copy = current_bug_mat.copy()
-            current_bug_mat_copy.append(place_move_insect[m])
-            if game % 2 == 1:
-                p1_tiles_copy = p1_tiles.copy()
-                p1_tiles_copy.append(final_pos[m])
-                z_p1_tiles_copy = z_p1_tiles.copy()
-                z_p1_tiles_copy.append(0)
-                p1_insect_mat_copy = p1_insect_mat.copy()
-                p1_insect_mat_copy.append(place_move_insect[m])
-                p2_tiles_copy = p2_tiles.copy()
-                z_p2_tiles_copy = z_p2_tiles.copy()
-                p2_insect_mat_copy = p2_insect_mat.copy()
-            elif game % 2 == 0:
-                p2_tiles_copy = p2_tiles.copy()
-                p2_tiles_copy.append(final_pos[m])
-                z_p2_tiles_copy = z_p2_tiles.copy()
-                z_p2_tiles_copy.append(0)
-                p2_insect_mat_copy = p2_insect_mat.copy()
-                p2_insect_mat_copy.append(place_move_insect[m])
-                p1_tiles_copy = p1_tiles.copy()
-                z_p1_tiles_copy = z_p1_tiles.copy()
-                p1_insect_mat_copy = p1_insect_mat.copy()
+                connected_p2 = connected_tiles(p2_tiles[index_q_p2], current_tile_mat)
+                connected_p1 = True
+                
 
-            if place_move_mat[m] == 0 and len(ava_pos) <= 100:
-                ava_pos_new, final_pos_new, place_move_mat_new, place_move_insect_new, original_position_mat_new = available_moves(game, current_tile_mat_copy, current_bug_mat, p1_tiles, p2_tiles, z_p1_tiles, z_p2_tiles, p1_insect_mat, p2_insect_mat)
+            elif 'Queen' in p1_insect_mat and 'Queen' not in p2_insect_mat:  
 
-##                if game % 2 == 0 and game <= 8 and 'Queen' not in p2_insect_mat:
-##                    print('Testing Length of Moves')
-##                    print(len(ava_pos_new))
-##                    print(len(ava_pos))
-            
-                # 4 Extra Positions
-                if len(ava_pos_new) - len(ava_pos) >= 4:
-                    points_ranking += 5
+                index_q_p1 = p1_insect_mat.index('Queen')
+                next_to_p1_queen = getlocations(p1_tiles[index_q_p1][0], p1_tiles[index_q_p1][1])
+                filled_next_to_p1_queen = filled_loc(p1_tiles[index_q_p1], current_tile_mat)
 
-                # No Real Change
-                if len(ava_pos_new) - len(ava_pos) < 5 and len(ava_pos_new) - len(ava_pos) > -5:
-                    points_ranking +=0
+                next_to_p2_queen = []
+                filled_next_to_p2_queen = []
 
-                # Removing heaps of moves
-                if len(ava_pos_new) - len(ava_pos) < -5:
-                    points_ranking += -10
-            
-            ######################## Player 1 #############################
-            # Player 1
-            if game % 2 == 1 and game != 1:
-                points_ranking = scoring(points_ranking, place_move_mat[m], place_move_insect[m], ava_pos[m], original_position_mat[m], \
-                                          next_to_p1_queen, next_to_p2_queen, p1_tiles, p2_tiles, p1_insect_mat, p2_insect_mat, index_q_p2, \
-                                          filled_next_to_p1_queen, filled_next_to_p2_queen, connected_p1, \
-                                          connected_p2, current_tile_mat, current_tile_mat_copy, game)
-                            
-            ######################## Player 2 #############################
-            # Player 2
+                
+                connected_p1 = connected_tiles(p1_tiles[index_q_p1], current_tile_mat)
+                connected_p2 = True
 
-            if game % 2 == 0 and game != 0:
-                points_ranking = scoring(points_ranking, place_move_mat[m], place_move_insect[m], ava_pos[m], original_position_mat[m], \
-                                          next_to_p2_queen, next_to_p1_queen, p2_tiles, p1_tiles, p2_insect_mat, p1_insect_mat, index_q_p1, \
-                                          filled_next_to_p2_queen, filled_next_to_p1_queen, connected_p2, \
-                                          connected_p1, current_tile_mat, current_tile_mat_copy, game)
+                
+            else:
+                next_to_p1_queen = []
+                filled_next_to_p1_queen = []
+                next_to_p2_queen = []
+                filled_next_to_p2_queen = []
+                connected_p1 = False
+                connected_p2 = False
+                index_q_p1 = 0
+                index_q_p2 = 0
+                
+            for m in range(len(final_pos)):
+                points_ranking = 0
                     
-            
-            points.append(points_ranking)
-            current_tile_mat_copy.pop(-1)
-            current_bug_mat_copy.pop(-1)
-            if game % 2 == 1:
-                p1_tiles_copy.pop(-1)
-                z_p1_tiles_copy.pop(-1)
-                p1_insect_mat_copy.pop(-1)
+                current_tile_mat_copy = current_tile_mat.copy()
+                current_tile_mat_copy.append(final_pos[m])
 
+                current_bug_mat_copy = current_bug_mat.copy()
+                current_bug_mat_copy.append(place_move_insect[m])
+                if game % 2 == 1:
+                    p1_tiles_copy = p1_tiles.copy()
+                    p1_tiles_copy.append(final_pos[m])
+                    z_p1_tiles_copy = z_p1_tiles.copy()
+                    z_p1_tiles_copy.append(0)
+                    p1_insect_mat_copy = p1_insect_mat.copy()
+                    p1_insect_mat_copy.append(place_move_insect[m])
+                    p2_tiles_copy = p2_tiles.copy()
+                    z_p2_tiles_copy = z_p2_tiles.copy()
+                    p2_insect_mat_copy = p2_insect_mat.copy()
+                elif game % 2 == 0:
+                    p2_tiles_copy = p2_tiles.copy()
+                    p2_tiles_copy.append(final_pos[m])
+                    z_p2_tiles_copy = z_p2_tiles.copy()
+                    z_p2_tiles_copy.append(0)
+                    p2_insect_mat_copy = p2_insect_mat.copy()
+                    p2_insect_mat_copy.append(place_move_insect[m])
+                    p1_tiles_copy = p1_tiles.copy()
+                    z_p1_tiles_copy = z_p1_tiles.copy()
+                    p1_insect_mat_copy = p1_insect_mat.copy()
+
+                if place_move_mat[m] == 0 and len(ava_pos) <= 100:
+                    ava_pos_new, final_pos_new, place_move_mat_new, place_move_insect_new, original_position_mat_new = available_moves(game, current_tile_mat_copy, current_bug_mat, p1_tiles, p2_tiles, z_p1_tiles, z_p2_tiles, p1_insect_mat, p2_insect_mat)
+
+    ##                if game % 2 == 0 and game <= 8 and 'Queen' not in p2_insect_mat:
+    ##                    print('Testing Length of Moves')
+    ##                    print(len(ava_pos_new))
+    ##                    print(len(ava_pos))
+                
+                    # 4 Extra Positions
+                    if len(ava_pos_new) - len(ava_pos) >= 4:
+                        points_ranking += 5
+
+                    # No Real Change
+                    if len(ava_pos_new) - len(ava_pos) < 5 and len(ava_pos_new) - len(ava_pos) > -5:
+                        points_ranking +=0
+
+                    # Removing heaps of moves
+                    if len(ava_pos_new) - len(ava_pos) < -5:
+                        points_ranking += -10
+                
+                ######################## Player 1 #############################
+                # Player 1
+                if game % 2 == 1 and game != 1:
+                    points_ranking = scoring(points_ranking, place_move_mat[m], place_move_insect[m], ava_pos[m], original_position_mat[m], \
+                                              next_to_p1_queen, next_to_p2_queen, p1_tiles, p2_tiles, p1_insect_mat, p2_insect_mat, index_q_p2, \
+                                              filled_next_to_p1_queen, filled_next_to_p2_queen, connected_p1, \
+                                              connected_p2, current_tile_mat, current_tile_mat_copy, game)
+                                
+                ######################## Player 2 #############################
+                # Player 2
+
+                if game % 2 == 0 and game != 0:
+                    points_ranking = scoring(points_ranking, place_move_mat[m], place_move_insect[m], ava_pos[m], original_position_mat[m], \
+                                              next_to_p2_queen, next_to_p1_queen, p2_tiles, p1_tiles, p2_insect_mat, p1_insect_mat, index_q_p1, \
+                                              filled_next_to_p2_queen, filled_next_to_p1_queen, connected_p2, \
+                                              connected_p1, current_tile_mat, current_tile_mat_copy, game)
+                        
+                
+                points.append(points_ranking)
+                current_tile_mat_copy.pop(-1)
+                current_bug_mat_copy.pop(-1)
+                if game % 2 == 1:
+                    p1_tiles_copy.pop(-1)
+                    z_p1_tiles_copy.pop(-1)
+                    p1_insect_mat_copy.pop(-1)
+
+                if game % 2 == 0:
+                    p2_tiles_copy.pop(-1)
+                    z_p2_tiles_copy.pop(-1)
+                    p2_insect_mat_copy.pop(-1)
+
+            ################# SELECTION ##################
+
+            # Player 2 is the Best AI
             if game % 2 == 0:
-                p2_tiles_copy.pop(-1)
-                z_p2_tiles_copy.pop(-1)
-                p2_insect_mat_copy.pop(-1)
+                max_tile = max(points)
 
-        ################# SELECTION ##################
+                index = [i for i, x in enumerate(points) if x == max_tile]
 
-        # Player 1 is the Best AI
-        if game % 2 == 1:
-            max_tile = max(points)
+                random_highest = random.randint(0,len(index)-1)
 
-            index = [i for i, x in enumerate(points) if x == max_tile]
+                ran_loc = index[random_highest]
 
-            random_highest = random.randint(0,len(index)-1)
+            # Player 1 is completely random
+            if game % 2 == 1:
+                min_tile = min(points)
 
-            ran_loc = index[random_highest]
+                index = [i for i, x in enumerate(points) if x == min_tile]
 
-        # Player 2 is completely random
-        if game % 2 == 0:
-            min_tile = min(points)
-
-            index = [i for i, x in enumerate(points) if x == min_tile]
-
-            random_lowest = random.randint(0,len(index)-1)
-            ran_loc = index[random_lowest]
+                random_lowest = random.randint(0,len(index)-1)
+                ran_loc = index[random_lowest]
         
-        insect = place_move_insect[ran_loc]
-        tile = original_position_mat[ran_loc]
-        loc = final_pos[ran_loc]
-        placement = place_move_mat[ran_loc]
+            insect = place_move_insect[ran_loc]
+            tile = original_position_mat[ran_loc]
+            loc = final_pos[ran_loc]
+            placement = place_move_mat[ran_loc]
+
+        if human == 1:
+            chose_tile, close_position, move_type, orig_position = Human_Player(p1_tiles, p2_tiles, p1_insect_mat, p2_insect_mat, z_p1_tiles, z_p2_tiles, current_tile_mat)
+
+            insect = chose_tile
+            tile = orig_position
+            loc = close_position
+            if move_type == 'Place':
+                placement = 0
+
+            if move_type == 'Move':
+                placement = 1
         
         print(game)
 ##        print(points[ran_loc])
@@ -1723,38 +2165,38 @@ def main():
 ##        print(placement)
 
 
-        if game == 14:
-            print('Current')
-            print(current_tile_mat)
-            print('Ava_Pos')
-            print(ava_pos)
-            print('Points')
-            print(points)
-            print('Place_move_mat')
-            print(place_move_mat)
-            print('Place_move_insect')
-            print(place_move_insect)
-            print('Original_position_mat')
-            print(original_position_mat)
-            print('Ran Loc')
-            print(ran_loc)
-            print('Point Value')
-            print(points[ran_loc])
-            print('End')
-            
-        if len(ava_pos) == 0:
-            print(ava_pos)
-            print(game)
-            print(place_move_mat)
-            print(place_move_insect)
-            print(original_position_mat)
-            print(p1_tiles)
-            print(p2_tiles)
-            print(p1_insect_mat)
-            print(p2_insect_mat)
-            print(z_p1_tiles)
-            print(z_p2_tiles)
-            print(points)
+##        if game == 14:
+##            print('Current')
+##            print(current_tile_mat)
+##            print('Ava_Pos')
+##            print(ava_pos)
+##            print('Points')
+##            print(points)
+##            print('Place_move_mat')
+##            print(place_move_mat)
+##            print('Place_move_insect')
+##            print(place_move_insect)
+##            print('Original_position_mat')
+##            print(original_position_mat)
+##            print('Ran Loc')
+##            print(ran_loc)
+##            print('Point Value')
+##            print(points[ran_loc])
+##            print('End')
+##            
+##        if len(ava_pos) == 0:
+##            print(ava_pos)
+##            print(game)
+##            print(place_move_mat)
+##            print(place_move_insect)
+##            print(original_position_mat)
+##            print(p1_tiles)
+##            print(p2_tiles)
+##            print(p1_insect_mat)
+##            print(p2_insect_mat)
+##            print(z_p1_tiles)
+##            print(z_p2_tiles)
+##            print(points)
 
 ###################################### Placement #######################
 
@@ -1785,9 +2227,13 @@ def main():
             open_slot_p1 = filled_loc(p1_tiles[index_q_p1], current_tile_mat)
             open_slot_p2 = filled_loc(p2_tiles[index_q_p2], current_tile_mat)
 
-            if len(open_slot_p1) == 6 and len(open_slot_2) != 6:
+            if len(open_slot_p1) == 6 and len(open_slot_p2) != 6:
                 print('Player 2 Wins')
                 print('Player 1''s Queen is surrounded')
+                print('Player 2 wins in ' + str(game) + ' moves')
+                main_turtle.goto(0,0)
+                main_turtle.color('Green')
+                main_turtle.write("You Lose!", False, align="center", font=("Arial", 100, "normal"))
                 
                 break
 
@@ -1814,26 +2260,19 @@ def main():
             if len(open_slot_p2) == 6 and len(open_slot_p1) != 6:
                 print('Player 1 Wins')
                 print('Player 2''s Queen is surrounded')
-                print('Player 1 in ' + str(game) + ' moves')
-                print(points)
-                print(final_pos)
-                print(ran_loc)
-                print(place_move_mat)
-                print(original_position_mat)
-                print(place_move_insect)
-                print(current_tile_mat)
-                print(current_bug_mat)
+                print('Player 1 wins in ' + str(game) + ' moves')
+                main_turtle.goto(0,0)
+                main_turtle.color('red')
+                main_turtle.write("You Win!", False, align="center", font=("Arial", 100, "normal"))
                 break
 
             if len(open_slot_p2) == 6 and len(open_slot_p1) == 6:
-                print('It'' a tie')
+                print('It''s a tie')
                 print('Both Queen''s are surrounded')
-                print(points)
-                print(final_pos)
-                print(ran_loc)
-                print(place_move_mat)
-                print(original_position_mat)
-                print(place_move_insect)
+                print('The game lasted ' + str(game) + ' moves')
+                main_turtle.goto(0,0)
+                main_turtle.color('black')
+                main_turtle.write("It's a tie!", False, align="center", font=("Arial", 100, "normal"))
                 break
 
             #Player 1's Turn

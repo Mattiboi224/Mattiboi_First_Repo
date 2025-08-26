@@ -757,46 +757,18 @@ def Human_Player(own_tiles, opp_tiles, own_insect, opp_insect, z_own, z_opp, cur
         selection_turtle.goto(close_position[0], close_position[1])
         selection_turtle.dot(10, "Red")
 
-        draw_rectangle(-450, 250, 50, 100, 'Selection')
-        turtle.tracer(False)
-        selection_turtle.goto(-423,300)
-        selection_turtle.right(90)
-        selection_turtle.forward(20)
-        selection_turtle.write("Q", False, align="center", font=("Arial", 30, "normal"))
-        turtle.tracer(True)
+        positions = [250, 100, -50, -200, -350]
+        letters = ["Q", "A", "G", "S", "B"]
 
-        draw_rectangle(-450, 100, 50, 100, 'Selection')
-        turtle.tracer(False)
-        selection_turtle.goto(-423,150)
-        selection_turtle.right(90)
-        selection_turtle.forward(20)
-        selection_turtle.write("A", False, align="center", font=("Arial", 30, "normal"))
-        turtle.tracer(True)
-
-        draw_rectangle(-450, -50, 50, 100, 'Selection')
-        turtle.tracer(False)
-        selection_turtle.goto(-423,0)
-        selection_turtle.right(90)
-        selection_turtle.forward(20)
-        selection_turtle.write("G", False, align="center", font=("Arial", 30, "normal"))
-        turtle.tracer(True)
-
-        draw_rectangle(-450, -200, 50, 100, 'Selection')
-        turtle.tracer(False)
-        selection_turtle.goto(-423,-150)
-        selection_turtle.right(90)
-        selection_turtle.forward(20)
-        selection_turtle.write("S", False, align="center", font=("Arial", 30, "normal"))
-        turtle.tracer(True)
-
-        draw_rectangle(-450, -350, 50, 100, 'Selection')
-        turtle.tracer(False)
-        selection_turtle.goto(-423,-300)
-        selection_turtle.right(90)
-        selection_turtle.forward(20)
-        selection_turtle.write("B", False, align="center", font=("Arial", 30, "normal"))
-        turtle.tracer(True)
-
+        for y, letter in zip(positions, letters):
+            draw_rectangle(-450, y, 50, 100, 'Selection')
+            turtle.tracer(False)
+            selection_turtle.goto(-423, y + 50)
+            selection_turtle.right(90)
+            selection_turtle.forward(20)
+            selection_turtle.write(letter, False, align="center", font=("Arial", 30, "normal"))
+            turtle.tracer(True)
+            
         picking_pos = False
 
         turtle.onscreenclick(select_tile)
