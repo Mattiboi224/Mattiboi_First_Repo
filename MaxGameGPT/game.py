@@ -11,6 +11,7 @@ from building import Building
 class Game:
     def __init__(self):
         self.grid = GridMap(C.GRID_W, C.GRID_H)
+        self.tile_map = self.grid.assign_tiles()
         self.units = []
         self.buildings = []
         self.money = {t: C.INITIAL_MONEY for t in [C.PLAYER_TEAM] + C.AI_TEAMS}
@@ -21,15 +22,15 @@ class Game:
         random.shuffle(spawns)
         # Player base
         tx, ty = spawns[0]
-        self.player_base = self.spawn_building(C.PLAYER_TEAM, *m.tile_center(tx, ty), "base")
+        self.player_base = self.spawn_building(C.PLAYER_TEAM, *m.tile_center(tx, ty), C.BASE_IMAGE, "base")
         # Give player a worker
-        self.spawn_unit(C.PLAYER_TEAM, *m.tile_center(tx+1, ty), "worker")
+        self.spawn_unit(C.PLAYER_TEAM, *m.tile_center(tx+1, ty), C.WORKER_IMAGE, "worker")
 
         # AI bases
         for i, team in enumerate(C.AI_TEAMS, start=1):
             tx, ty = spawns[i % len(spawns)]
-            self.spawn_building(team, *m.tile_center(tx, ty), "base")
-            self.spawn_unit(team, *m.tile_center(tx+1, ty), "worker")  # give AI a worker too
+            self.spawn_building(team, *m.tile_center(tx, ty), C.BASE_IMAGE, "base")
+            self.spawn_unit(team, *m.tile_center(tx+1, ty), C.WORKER_IMAGE, "worker")  # give AI a worker too
 
         # Selection
         self.select_start = None
@@ -48,13 +49,13 @@ class Game:
         self.ai_timers = {team: 0.0 for team in C.AI_TEAMS}
 
     # ---- Spawning ----
-    def spawn_unit(self, team, x, y, kind):
-        u = Unit(team, x, y, kind)
+    def spawn_unit(self, team, x, y, image, kind):
+        u = Unit(team, x, y, image, kind)
         self.units.append(u)
         return u
 
-    def spawn_building(self, team, x, y, kind):
-        b = Building(team, x, y, kind)
+    def spawn_building(self, team, x, y, image, kind):
+        b = Building(team, x, y, image, kind)
         self.buildings.append(b)
         return b
 
@@ -85,19 +86,27 @@ class Game:
                 d = m.dist(pos, b.pos())
                 if d < bd:
                     bd = d; best = b
+        
         return best
     
     def find_nearest_resource(self, pos):
         best = None
         bd = 1e9
         x, y = m.to_grid(pos)
+        #print(x, y)
+        #count = 0
         for i in range(C.GRID_H):
             for j in range(C.GRID_W):
                 #print(self.grid.tiles[i][j])
                 if self.grid.tiles[i][j] == 2:
-                    d = m.dist((x,y), (i,j))
+                    d = m.dist((y,x), (i,j))
+                    #count += 1
                     if d < bd:
-                        bd = d; best = (i,j)
+                        bd = d; best = (j,i)
+                        #print("bd:", bd)
+                        #print(i, j)
+        #print("Resource Loc:", best)
+        #print(count)
         return best
 
 
@@ -183,7 +192,7 @@ class Game:
                             if not m.in_bounds(tx, ty): continue
                             if self.grid.tiles[ty][tx] == C.T_GRASS:
                                 px, py = m.tile_center(tx, ty)
-                                self.spawn_building(team, px, py, "barracks")
+                                self.spawn_building(team, px, py, C.BARRACKS_IMAGE, "barracks")
                                 self.money[team] -= C.COST_BARRACKS
                                 break
                     # queue a soldier somewhere (base or any barracks)
@@ -247,6 +256,7 @@ class Game:
         lines = [
             "Controls: Left-drag = select units | Right-click = move/attack/harvest | ESC = cancel/clear",
             "B: place Barracks (75) | U: train Worker at Base (50) | S: train Soldier at Barracks (60)",
+            "W: place Tank Factory (100) | T: train Tank at Tank Factory (100)",
             "M: toggle Map Edit | [ / ] choose tile: Wall / Resource (paint while in Map Edit) | F1: toggle help",
         ]
         y = 6

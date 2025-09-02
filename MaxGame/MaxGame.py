@@ -2,6 +2,7 @@
 from enemy import Enemy
 import pygame as pg
 import Constants as c
+from gridmap import GridMap
 
 ## Initialise pygame
 pg.init()
@@ -24,7 +25,9 @@ enemy_group = pg.sprite.Group()
 enemy = Enemy((200,300), enemy_image)
 enemy_group.add(enemy)
 
-print(enemy)
+# Setup
+grid = GridMap(c.SCREEN_WIDTH, c.SCREEN_HEIGHT)
+tile_list = grid.assign_tiles()
 
 # Game Loop
 run = True
@@ -33,13 +36,17 @@ while run:
 
     clock.tick(c.FPS)
 
-    screen.fill("grey100")
+    #screen.fill("grey100")
 
     # Update Groups
     enemy_group.update()
+    
+    screen.fill((30, 30, 30))
+    grid.draw(screen)
 
     # Draw Groups
     enemy_group.draw(screen)
+    
 
     ## Event Handle
     for event in pg.event.get():

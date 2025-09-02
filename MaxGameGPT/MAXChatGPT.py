@@ -88,6 +88,16 @@ def main():
                         game.build_mode = True
                         game.build_kind = "barracks"
 
+                elif event.key == pygame.K_w:
+                    # enter build mode (Warfactory)
+                    if game.money[C.PLAYER_TEAM] >= C.COST_TANK_FACTORY:
+                        game.build_mode = True
+                        game.build_kind = "tank_factory"
+
+                elif event.key == pygame.K_p:
+                    own_tank_factory = [b for b in game.buildings if b.team==C.PLAYER_TEAM and b.kind=="tank_factory"]
+                    print(own_tank_factory)
+
                 elif event.key == pygame.K_u:
                     # queue a worker at player's base
                     base = game.player_base
@@ -111,14 +121,35 @@ def main():
                             bb.queue_time = C.BUILD_SOLDIER_TIME
                         game.money[C.PLAYER_TEAM] -= C.COST_SOLDIER
 
+                elif event.key == pygame.K_t:
+                    # queue a tank at any selected warfactory
+                    selected_tank_factory = [b for b in game.buildings if b.team==C.PLAYER_TEAM and b.kind=="tank_factory"
+                                         and pygame.Rect(0,0,C.TILE,C.TILE).inflate(0,0)]
+                    # if player selected a tank factory, use that; otherwise first tank factory
+                    # (for simplicity here we'll just use the first owned tank factory)
+                    own_tank_factory = [b for b in game.buildings if b.team==C.PLAYER_TEAM and b.kind=="tank_factory"]
+                    if own_tank_factory and game.money[C.PLAYER_TEAM] >= C.COST_TANK:
+                        bb = own_tank_factory[0]
+                        bb.queue.append("tank")
+                        if len(bb.queue) == 1:
+                            bb.queue_time = C.BUILD_TANK_TIME
+                        game.money[C.PLAYER_TEAM] -= C.COST_TANK
+
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:  # left
-                    if game.build_mode:
+                    if game.build_mode and game.build_kind == "barracks":
                         # attempt to place building
                         if game.ghost_valid and game.money[C.PLAYER_TEAM] >= C.COST_BARRACKS:
                             px, py = game.ghost_pos
-                            game.spawn_building(C.PLAYER_TEAM, px, py, "barracks")
+                            game.spawn_building(C.PLAYER_TEAM, px, py, C.BARRACKS_IMAGE, "barracks")
                             game.money[C.PLAYER_TEAM] -= C.COST_BARRACKS
+                            game.build_mode = False
+                    elif game.build_mode and game.build_kind == "tank_factory":
+                        # attempt to place building
+                        if game.ghost_valid and game.money[C.PLAYER_TEAM] >= C.COST_TANK_FACTORY:
+                            px, py = game.ghost_pos
+                            game.spawn_building(C.PLAYER_TEAM, px, py, C.TANK_FACTORY_IMAGE, "tank_factory")
+                            game.money[C.PLAYER_TEAM] -= C.COST_TANK_FACTORY
                             game.build_mode = False
                     elif game.map_edit:
                         tx, ty = UT.to_grid(event.pos)
@@ -129,7 +160,7 @@ def main():
                             else:
                                 game.grid.toggle_at(tx, ty, game.paint_tile)
                     else:
-                        print("starting sel")
+                        # print("starting sel")
                         # begin selection
                         game.select_start = event.pos
                         #game.selection_rect = pygame.Rect(event.pos, (0,0))
@@ -149,6 +180,8 @@ def main():
                                 u.target = enemy
                         else:
                             tx, ty = UT.to_grid(event.pos)
+                            #print(tx)
+                            #print(ty)
                             if UT.in_bounds(tx, ty) and game.grid.tiles[ty][tx] == C.T_RESOURCE:
                                 game.order_harvest(game.selected_units, (tx, ty))
                                 #print("harvesting")
