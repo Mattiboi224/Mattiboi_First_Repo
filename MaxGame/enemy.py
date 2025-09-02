@@ -8,7 +8,7 @@ class Enemy(pg.sprite.Sprite):
         self.rect.center = pos
 
     def move(self):
-        self.rect.x += 1
+        self.rect.x += 10
 
     def update(self):
         self.move()

@@ -10,8 +10,8 @@ def gen_id():
     NEXT_ID += 1
     return i
 
-class Entity:
-    def __init__(self, team, x, y, radius=12):
+class Entity(pygame.sprite.Sprite):
+    def __init__(self, team, x, y, image, radius=12):
         self.id = gen_id()
         self.team = team
         self.x = x
@@ -19,6 +19,7 @@ class Entity:
         self.radius = radius
         self.hp = 1
         self.max_hp = 1
+        self.image = image
         self.dead = False
 
     def pos(self):
