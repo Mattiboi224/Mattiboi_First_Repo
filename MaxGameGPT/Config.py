@@ -6,16 +6,16 @@ GRID_W, GRID_H = WIDTH // TILE, HEIGHT // TILE
 FPS = 60
 
 PLAYER_TEAM = 0
-NUM_AI = 1             # number of AI opponents
+NUM_AI = 2             # number of AI opponents
 AI_TEAMS = list(range(1, 1 + NUM_AI))
 
-INITIAL_MONEY = 0
+INITIAL_MONEY = 200
 
 # Costs
 COST_WORKER = 50
 COST_SOLDIER = 60
 COST_BARRACKS = 75
-COST_TANK = 100
+COST_TANK = 150
 COST_TANK_FACTORY = 100
 
 # Build times (in seconds)
@@ -30,13 +30,13 @@ WORKER_RANGE = 1.0 * TILE
 WORKER_SPEED = 80  # px/s
 
 SOLDIER_HP = 80
-SOLDIER_ATK = 10
+SOLDIER_ATK = 20
 SOLDIER_RANGE = 1.2 * TILE
 SOLDIER_SPEED = 90  # px/s
 
-TANK_HP = 200
-TANK_ATK = 50
-TANK_RANGE = 3 * TILE
+TANK_HP = 150
+TANK_ATK = 30
+TANK_RANGE = 2 * TILE
 TANK_SPEED = 50  # px/s
 
 # Building stats
@@ -53,6 +53,7 @@ RESOURCE_HEALTH = 200
 T_GRASS = 0
 T_WALL = 1
 T_RESOURCE = 2
+T_PLAYER_LOC = 3
 
 # Image Location
 #pg.image.load('assets/tank.png').convert_alpha()
@@ -63,11 +64,17 @@ SOLDIER_IMAGE = 'assets/units/soldier.png'
 TANK_FACTORY_IMAGE = 'assets/buildings/tank_factory.png'
 TANK_IMAGE = 'assets/units/tank.png'
 
+# Game Map Location
+GAME_MAP = 'game_map.png'
 
 TILE_COLORS = {
-    T_GRASS: (40, 110, 40),
-    T_WALL: (70, 70, 70),
-    T_RESOURCE: (120, 85, 30),
+    #T_GRASS: (40, 110, 40),
+    T_GRASS: (34, 177, 76),
+    #T_WALL: (70, 70, 70),
+    T_WALL: (127, 127, 127),
+    #T_RESOURCE: (120, 85, 30),
+    T_RESOURCE: (255, 242, 0),
+    T_PLAYER_LOC: (237, 28, 36)
 }
 
 TEAM_COLORS = {

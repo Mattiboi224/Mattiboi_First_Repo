@@ -3,6 +3,8 @@ import random
 import pygame
 import Config as C
 from tiles import Tiles
+from PIL import Image
+from collections import Counter
 
 # ------------------ GRID/MAP ------------------
 class GridMap:
@@ -13,11 +15,23 @@ class GridMap:
         #print(w)
         #print(h)
         # scatter some walls/resources
-        for _ in range(150):
-            x = random.randrange(w)
-            y = random.randrange(h)
-            self.tiles[y][x] = random.choice([C.T_GRASS, C.T_GRASS, C.T_GRASS, C.T_WALL, C.T_RESOURCE])
+        #for _ in range(150):
+        #    x = random.randrange(w)
+        #    y = random.randrange(h)
+        #    self.tiles[y][x] = random.choice([C.T_GRASS, C.T_GRASS, C.T_GRASS, C.T_WALL, C.T_RESOURCE])
 
+        # Make your own maps
+        image = Image.open(C.GAME_MAP)
+        pixels = list(image.getdata())
+        rgb_pixel = [t[:3] for t in pixels]
+        
+        for i in range(h):
+            for j in range(w):
+                for key, value in C.TILE_COLORS.items():
+                    if value == rgb_pixel[j + (i - 1) * w]:
+                        if key == 3:
+                            key = 1
+                        self.tiles[i][j] = key
         #print(self.tiles)
 
     def toggle_at(self, tx, ty, ttype):

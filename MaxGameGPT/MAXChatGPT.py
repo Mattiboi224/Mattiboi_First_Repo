@@ -244,6 +244,63 @@ def main():
         game.draw(screen, font)
         pygame.display.flip()
 
+        # End Game conditions
+
+        final_teams = []
+        for b in game.buildings:
+            if not b.dead:
+                final_teams.append(b.team)
+        
+        unique_final_teams = list(set(final_teams))
+
+        if len(unique_final_teams) == 1 or C.PLAYER_TEAM not in unique_final_teams:
+            running = False
+            print("Game Over")
+
+            b_built = 0
+            b_lost = 0
+            b_destroyed = 0
+
+            u_built = 0
+            u_lost = 0
+            u_destroyed = 0
+
+            eb_built = 0
+            eu_built = 0
+            
+
+            for b in game.total_buildings:
+                if b.team == 0: # If Player Buildings
+                    b_built += 1
+                    if b.dead == True:
+                        b_lost += 1
+                else:
+                    if b.dead == True:
+                        b_destroyed += 1
+                    eb_built += 1
+                    
+            for u in game.total_units:
+                if u.team == 0: # If Player Units
+                    u_built += 1
+                    if u.dead == True:
+                        u_lost += 1
+                else:
+                    if u.dead == True:
+                        u_destroyed += 1
+                    eu_built += 1
+
+            print('End Game Stats')
+            print('Buildings Built: ', b_built)
+            print('Buildings Lost: ', b_lost)
+            print('Buildings Destroyed: ', b_destroyed)
+            print('Units Built: ', u_built)
+            print('Units Lost: ', u_lost)
+            print('Units Destroyed: ', u_destroyed)
+            print('Enemy Buildings Built: ', eb_built)
+            print('Enemy Units Built: ', eu_built)
+
+    
+
     pygame.quit()
 
 if __name__ == "__main__":
