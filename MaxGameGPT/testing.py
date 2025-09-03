@@ -1,23 +1,52 @@
+from PIL import Image
+from collections import Counter
 
-a = 5
-b = 10
-matrix = [[0 for _ in range(a)] for _ in range(b)]
+w = 32
+h = 22
 
-transposed = [[row[i] for row in matrix] for i in range(len(matrix[0]))]
-print(transposed)
+# Tile types
+T_GRASS = 0
+T_WALL = 1
+T_RESOURCE = 2
+T_PLAYER_LOC = 3
 
-matrix[1][0] = 20
+TILE_COLORS = {
+    #T_GRASS: (40, 110, 40),
+    T_GRASS: (34, 177, 76),
+    #T_WALL: (70, 70, 70),
+    T_WALL: (127, 127, 127),
+    #T_RESOURCE: (120, 85, 30),
+    T_RESOURCE: (255, 242, 0),
+    T_PLAYER_LOC: (237, 28, 36)
+}
 
-print(matrix)
+# Load the image
+image = Image.open('game_map.png')
+
+# Resize for faster processing
+#image = image.resize((32, 22))
+
+# Get pixel data
+pixels = list(image.getdata())
+rgb_pixel = [t[:3] for t in pixels]
+#print(pixels)
+
+print(rgb_pixel[0])
+
+# for i in range(h):
+#     for j in range(w):
+#         for key, value in TILE_COLORS.items():
+#             if value == rgb_pixel[j + (i - 1) * w]:
+#                 print(key)
 
 
 
-for i in range(b):
-    for j in range(a):
-        print (i)
-        print(j)
-        matrix[i][j] = 10
+# Count colors
+color_counts = Counter(pixels)
 
-print(matrix[7][2])
+#print(color_counts)
 
-print(matrix)
+# Find the most common color
+dominant_color = color_counts.most_common(1)[0][0]
+
+#print(f"Dominant Color: {dominant_color}")
