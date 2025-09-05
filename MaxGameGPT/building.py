@@ -18,6 +18,7 @@ class Building(Entity):
         self.queue = []     # production queue of ("worker" or "soldier")
         self.queue_time = 0.0
         self.image = pygame.image.load(image).convert_alpha()
+        self.sold = False
 
     def pos(self):
         return (self.x, self.y)
@@ -32,10 +33,17 @@ class Building(Entity):
             if self.queue_time <= 0:
                 unit_type = self.queue.pop(0)
                 # spawn near the building
-                angle = random.random() * math.tau
                 r = 24
-                px = self.x + math.cos(angle) * r
-                py = self.y + math.sin(angle) * r
+                spawn_point = True
+                while spawn_point:
+                    angle = random.random() * math.tau
+                    px = self.x + math.cos(angle) * r
+                    py = self.y + math.sin(angle) * r
+                    gx, gy = m.to_grid((px, py))
+                    if not m.in_bounds(gx, gy):
+                        continue
+                    spawn_point = False
+
                 if unit_type == "worker":
                     image_to_use = C.WORKER_IMAGE
                 elif unit_type == "soldier":

@@ -11,6 +11,7 @@ from building import Building
 class Game:
     def __init__(self):
         self.grid = GridMap(C.GRID_W, C.GRID_H)
+        
         self.tile_map = self.grid.assign_tiles()
         self.units = []
         self.buildings = []
@@ -21,10 +22,16 @@ class Game:
 
         # Place bases
         spawns = [(2,2), (C.GRID_W-3, C.GRID_H-3), (C.GRID_W-3, 2), (2, C.GRID_H-3), (C.GRID_W//2, C.GRID_H-3)]
+        #print(self.grid.spawns)
+        if len(self.grid.spawns) != 0:
+            spawns = self.grid.spawns
+        #print(spawns)
         random.shuffle(spawns)
         # Player base
         tx, ty = spawns[0]
+        #print(tx, ty)
         self.player_base = self.spawn_building(C.PLAYER_TEAM, *m.tile_center(tx, ty), C.BASE_IMAGE, "base")
+    
         # Give player a worker
         self.spawn_unit(C.PLAYER_TEAM, *m.tile_center(tx+1, ty), C.WORKER_IMAGE, "worker")
 
@@ -33,6 +40,7 @@ class Game:
             tx, ty = spawns[i % len(spawns)]
             self.spawn_building(team, *m.tile_center(tx, ty), C.BASE_IMAGE, "base")
             self.spawn_unit(team, *m.tile_center(tx+1, ty), C.WORKER_IMAGE, "worker")  # give AI a worker too
+           # print(tx, ty)
 
         # Selection
         self.select_start = None
@@ -74,7 +82,7 @@ class Game:
             if d < bd:
                 bd = d; best = u
         for b in self.buildings:
-            if b.team == team or b.dead: continue
+            if b.team == team or b.dead or b.sold: continue
             d = m.dist(pos, b.pos())
             if within and d > within: continue
             if d < bd:
@@ -85,7 +93,7 @@ class Game:
         best = None
         bd = 1e9
         for b in self.buildings:
-            if b.team != team or b.dead: continue
+            if b.team != team or b.dead or b.sold: continue
             if b.kind in ("base","barracks"):
                 d = m.dist(pos, b.pos())
                 if d < bd:
@@ -97,7 +105,7 @@ class Game:
         best = None
         bd = 1e9
         for b in self.buildings:
-            if b.team != team or b.dead: continue
+            if b.team != team or b.dead or b.sold: continue
             if b.kind in b_type:
                 d = m.dist(pos, b.pos())
                 if d < bd:
@@ -126,7 +134,7 @@ class Game:
         for i in range(C.GRID_H):
             for j in range(C.GRID_W):
                 #print(self.grid.tiles[i][j])
-                if self.grid.tiles[i][j] == 2:
+                if self.grid.tiles[i][j] == C.T_RESOURCE or self.grid.tiles[i][j] == C.T_GEMS:
                     d = m.dist((y,x), (i,j))
                     #count += 1
                     if d < bd:
@@ -149,7 +157,7 @@ class Game:
 
     def building_at_point(self, p):
         for b in reversed(self.buildings):
-            if b.dead: continue
+            if b.dead or b.sold: continue
             rect = pygame.Rect(0,0,C.TILE,C.TILE)
             rect.center = (int(b.x), int(b.y))
             if rect.collidepoint(p): return b
@@ -179,7 +187,9 @@ class Game:
                 u.set_path(path)
                 # when they arrive, start harvesting
                 u.harvesting = True
-                u.harvest_timer = C.HARVEST_TIME
+                new_resource = self.tile_map[tx][ty]
+                #print(new_resource.harvest_timer)
+                u.harvest_timer = new_resource.harvest_timer
 
     # ---- Update ----
     def update(self, dt):
@@ -190,11 +200,11 @@ class Game:
 
         # Remove dead
         self.units = [u for u in self.units if not u.dead]
-        self.buildings = [b for b in self.buildings if not b.dead]
+        self.buildings = [b for b in self.buildings if not b.dead and not b.sold]
 
         # Update buildings
         for b in self.buildings:
-            if not b.dead:
+            if not b.dead and not b.sold:
                 b.update(dt, self)
 
         # AI
@@ -225,7 +235,9 @@ class Game:
                                 u.set_path(path)
                                 # when they arrive, start harvesting
                                 u.harvesting = True
-                                u.harvest_timer = C.HARVEST_TIME
+                                new_resource = self.tile_map[tx][ty]
+                                u.harvest_timer = new_resource.harvest_timer
+                               # u.harvest_timer = C.HARVEST_TIME
 
                 if base:
                     worker_count = 1 ## Added One for Logic Reasons
@@ -236,18 +248,45 @@ class Game:
                     # queue a worker somewhere at base
                     target_build = random.choice([b for b in self.buildings if b.team==team and b.kind=="base"])
 
+                    worker_count = worker_count + len(target_build.queue)
+
                     # More Workers Less Likely to build
-                    if money >= C.COST_WORKER and random.random() < 1/worker_count:
+                    if self.money[team] >= C.COST_WORKER and random.random() < 1/worker_count:
                         target_build.queue.append("worker")
                         target_build.queue_time = C.BUILD_WORKER_TIME if len(target_build.queue)==1 else target_build.queue_time
-                        self.money[team] -= C.COST_WORKER                   
+                        self.money[team] -= C.COST_WORKER
+                        break
                     
+                    # No Workers and No Money
+                    if self.money[team] < C.COST_WORKER and worker_count == 1 \
+                    and len([b for b in self.buildings if b.team==team and b.kind!="base"]) > 0 and len(target_build.queue) == 0: 
+
+                        # Sell Building to cover cost
+                        sold_building = random.choice([b for b in self.buildings if b.team==team and b.kind!="base"])
+                        sold_building.sold = True
+
+                        #print(sold_building.kind)
+
+                        if sold_building.kind == "barracks":
+                            cost_value = C.COST_BARRACKS
+                        elif sold_building.kind == "tank_factory":
+                            cost_value = C.COST_TANK_FACTORY
+
+                        self.money[team] += cost_value * C.SELL_PERCENTAGE
+
+                        #print(self.money[team])
+
+                        break
+
+
+
+
                     barracks_count = 1 ## Added One for Logic Reasons
                     for b in self.buildings:
                         if b.team == team and b.kind == "barracks":
                             barracks_count += 1
                     # Less Likely the more barracks you build
-                    if money >= C.COST_BARRACKS and random.random() < 1/(barracks_count/2):
+                    if self.money[team] >= C.COST_BARRACKS and random.random() < 1/(barracks_count/2):
                         # find a nearby free tile
                         gx, gy = m.to_grid(base.pos())
                         for _ in range(10):
@@ -261,7 +300,7 @@ class Game:
                                 self.money[team] -= C.COST_BARRACKS
                                 break
                 # 30% chance to build a tank factory near base if enough money
-                    if money >= C.COST_TANK_FACTORY and random.random() < 0.3:
+                    if self.money[team] >= C.COST_TANK_FACTORY and random.random() < 0.3:
                         # find a nearby free tile
                         gx, gy = m.to_grid(base.pos())
                         for _ in range(10):
@@ -278,10 +317,11 @@ class Game:
                 if barracks:
                     # queue a soldier somewhere (base or any barracks)
                     target_build = random.choice([b for b in self.buildings if b.team==team and b.kind=="barracks"])
-                    if money >= C.COST_SOLDIER and random.random() < 0.3:
+                    if self.money[team] >= C.COST_SOLDIER and random.random() < 0.3:
                         target_build.queue.append("soldier")
                         target_build.queue_time = C.BUILD_SOLDIER_TIME if len(target_build.queue)==1 else target_build.queue_time
                         self.money[team] -= C.COST_SOLDIER
+                        break
 
                     # Rally soldiers toward player's base
                     pbase = self.player_base
@@ -294,10 +334,12 @@ class Game:
                             if u.team==team and u.kind=="soldier" and (not u.path_px):
                                 choice = random.choice(["Unit", "Building"])
 
-                                if random.choice([b for b in self.buildings if b.team==C.PLAYER_TEAM]) == None:
+                                # If no Buildings pick a Unit
+                                if len([b for b in self.buildings if b.team==C.PLAYER_TEAM]) == 0:
                                     choice = "Unit"
 
-                                if random.choice([b for b in self.units if b.team==C.PLAYER_TEAM]) == None:
+                                # If no Units pick a building
+                                if len([b for b in self.units if b.team==C.PLAYER_TEAM]) == 0:
                                     choice = "Building"
 
                                 if choice == "Unit":
@@ -317,10 +359,11 @@ class Game:
                 if tank_factory:
                     # queue a soldier somewhere (base or any barracks)
                     target_build = random.choice([b for b in self.buildings if b.team==team and b.kind=="tank_factory"])
-                    if money >= C.COST_TANK:
+                    if self.money[team] >= C.COST_TANK:
                         target_build.queue.append("tank")
                         target_build.queue_time = C.BUILD_TANK_TIME if len(target_build.queue)==1 else target_build.queue_time
                         self.money[team] -= C.COST_TANK
+                        break
 
                     # Rally soldiers toward player's base
                     pbase = self.player_base
@@ -335,10 +378,10 @@ class Game:
                             if u.team==team and u.kind=="tank" and (not u.path_px):
                                 choice = random.choice(["Unit", "Building"])
 
-                                if random.choice([b for b in self.buildings if b.team==C.PLAYER_TEAM]) == None:
+                                if len([b for b in self.buildings if b.team==C.PLAYER_TEAM]) == 0:
                                     choice = "Unit"
 
-                                if random.choice([b for b in self.units if b.team==C.PLAYER_TEAM]) == None:
+                                if len([b for b in self.units if b.team==C.PLAYER_TEAM]) == 0:
                                     choice = "Building"
 
                                 if choice == "Unit":
