@@ -134,6 +134,7 @@ class Unit(Entity):
                 if dest2 is not None:
                     #print("Going back to harvest")
                     ux, uy = dest2
+                    new_resource = game.tile_map[ux][uy]
                     #print("Resource:", ux)
                     #print("Resource:", uy)
                     #tx, ty = to_grid(dest2.pos())
@@ -141,7 +142,7 @@ class Unit(Entity):
                     self.set_path(path)
                     #print("Finding Resource: ", path)
                     self.harvesting = True
-                    self.harvest_timer = C.HARVEST_TIME
+                    self.harvest_timer = new_resource.harvest_timer
                     #print("finish")
                     #print(self.carry)
                     return

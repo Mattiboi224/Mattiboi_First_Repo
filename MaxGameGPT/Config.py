@@ -10,6 +10,7 @@ NUM_AI = 2             # number of AI opponents
 AI_TEAMS = list(range(1, 1 + NUM_AI))
 
 INITIAL_MONEY = 200
+SELL_PERCENTAGE = 0.5
 
 # Costs
 COST_WORKER = 50
@@ -46,14 +47,17 @@ TANK_FACTORY_HP = 300
 
 # Resource harvest
 HARVEST_PER_TRIP = 25
-HARVEST_TIME = 3.0
-RESOURCE_HEALTH = 200
+ORE_HARVEST_TIME = 3.0
+GEM_HARVEST_TIME = 2.0
+ORE_RESOURCE_HEALTH = 200
+GEM_RESOURCE_HEALTH = 400
 
 # Tile types
 T_GRASS = 0
 T_WALL = 1
 T_RESOURCE = 2
 T_PLAYER_LOC = 3
+T_GEMS = 4
 
 # Image Location
 #pg.image.load('assets/tank.png').convert_alpha()
@@ -74,7 +78,8 @@ TILE_COLORS = {
     T_WALL: (127, 127, 127),
     #T_RESOURCE: (120, 85, 30),
     T_RESOURCE: (255, 242, 0),
-    T_PLAYER_LOC: (237, 28, 36)
+    T_PLAYER_LOC: (237, 28, 36),
+    T_GEMS: (163, 73, 164)
 }
 
 TEAM_COLORS = {

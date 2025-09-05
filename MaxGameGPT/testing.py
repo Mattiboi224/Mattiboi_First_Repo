@@ -9,6 +9,7 @@ T_GRASS = 0
 T_WALL = 1
 T_RESOURCE = 2
 T_PLAYER_LOC = 3
+T_GEMS = 4
 
 TILE_COLORS = {
     #T_GRASS: (40, 110, 40),
@@ -17,7 +18,8 @@ TILE_COLORS = {
     T_WALL: (127, 127, 127),
     #T_RESOURCE: (120, 85, 30),
     T_RESOURCE: (255, 242, 0),
-    T_PLAYER_LOC: (237, 28, 36)
+    T_PLAYER_LOC: (237, 28, 36),
+    T_GEMS: (163, 73, 164)
 }
 
 # Load the image
@@ -31,7 +33,7 @@ pixels = list(image.getdata())
 rgb_pixel = [t[:3] for t in pixels]
 #print(pixels)
 
-print(rgb_pixel[0])
+print(rgb_pixel)
 
 # for i in range(h):
 #     for j in range(w):

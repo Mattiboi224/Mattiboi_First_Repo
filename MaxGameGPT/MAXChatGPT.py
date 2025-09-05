@@ -46,7 +46,7 @@ from game import Game
 # ------------------ MAIN LOOP ------------------
 def main():
     pygame.init()
-    screen = pygame.display.set_mode((C.WIDTH, C.HEIGHT))
+    screen = pygame.display.set_mode((C.WIDTH, C.HEIGHT+28))
     pygame.display.set_caption("Grid RTS Prototype")
     clock = pygame.time.Clock()
     font = pygame.font.SysFont(None, 22)
@@ -93,10 +93,6 @@ def main():
                     if game.money[C.PLAYER_TEAM] >= C.COST_TANK_FACTORY:
                         game.build_mode = True
                         game.build_kind = "tank_factory"
-
-                elif event.key == pygame.K_p:
-                    own_tank_factory = [b for b in game.buildings if b.team==C.PLAYER_TEAM and b.kind=="tank_factory"]
-                    print(own_tank_factory)
 
                 elif event.key == pygame.K_u:
                     # queue a worker at player's base
@@ -182,7 +178,8 @@ def main():
                             tx, ty = UT.to_grid(event.pos)
                             #print(tx)
                             #print(ty)
-                            if UT.in_bounds(tx, ty) and game.grid.tiles[ty][tx] == C.T_RESOURCE:
+                            if UT.in_bounds(tx, ty) and (game.grid.tiles[ty][tx] == C.T_RESOURCE or game.grid.tiles[ty][tx] == C.T_GEMS):
+                                                         #and game.selected_units.kind == "worker"):
                                 game.order_harvest(game.selected_units, (tx, ty))
                                 #print("harvesting")
                             else:
@@ -248,7 +245,7 @@ def main():
 
         final_teams = []
         for b in game.buildings:
-            if not b.dead:
+            if not b.dead and not b.sold:
                 final_teams.append(b.team)
         
         unique_final_teams = list(set(final_teams))
@@ -275,7 +272,7 @@ def main():
                     if b.dead == True:
                         b_lost += 1
                 else:
-                    if b.dead == True:
+                    if b.dead == True or b.sold == True:
                         b_destroyed += 1
                     eb_built += 1
                     

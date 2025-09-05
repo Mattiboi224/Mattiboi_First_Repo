@@ -17,7 +17,7 @@ def to_grid(pos):
     return int(x // C.TILE), int(y // C.TILE)
 
 def in_bounds(tx, ty):
-    return 0 <= tx < C.GRID_W and 0 <= ty < C.GRID_H
+    return 0 <= tx < C.GRID_W and 0 <= ty < C.GRID_H - 1 # Adding Boundary
 
 # ------------------ PATHFINDING ------------------
 def astar(grid, start, goal, passable=lambda t: t != C.T_WALL):
