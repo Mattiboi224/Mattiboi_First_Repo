@@ -1,7 +1,7 @@
 ## Known Bugs
 # Ant Logic missing close tile
 # Placement needs modifying when on top of a tile
-# Mis-clicks break the game
+# Mis-clicks break the game  -- Fixed
 # Human can break rules i.e. placement breaks -- Show where legal placements can go
 
 
@@ -22,6 +22,10 @@ import signal
 from collections import deque
 import time
 import math
+#import threading
+
+#click_event = threading.Event()
+#click_pos = {}
 
 # Constants
 total_ant = 3
@@ -1650,21 +1654,28 @@ def select_tile(x, y):
 def select_move_type(x, y):
     global move_type, picking_pos
 
-    counter = 0
-    
-    while counter == 0:
+    #print('X Cord: ', x)
+    #print('Y Cord: ', y)
+
         
-        if x >= 400 and x <= 450 and y >= 25 and y <= 125:
-            move_type = 'Place'
-            break
+    if x >= 400 and x <= 450 and y >= 25 and y <= 125:
+        move_type = 'Place'
+        #click_event.set()
+        picking_pos = True
 
-        if x >= 400 and x <= 450 and y >= -125 and y <= -25:
-            move_type = 'Move'
-            break
+    elif x >= 400 and x <= 450 and y >= -125 and y <= -25:
+        move_type = 'Move'
+        #click_event.set()
+        picking_pos = True
+    
     else:
-        counter = 0
+        print('Invalid Click')
+        picking_pos = False
+        #turtle.onclick(None)
+        
 
-    picking_pos = True
+    
+    #turtle.onclick(None)
 
 # Place a tile
 def place_tile(x, y):
@@ -1708,10 +1719,25 @@ def Human_Player(own_tiles, opp_tiles, own_insect, opp_insect, z_own, z_opp, cur
     move_place_turtle.write("M", False, align="center", font=("Arial", 30, "normal"))
     turtle.tracer(True)
 
+    #print('Move type: ', move_type)
+    
     turtle.onscreenclick(select_move_type)
+
+    #print('Waiting for a click')
+    #click_event.wait()
+
+    #print('Finished Waiting')
+
+    #click_event.clear()
+
+    #print('Move type: ', move_type)
+
+##    turtle.onscreenclick(None)
 
     while not picking_pos and move_type is None:
         wn.update()
+
+    turtle.onscreenclick(None)
 
     move_place_turtle.clear()
 
@@ -2159,7 +2185,7 @@ def main():
             if move_type == 'Move':
                 placement = 1
         
-        print(game)
+##        print(game)
 ##        print(points[ran_loc])
 ##        print(ran_loc)
 ##        print(placement)
@@ -2434,7 +2460,6 @@ def main():
 
 #print(main_turtle.position())
 main()
-
 
 
 print('Waiting')
