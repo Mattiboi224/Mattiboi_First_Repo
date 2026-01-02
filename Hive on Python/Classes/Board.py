@@ -2,13 +2,13 @@ import turtle
 import util as m
 from collections import deque
 import Config as C
-import Tiles as T
+from Tiles import Tiles as T
 
 
 class Board():
     def __init__(self):
         self.all_locs = self.build_the_board()
-        self.current_positions = []
+
 
     # Build the board
     def build_the_board(self):
@@ -51,7 +51,7 @@ class Board():
 
 
         # Drawing Announcers
-    def draw_board(color, x, y, label):
+    def draw_board(self, color, x, y, label):
         C.board_turtle.color(color)
         C.board_turtle.begin_fill()
         m.draw_rectangle(x, y, 150, 50, 'Board')

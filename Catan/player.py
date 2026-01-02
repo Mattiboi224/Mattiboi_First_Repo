@@ -17,4 +17,6 @@ class Player:
 
         self.cards = []
 
-        self.current_points = 0
+        self.current_points = 2
+
+        self.played_knights = 0

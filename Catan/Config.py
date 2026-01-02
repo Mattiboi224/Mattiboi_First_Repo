@@ -11,6 +11,7 @@ global city_check
 global development_card_check
 global built
 global card_check
+global trade_check
 
 global knight_check
 global monopoly_check
@@ -85,6 +86,12 @@ BUILD_DEVELOPMENT_CARD_REQ_WHEAT = 1
 BUILD_DEVELOPMENT_CARD_REQ_SHEEP = 1
 BUILD_DEVELOPMENT_CARD_REQ_STONE = 1
 
+# Sea ports
+TOTAL_SEAPORTS = 9
+
+# Seaport List
+SEAPORT_LIST = ['Any','Any','Any','Any','Wood', 'Brick', 'Wheat', 'Stone', 'Sheep']
+
 # Hexagon shape
 side_length = 40
 num_sides = 6
@@ -103,6 +110,10 @@ number_turtle = turtle.Turtle()
 number_turtle.hideturtle()
 announcer_turtle = turtle.Turtle()
 announcer_turtle.hideturtle()
+dice_turtle = turtle.Turtle()
+dice_turtle.hideturtle()
+text_announcer_turtle = turtle.Turtle()
+text_announcer_turtle.hideturtle()
 
 # Putting Everything Up
 main_turtle.up()
@@ -110,3 +121,4 @@ board_turtle.up()
 number_turtle.up()
 selection_turtle.up()
 announcer_turtle.up()
+text_announcer_turtle.up()

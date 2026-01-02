@@ -16,6 +16,7 @@ class Road:
         if road_value[1][1] == -0.0:
             road_value[1][1] = 0.0
 
+        self.road_value = road_value
         self.x1 = road_value[0][0]
         self.y1 = road_value[0][1]
         self.p1 = [self.x1, self.y1]

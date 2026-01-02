@@ -7,70 +7,39 @@ from collections import deque
 
 class Bugs():
 
-    team_1_queen = 0
-    team_1_ant = 0
-    team_1_grasshopper = 0
-    team_1_beetle = 0
-    team_1_spider = 0
-    team_2_queen = 0
-    team_2_ant = 0
-    team_2_grasshopper = 0
-    team_2_beetle = 0
-    team_2_spider = 0
 
     def __init__(self, bug_type, x, y, z, team):
         self.bug_type = bug_type
         self.original_tile = [x, y]
+        self.x = x
+        self.y = y
         self.z = z
+        self.m_p = None
+        self.Tile = None
+        self.radius = C.radius
 
         self.team = team
-        if team == 'a':
-            C.main_turtle.color(C.team0)
-        elif team == 'b':
-            C.main_turtle.color(C.team1)
+        self.colour = team.colour
 
-        if self.team == 'a' and self.bug_type == 'Ant':
-            Bugs.team_1_ant += 1
-
-        if self.team == 'a' and self.bug_type == 'Grasshopper':
-            Bugs.team_1_ant += 1
-
-        if self.team == 'a' and self.bug_type == 'Beetle':
-            Bugs.team_1_ant += 1
-
-        if self.team == 'a' and self.bug_type == 'Queen':
-            Bugs.team_1_ant += 1
-
-        if self.team == 'a' and self.bug_type == 'Spider':
-            Bugs.team_1_ant += 1
-
-        if self.team == 'b' and self.bug_type == 'Ant':
-            Bugs.team_2_ant += 1
-
-        if self.team == 'b' and self.bug_type == 'Grasshopper':
-            Bugs.team_2_ant += 1
-
-        if self.team == 'b' and self.bug_type == 'Beetle':
-            Bugs.team_2_ant += 1
-
-        if self.team == 'b' and self.bug_type == 'Queen':
-            Bugs.team_2_ant += 1
-
-        if self.team == 'b' and self.bug_type == 'Spider':
-            Bugs.team_2_ant += 1
-
+    def pos(self):
+        return [self.x, self.y]
+    
+    def update(self, new_tile):
+        self.x = new_tile[0]
+        self.y = new_tile[1]
+        self.original_tile = new_tile
 
     def draw(self):
 
-        if self.team == 0:
-            C.main_turtle.color(C.team0)
-        elif self.team == 1:
-            C.main_turtle.color(C.team1)        
+        turtle.tracer(False)
+
+        C.main_turtle.color(self.colour)
+        C.main_turtle.goto(self.x, self.y - 20)
 
         #Draw Bugs
         if self.bug_type == 'Queen':
-            C.main_turtle.right(90)
-            C.main_turtle.forward(20)
+            #C.main_turtle.right(90)
+            #C.main_turtle.forward(20)
             C.main_turtle.write("Q", False, align="center", font=("Arial", 30, "normal"))
 
             '''
@@ -117,27 +86,43 @@ class Bugs():
             '''
 
         elif self.bug_type == 'Grasshopper':
-            C.main_turtle.right(90)
-            C.main_turtle.forward(20)
+            #C.main_turtle.right(90)
+            #C.main_turtle.forward(20)
             C.main_turtle.write("G", False, align="center", font=("Arial", 30, "normal"))
 
         elif self.bug_type == 'Beetle':
-            C.main_turtle.right(90)
-            C.main_turtle.forward(20)
+            #C.main_turtle.right(90)
+            #C.main_turtle.forward(20)
             C.main_turtle.write("B", False, align="center", font=("Arial", 30, "normal"))
 
         elif self.bug_type == 'Ant':
-            C.main_turtle.right(90)
-            C.main_turtle.forward(20)
+            #C.main_turtle.right(90)
+            #C.main_turtle.forward(20)
             C.main_turtle.write("A", False, align="center", font=("Arial", 30, "normal"))
 
         elif self.bug_type == 'Spider':
-            C.main_turtle.right(90)
-            C.main_turtle.forward(20)
+            #C.main_turtle.right(90)
+            #C.main_turtle.forward(20)
             C.main_turtle.write("S", False, align="center", font=("Arial", 30, "normal"))
 
+        turtle.tracer(True)
+
     def avaliable_move(self, current_tile_mat):
+
+        # Check for slideable
+        open_loc = m.slideable_locs(self.original_tile, current_tile_mat)
+
+        if len(open_loc) == 0 and self.bug_type in ('Queen', 'Ant', 'Spider'):
+            final_loc = []
+            return final_loc
+
+        # Check if not breaking the hive
+        connected = m.connected_tiles(self.original_tile, current_tile_mat)
+        if not connected:
+            final_loc = []
+            return final_loc
         
+    
         if self.bug_type == 'Queen':
             #def queen_logic(original_tile, current_tile_mat):
 
@@ -296,3 +281,12 @@ class Bugs():
                         final_loc.append(position[j])    
 
             return final_loc
+        
+
+    def get_tile(self, Tile_Mat):
+
+        for i in Tile_Mat:
+
+            if i.x == self.x and i.y == self.y:
+
+                self.Tile = i
