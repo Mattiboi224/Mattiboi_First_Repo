@@ -46,7 +46,7 @@ def hexagon_shape(position_x, position_y, sel_turtle):
         C.board_turtle.left(C.angle * 2)
         C.board_turtle.forward(C.side_length)
         #main_turtle.right(angle * 2)
-        C.board_turtle.right(C.C.board_turtle.heading())
+        C.board_turtle.right(C.board_turtle.heading())
         C.board_turtle.down()
 
         # Draw Hexagon
@@ -194,15 +194,6 @@ def filled_loc(location, current_tile_mat):
 
     return filled_mat
 
-def filled_loc(location, current_tile_mat):
-
-    surround_loc = getlocations(location[0],location[1])
-    filled_mat = []
-    for i in range(len(surround_loc)):
-        if surround_loc[i] in current_tile_mat:
-            filled_mat.append(surround_loc[i])
-
-    return filled_mat
 
 def connected_tiles(original_tile, current_tile_mat):
     final_output = False
@@ -305,3 +296,50 @@ def is_connected(start, end, current_tile_mat, current_tile):
         
     return False
 
+def dist(a, b):
+    return math.hypot(a[0]-b[0], a[1]-b[1])
+
+
+def select_move_type(x, y):
+        
+    if x >= 400 and x <= 450 and y >= 25 and y <= 125 and C.place_trigger == 1:
+        C.move_type = 'Place'
+        C.picking_pos = True
+
+    elif x >= 400 and x <= 450 and y >= -125 and y <= -25 and C.move_trigger == 1:
+        C.move_type = 'Move'
+        C.picking_pos = True
+    
+    else:
+        print('Invalid Click')
+        C.picking_pos = False
+
+
+    # Select a tile
+def select_tile(x, y):
+
+    C.move_type = None
+
+    if x >= -550 and x <= -500 and y >= -350 and y <= -250:
+        C.move_type = 'Beetle'
+        C.picking_pos = True
+
+    elif x >= -550 and x <= -500 and y >= -200 and y <= -100:
+        C.move_type = 'Spider'
+        C.picking_pos = True
+
+    elif x >= -550 and x <= -500 and y >= -50 and y <= 50:
+        C.move_type = 'Grasshopper'
+        C.picking_pos = True
+
+    elif x >= -550 and x <= -500 and y >= 100 and y <= 200:
+        C.move_type = 'Ant'
+        C.picking_pos = True
+
+    elif x >= -550 and x <= -500 and y >= 250 and y <= 350:
+        C.move_type = 'Queen'
+        C.picking_pos = True
+
+    else:
+        print('Invalid Click')
+        C.picking_pos = False

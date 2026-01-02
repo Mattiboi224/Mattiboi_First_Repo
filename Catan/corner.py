@@ -13,6 +13,7 @@ class Corner:
         self.building = None
         self.team = None
         self.radius = 10
+        self.seaport_trade = 0
 
     def pos(self):
         return [self.x, self.y]
@@ -42,7 +43,7 @@ class Corner:
         self.nearby_roads_mat = []
 
         for i in range(len(self.nearby_corners_mat)):
-            self.nearby_roads_mat.append([self.nearby_corners_mat[i-1], [self.nearby_corners_mat[i]]])
+            self.nearby_roads_mat.append([[self.x, self.y], self.nearby_corners_mat[i]])
 
     def draw(self, team_colour):
 
@@ -82,6 +83,13 @@ class Corner:
             C.main_turtle.goto(self.x, self.y)
             C.main_turtle.pencolor(team_colour)
             C.main_turtle.dot(20)
+            C.main_turtle.pencolor('Black')
+            C.main_turtle.goto(self.x, self.y - 10)
+            C.main_turtle.down()
+            C.main_turtle.circle(10)
+            C.main_turtle.up()
+            turtle.tracer(False)
+
 
 
     def draw_midpoint(self):

@@ -44,11 +44,14 @@ class Tiles:
         return [self.x, self.y]
 
     def draw(self, turtle_type):
-        m.hexagon_shape(self.x, self.y, turtle_type, self.colour, C.side_length, 'On', 'No')
 
-       
+        if self.number >= 0:
+            m.hexagon_shape(self.x, self.y, turtle_type, self.colour, C.side_length, 'On', 'No')
 
-        self.draw_number()
+            self.draw_number()
+
+        else:
+            m.draw_shipping(self.x, self.y, self.number, self.tile_type)
 
     def draw_number(self):
 
@@ -70,6 +73,5 @@ class Tiles:
 
         elif self.number == 0:
             C.number_turtle.dot(30,"Grey")
-            C.number_turtle.color('Red')    
 
         turtle.tracer(True)

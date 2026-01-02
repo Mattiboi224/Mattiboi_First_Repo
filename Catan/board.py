@@ -6,10 +6,12 @@ from tiles import Tiles as Ti
 from corner import Corner as Co
 from road import Road as R
 import random
+import math
 
 class Board():
     def __init__(self):
         self.ava_numbers = C.NUMBER
+        self.seaport_options = C.SEAPORT_LIST
         self.Tiles_Mat = []
         self.corner_mat_class = []
         self.road_mat_class = []
@@ -17,8 +19,11 @@ class Board():
         self.build_the_border()
         self.all_locs = self.build_the_board()
         self.assign_corners()
-        self.give_tile_mat()
+        self.give_tile_mat(self.Tiles_Mat)
         self.give_corner_mat()
+        self.find_edge_pieces()
+        self.give_tile_mat(self.seaports_class)
+        self.randomise_seaport_connections()
 
         
         
@@ -155,17 +160,19 @@ class Board():
 
             for i in self.road_mat_class:
 
-                if i.is_occupied == 1:
+                if j.team == i.team and i.is_occupied == 1:
                     i.draw(j.colour)
 
             for i in self.corner_mat_class:
-                if i.is_occupied == 1:
+                if j.team == i.team and i.is_occupied == 1:
                     i.draw(j.colour)
 
     # Assign Corner Mat's to Tiles
-    def give_tile_mat(self):
+    def give_tile_mat(self, Tiles):
+
         
-        for i in self.Tiles_Mat:
+        
+        for i in Tiles:
 
             for k in range(len(i.corner_mat)):
                 for j in self.corner_mat_class:
@@ -190,4 +197,81 @@ class Board():
 
         m.draw_rectangle(200, 200, 40, 50)
 
+    
+    def find_edge_pieces(self):
+        
+        count = 0
+        edge_tiles = []
+        seaports_class = []
+
+        for i in self.Tiles_Mat:
+            if count <= 6:
+                count += 1
+
+            # Get the outside tiles
+            else:
+                for j in range(len(i.close_tiles)):
+                    exists = any(tile.x == i.close_tiles[j][0] and tile.y == i.close_tiles[j][1] for tile in self.Tiles_Mat)
+                    
+                    if not exists and i.close_tiles[j] not in edge_tiles:
+                        edge_tiles.append(i.close_tiles[j])
+
+        # 1. Find center
+        cx = sum(x for x, y in edge_tiles) / len(edge_tiles)
+        cy = sum(y for x, y in edge_tiles) / len(edge_tiles)
+
+        # 2. Sort by angle
+        sorted_points = sorted(
+            edge_tiles,
+            key=lambda p: math.atan2(p[1] - cy, p[0] - cx)
+        )
+
+        for i in range(len(sorted_points)):
+            
+            if i % 2 == 1:
+
+                var = random.randint(0, len(self.seaport_options)-1)
+
+                val = self.seaport_options[var]
+
+                if val == 'Any':
+                    number = -3
+                else:
+                    number = -2
+
+                b = Ti(sorted_points[i][0], sorted_points[i][1], self.seaport_options[var], number)
+                #print(self.seaport_options[var])
+
+                self.seaport_options.pop(var)
+
+                seaports_class.append(b)
+
+                
+
+        #print(len(seaports_class))
+        self.seaports_class = seaports_class
+
+    def randomise_seaport_connections(self):
+
+        for i in self.seaports_class:
+            if len(i.corner_mat_class) == 3:
+
+                var = random.randint(0,1)
+                if var == 0:
+                    i.corner_mat_class.pop(0)
+                else:
+                    i.corner_mat_class.pop(2)
+
+            for j in i.corner_mat_class:
+                C.board_turtle.up()
+                C.board_turtle.goto(j.x, j.y)
+                C.board_turtle.down()
+                C.board_turtle.goto(i.x, i.y)
+
+        for i in self.seaports_class:
+            i.draw('Board')
+            for j in i.corner_mat_class:
+                j.seaport_trade = 1
+
+                
         

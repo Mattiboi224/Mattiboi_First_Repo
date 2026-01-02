@@ -45,7 +45,7 @@ class Game:
             if isinstance(u, Co) and C.selecting_type == 'Road':
                 continue
 
-            if isinstance(u, R) and C.selecting_type == 'Settlement':
+            if isinstance(u, R) and (C.selecting_type == 'Settlement' and C.selecting_type == 'City'):
                 continue
 
             if m.dist([x, y], u.pos()) <= u.radius:
@@ -123,7 +123,7 @@ class Game:
 
         turtle.tracer(False)
                 
-        original_x = -450
+        original_x = -500
         original_y = 300
 
         curr_team = self.team_mat[curr_team]
@@ -221,14 +221,17 @@ class Game:
         team_class = self.team_mat[C.built % C.NO_OF_PLAYER]
         team = team_class.team
 
-        for r in self.board.Tiles_Mat:
-            if r.is_robber == 1:
-                r.is_robber = 0
-                break
+        # # Find the current robber and turn it to 0
+        # for r in self.board.Tiles_Mat:
+        #     if r.is_robber == 1:
+        #         r.is_robber = 0
+        #         break
 
         # Search the tiles
         for u in self.board.Tiles_Mat:
 
+
+            # Find the Tile selected
             if m.dist([x, y], u.pos()) <= u.radius:
 
                 for r in self.board.Tiles_Mat:
@@ -250,17 +253,24 @@ class Game:
                         if i.team not in stealable_teams:
                             stealable_teams.append(i.team)
 
+                stolen = 0
+
                 while len(stealable_teams) != 0:
 
-                    team_to_be_stolen = random.randint(1, len(stealable_teams))
+                    team_to_be_stolen = random.randint(0, len(stealable_teams)-1)
 
-                    print(team_to_be_stolen)
+                    #print(team_to_be_stolen)
+                    #print(stealable_teams)
+                    #print(C.selected_team)
 
                     # Find the chosen team
                     for i in C.selected_team:
-                        if i.team == team_to_be_stolen:
+                        
+                        #print(stealable_teams)
 
-                            print(i.team)
+                        if i.team == stealable_teams[team_to_be_stolen]:
+
+                            #print(i.team)
 
                             if len(i.resources) > 0:
                                 chosen_resource_idx = random.randint(0, len(i.resources) - 1)
@@ -270,12 +280,19 @@ class Game:
                                 i.resources.pop(chosen_resource_idx)
                                 
                                 # Give it to other player
-                                C.selected_team[C.built % C.NO_OF_PLAYER].append(chosen_resource)
+                                C.selected_team[C.built % C.NO_OF_PLAYER].resources.append(chosen_resource)
+
+                                stealable_teams.pop(0)
+                                stolen = 1
+                                break
                                 
                             
                             # If they have no resources remove them
                             else:
                                 stealable_teams.pop(0)
+                    
+                    if stolen == 1:
+                        break
 
                 # Update Drawing
                 C.number_turtle.clear()
@@ -290,3 +307,219 @@ class Game:
 
         print('Invalid Click')
         C.selecting_on_screen = False
+
+    def intial_ai_build(self, TEAM):
+
+        if C.selecting_type == 'Settlement':
+            self.ai_find_settlement(TEAM, initial=1)
+
+        elif C.selecting_type == 'Road':
+            self.ai_find_road(TEAM)
+
+
+    def ai_find_settlement(self, TEAM, initial=0):
+
+        colour = TEAM.colour
+        team_name = TEAM.team
+        if C.selecting_type == 'Settlement':
+            if initial == 1:
+                while 1 == 1:
+                    a = 0
+                    corner_selection = random.randint(0, len(self.board.corner_mat_class) - 1)
+                    
+                    # Remove Occupied Ones
+                    if self.board.corner_mat_class[corner_selection].is_occupied == 1:
+                        continue
+                    
+                    occupied_corners = []
+
+                    # Remove Corners next to a current spot
+                    for i in self.board.corner_mat_class:
+                        if i.is_occupied == 1:
+                            if self.board.corner_mat_class[corner_selection] in i.nearby_corners_mat_class:
+                                a = 1
+                            for j in i.nearby_corners_mat_class:
+                                occupied_corners.append(j)
+                            
+                    # Valid
+                    if a == 0:
+                        break
+
+                self.board.corner_mat_class[corner_selection].is_occupied = 1
+                self.board.corner_mat_class[corner_selection].team = team_name
+                self.board.corner_mat_class[corner_selection].building = 'Settlement'
+                self.board.corner_mat_class[corner_selection].draw(colour)
+
+                return
+
+            elif initial == 0:
+
+                occupied_corners = []
+                available_corners = []
+
+                # Remove Corners next to a current spot
+                for i in self.board.corner_mat_class:
+                    if i.is_occupied == 1:
+                        for j in i.nearby_corners_mat_class:
+                            occupied_corners.append(j)
+
+                # Search all the roads
+                for i in self.board.road_mat_class:
+                    # Find the ones you own
+                    if i.is_occupied == 1 and i.team == team_name:
+
+                        # If either end if occupied Skip
+                        if i.nearby_corners_mat_class[0].is_occupied == 1 or i.nearby_corners_mat_class[1].is_occupied == 1:
+                            pass
+                        else:
+                            if i.nearby_corner_mat_class[0] not in occupied_corners and \
+                                i.nearby_corner_mat_class[0] not in available_corners:
+                                available_corners.append(i.nearby_corner_mat_class[0])
+                            if i.nearby_corner_mat_class[1] not in occupied_corners and \
+                                i.nearby_corner_mat_class[1] not in available_corners:
+                                available_corners.append(i.nearby_corner_mat_class[1])
+                        
+                if len(available_corners) > 0:
+                    corner_selection = random.randint(0, len(available_corners)-1)
+                    self.board.corner_mat_class[corner_selection].is_occupied = 1
+                    self.board.corner_mat_class[corner_selection].team = team_name
+                    self.board.corner_mat_class[corner_selection].building = 'Settlement'
+                    self.board.corner_mat_class[corner_selection].draw(colour)
+
+                    return True
+
+                else:
+                    return False 
+
+    def ai_find_road(self, TEAM):
+        
+        colour = TEAM.colour
+        team_name = TEAM.team 
+        if C.selecting_type == 'Road':
+
+            # Find Roads around current spot
+            avaliable_roads = []
+            for i in self.board.corner_mat_class:
+                if i.is_occupied == 1 and i.team == team_name:
+                    for j in i.nearby_roads_mat:
+                        if j not in avaliable_roads:
+                            avaliable_roads.append(j)
+
+            for i in self.board.road_mat_class:
+                if i.is_occupied == 1 and i.team == team_name:
+                    for j in i.nearby_road_mat_class:
+                        if [j.p1, j.p2] not in avaliable_roads and [j.p2, j.p1] not in avaliable_roads:
+                            avaliable_roads.append([j.p1, j.p2])
+
+            if len(avaliable_roads) > 0:
+                road_selection = random.randint(0, len(avaliable_roads) - 1)
+
+                for i in self.board.road_mat_class:
+                    if i.p1 == avaliable_roads[road_selection][0] and i.p2 == avaliable_roads[road_selection][1] or \
+                        i.p2 == avaliable_roads[road_selection][0] and i.p1 == avaliable_roads[road_selection][1]:
+                        
+                        i.occupied = 1
+                        i.team = team_name
+                        i.draw(colour)
+                        return True
+            else:
+                return False
+
+
+    def ai_robber(self, TEAM):
+
+        team = TEAM.team
+
+        chosen_tile = random.randint(0, len(self.board.Tiles_Mat)-1)
+        
+        # Search the tiles
+        u = self.board.Tiles_Mat[chosen_tile]
+
+        for r in self.board.Tiles_Mat:
+            if r.is_robber == 1:
+                r.is_robber = 0
+                break
+
+        u.is_robber = 1
+
+        r.number = u.number
+        u.number = 0
+
+        # Steal Resource
+
+        stealable_teams = []
+        for i in u.corner_mat_class:
+            if i.is_occupied == 1 and i.team != team:
+
+                if i.team not in stealable_teams:
+                    stealable_teams.append(i.team)
+
+        stolen = 0
+
+        while len(stealable_teams) != 0:
+
+            team_to_be_stolen = random.randint(0, len(stealable_teams)-1)
+
+            #print(team_to_be_stolen)
+            #print(stealable_teams)
+            #print(C.selected_team)
+
+            # Find the chosen team
+            for i in C.selected_team:
+                
+                #print(stealable_teams)
+
+                if i.team == stealable_teams[team_to_be_stolen]:
+
+                    #print(i.team)
+
+                    if len(i.resources) > 0:
+                        chosen_resource_idx = random.randint(0, len(i.resources) - 1)
+                        chosen_resource = i.resources[chosen_resource_idx]
+                        
+                        # Remove it from player
+                        i.resources.pop(chosen_resource_idx)
+                        
+                        # Give it to other player
+                        C.selected_team[C.built % C.NO_OF_PLAYER].resources.append(chosen_resource)
+
+                        stealable_teams.pop(0)
+                        stolen = 1
+                        break
+                        
+                    
+                    # If they have no resources remove them
+                    else:
+                        stealable_teams.pop(0)
+            
+            if stolen == 1:
+                break
+
+        # Update Drawing
+        C.number_turtle.clear()
+        
+        for t in self.board.Tiles_Mat:
+            t.draw_number()
+
+        C.selecting_on_screen = True
+
+    def ai_build_city(self, TEAM):
+
+        team_class = TEAM
+        team = team_class.team
+        
+        # Find all the options
+        avaliable_buildings = []
+        for i in self.board.corner_mat_class:
+            if i.is_occupied == 1 and i.team == team and i.building == 'Settlement':
+                avaliable_buildings.append(i)
+        
+        if len(avaliable_buildings) == 0:
+            return False
+
+        else:
+            choice = random.randint(0, len(avaliable_buildings)- 1)
+            avaliable_buildings[choice].building = 'City'
+            C.built = 'City'
+
+        return True
