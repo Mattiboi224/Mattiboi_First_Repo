@@ -21,6 +21,12 @@ global year_of_plenty_check
 # Number of Players
 NO_OF_PLAYER = 3
 
+# Number of Hexes
+NO_OF_HEXS = 19
+
+# Number of Different Types Resources
+NO_OF_RESOURCES = 5
+
 # Winning Points
 NO_OF_VICTORY_WINNING_POINTS = 10
 

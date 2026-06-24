@@ -6,11 +6,18 @@ from road import Road as R
 import random
 import turtle
 
+import torch
+import torch.nn as nn
+import torch.optim as optim
+
 class Game:
     def __init__(self, team_mat):
         self.board = Board()
         self.objects = []
         self.team_mat = team_mat
+        self.current_player = None
+        self.phase = None
+        self.turn_number = 0
 
         for i in self.board.road_mat_class:
             self.objects.append(i)
@@ -18,6 +25,8 @@ class Game:
         for i in self.board.corner_mat_class:
             self.objects.append(i)
 
+    def select_current_player(self, player):
+        self.current_player = player
 
     def unit_at_point(self, x, y):
 
@@ -523,3 +532,105 @@ class Game:
             C.built = 'City'
 
         return True
+    
+    def encode_hexes(self):
+        hex_vecs = []
+
+        for hex in self.board.Tiles_Mat:
+            res = torch.zeros(C.NO_OF_RESOURCES)
+            if hex.tile_type is not 'Sand':
+                res[hex.resource] = 1
+
+            dice = torch.tensor([hex.number / 12.0])
+            robber = torch.tensor([1.0 if hex.is_robber else 0.0])
+
+            hex_vecs.append(torch.cat([res, dice, robber]))
+
+        return torch.cat(hex_vecs)
+    
+    def encode_nodes(self):
+        nodes = []
+
+        for node in self.board.corner_mat_class:
+            v = torch.zeros(3)
+            if node.team is None:
+                v[0] = 1            # empty
+            elif node.team == self.current_player:
+                v[1] = 1            # mine
+            else:
+                v[2] = 1            # opponent
+
+            city = torch.tensor([1.0 if node.building == 'City' else 0.0])
+            nodes.append(torch.cat([v, city]))
+
+        return torch.cat(nodes)
+
+
+    def encode_roads(self):
+        roads = []
+
+        for road in self.board.road_mat_class:
+            v = torch.zeros(3)
+            if road.team is None:
+                v[0] = 1
+            elif road.team == self.current_player:
+                v[1] = 1
+            else:
+                v[2] = 1
+            roads.append(v)
+
+        return torch.cat(roads)
+    
+    def encode_players(self):
+        players = []
+
+        for p in self.team_mat:
+            rel = 1 if p == self.current_player else -1
+
+            players.append(torch.tensor([
+                p.resources.count("Wood")   / 10.0 * rel,
+                p.resources.count("Brick")  / 10.0 * rel,
+                p.resources.count("Sheep")  / 10.0 * rel,
+                p.resources.count("Wheat")  / 10.0 * rel,
+                p.resources.count("Stone")    / 10.0 * rel,
+                p.current_points / 10.0 * rel,
+                float(p.has_longest_road) * rel,
+                float(p.has_largest_army) * rel,
+            ]))
+
+        return torch.cat(players) 
+    
+    def encode_turn(self):
+        return torch.tensor([
+            self.turn_number / 100.0,
+            float(self.phase == "Build"),
+            float(self.phase == "Trade"),
+            float(self.phase == "Roll"),
+        ])
+    
+    def encode_state(self):
+        return torch.cat([
+            self.encode_hexes(),
+            self.encode_nodes(),
+            self.encode_roads(),
+            self.encode_players(),
+            self.encode_turn(),
+        ])
+    
+
+
+
+class ValueNet(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Linear(650, 512),
+            nn.ReLU(),
+            nn.Linear(512, 256),
+            nn.ReLU(),
+            nn.Linear(256, 1),
+            nn.Tanh(),
+        )
+
+    def forward(self, x):
+        return self.net(x)

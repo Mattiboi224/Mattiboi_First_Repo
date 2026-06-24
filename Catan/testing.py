@@ -8,6 +8,6 @@ from collections import deque
 import math
 
 
-a = [[-20.0, 34.641], [40.0, 0.0]]
-print(a[0])
+a = ['Sand', 'Sheep', 'Wood', 'Wood', 'Wheat', 'Wheat', 'Sheep', 'Wheat', 'Wheat', 'Sheep', 'Wheat', 'Wheat', 'Sheep']
 
+print(a['Sheep'])

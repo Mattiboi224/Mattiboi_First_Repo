@@ -20,3 +20,7 @@ class Player:
         self.current_points = 2
 
         self.played_knights = 0
+
+        self.has_longest_road = 0
+
+        self.has_largest_army = 0
