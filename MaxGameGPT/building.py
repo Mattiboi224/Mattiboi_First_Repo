@@ -49,7 +49,7 @@ class Building(Entity):
             if self.queue_time <= 0:
                 unit_type = self.queue.pop(0)
                 # spawn near the building
-                r = 24
+                r = 64
                 spawn_point = True
                 while spawn_point:
                     angle = random.random() * math.tau
@@ -57,6 +57,8 @@ class Building(Entity):
                     py = self.y + math.sin(angle) * r
                     gx, gy = m.to_grid((px, py))
                     if not m.in_bounds(gx, gy):
+                        continue
+                    if m.is_occupied(game.tile_map, gx, gy):
                         continue
                     spawn_point = False
 
@@ -66,7 +68,8 @@ class Building(Entity):
                     image_to_use = C.SOLDIER_IMAGE
                 elif unit_type == "tank":
                     image_to_use = C.TANK_IMAGE
-                game.spawn_unit(self.team, px, py, image_to_use, unit_type)
+                tx, ty = m.tile_center(gx, gy)
+                game.spawn_unit(self.team, tx, ty, image_to_use, unit_type)
                 # reset timer if more remain
                 if self.queue:
                     if self.queue[0] == "worker":

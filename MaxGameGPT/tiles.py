@@ -36,3 +36,5 @@ class Tiles:
         else:
             self.resource_type = None
         
+    def pos(self):
+        return (self.x_cord, self.y_cord)

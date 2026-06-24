@@ -19,6 +19,15 @@ def to_grid(pos):
 def in_bounds(tx, ty):
     return 0 <= tx < C.GRID_W and 0 <= ty < C.GRID_H - 1 # Adding Boundary
 
+def is_occupied(tile_map, gx, gy):
+        for w in range(len(tile_map)):
+            for h in tile_map[w]:
+                if h.pos() == (gx, gy):
+                    if h.occupied == False:
+                        return False
+                    else:
+                        return True
+
 # ------------------ PATHFINDING ------------------
 def astar(grid, start, goal, occupied_tiles=set(), passable=lambda t: t != C.T_WALL):
     sx, sy = start

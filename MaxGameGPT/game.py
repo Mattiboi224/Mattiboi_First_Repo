@@ -173,15 +173,23 @@ class Game:
         return None
 
     def occupied_tiles(self):
+        
+        self.unit_locs = []
+        for u in self.units:
+            if u.dead: continue
+            self.unit_locs.append(m.to_grid(u.pos()))
+        
+        for b in self.buildings:
+            if b.dead or b.sold: continue
+            self.unit_locs.append(m.to_grid(b.pos()))        
 
         self.occupied = []
-        for y in self.tile_map:
-            for x in self.tile_map[y]:
-                if self.tile_map[y][x].occupied == True:
-                    print("Tile is occupied")
-                    print(self.tile_map[y][x].x)
-                    print(self.tile_map[y][x].y)
-                    self.occupied.append((x,y))
+        for w in range(len(self.tile_map)):
+            for h in self.tile_map[w]:
+                if h.pos() in self.unit_locs:
+                    h.occupied = True
+                else:
+                    h.occupied = False
             
 
     # ---- Commands ----
@@ -189,7 +197,9 @@ class Game:
         gx, gy = m.to_grid(dest_px)
         for u in units:
             sx, sy = m.to_grid(u.pos())
-            path = m.astar(self.grid.tiles, self.occupied, (sx, sy), (gx, gy), passable=lambda t: t!=C.T_WALL)
+            print(sx, sy)
+            print(self.unit_locs)
+            path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), self.unit_locs, passable=lambda t: t!=C.T_WALL)
             if path:
                 u.set_path(path)
 
@@ -241,11 +251,14 @@ class Game:
                     if self.money[team] >= C.COST_BARRACKS and random.random() < 1/(barracks_count/2):
                         # find a nearby free tile
                         gx, gy = m.to_grid(base.pos())
+                        count = 0
                         for _ in range(10):
                             ox = random.randint(-3,3)
                             oy = random.randint(-3,3)
                             tx, ty = gx+ox, gy+oy
-                            if not m.in_bounds(tx, ty) or self.grid.tiles[ty][tx]!=C.T_GRASS or tx < C.GRID_W - C.MENU_TILE: continue
+                            if not m.in_bounds(tx, ty): continue
+                            if self.grid.tiles[ty][tx]!=C.T_GRASS: continue
+                            if m.is_occupied(self.tile_map, tx, ty): continue
                             if self.grid.tiles[ty][tx] == C.T_GRASS:
                                 px, py = m.tile_center(tx, ty)
                                 self.spawn_building(team, px, py, C.BARRACKS_IMAGE, "barracks")
@@ -255,11 +268,14 @@ class Game:
                     if self.money[team] >= C.COST_TANK_FACTORY and random.random() < 0.3:
                         # find a nearby free tile
                         gx, gy = m.to_grid(base.pos())
+                        count = 0
                         for _ in range(10):
                             ox = random.randint(-3,3)
                             oy = random.randint(-3,3)
                             tx, ty = gx+ox, gy+oy
-                            if not m.in_bounds(tx, ty) and self.grid.tiles[ty][tx]==C.T_GRASS and tx < C.GRID_W - C.MENU_TILE: continue
+                            if not m.in_bounds(tx, ty): continue
+                            if self.grid.tiles[ty][tx]!=C.T_GRASS: continue
+                            if m.is_occupied(self.tile_map, tx, ty): continue
                             if self.grid.tiles[ty][tx] == C.T_GRASS:
                                 px, py = m.tile_center(tx, ty)
                                 self.spawn_building(team, px, py, C.TANK_FACTORY_IMAGE, "tank_factory")
@@ -298,14 +314,14 @@ class Game:
                                     dest = self.find_nearest_unit(C.PLAYER_TEAM, u.pos(), ("worker", "soldier", "tank"))
                                     gx, gy = m.to_grid(dest.pos())
                                     sx, sy = m.to_grid(u.pos())
-                                    path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), passable=lambda t: t!=C.T_WALL)
+                                    path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), self.unit_locs, passable=lambda t: t!=C.T_WALL)
                                     if path:
                                         u.set_path(path)
                                 elif choice == "Building":
                                     dest = self.find_nearest_building(C.PLAYER_TEAM, u.pos(), ("base", "barracks", "tank_factory"))
                                     gx, gy = m.to_grid(dest.pos())
                                     sx, sy = m.to_grid(u.pos())
-                                    path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), passable=lambda t: t!=C.T_WALL)
+                                    path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), self.unit_locs, passable=lambda t: t!=C.T_WALL)
                                     if path:
                                         u.set_path(path)
                 if tank_factory:
@@ -340,14 +356,14 @@ class Game:
                                     dest = self.find_nearest_unit(C.PLAYER_TEAM, u.pos(), ("worker", "soldier", "tank"))
                                     gx, gy = m.to_grid(dest.pos())
                                     sx, sy = m.to_grid(u.pos())
-                                    path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), passable=lambda t: t!=C.T_WALL)
+                                    path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), self.unit_locs, passable=lambda t: t!=C.T_WALL)
                                     if path:
                                         u.set_path(path)
                                 elif choice == "Building":
                                     dest = self.find_nearest_building(C.PLAYER_TEAM, u.pos(), ("base", "barracks", "tank_factory"))
                                     gx, gy = m.to_grid(dest.pos())
                                     sx, sy = m.to_grid(u.pos())
-                                    path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), passable=lambda t: t!=C.T_WALL)
+                                    path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), self.unit_locs, passable=lambda t: t!=C.T_WALL)
                                     if path:
                                         u.set_path(path)
                 # Re-arm timer
