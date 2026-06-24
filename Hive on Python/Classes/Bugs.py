@@ -29,6 +29,8 @@ class Bugs():
         self.y = new_tile[1]
         self.original_tile = new_tile
 
+
+
     def draw(self):
 
         turtle.tracer(False)

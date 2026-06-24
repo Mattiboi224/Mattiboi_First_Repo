@@ -11,6 +11,8 @@ class Player():
 
         if human == 0:
             self.text = 'Comp'
+        elif human == -1:
+            self.text = 'Score'
         else:
             self.text = 'You'
 

@@ -53,6 +53,18 @@ def main():
 
     game = Game()
 
+    def queue_unit(game, building_kind, unit_name, cost, build_time):
+        # find owned buildings of the correct type
+        buildings = [b for b in game.buildings
+                    if b.team == C.PLAYER_TEAM and b.kind == building_kind]
+
+        if buildings and game.money[C.PLAYER_TEAM] >= cost:
+            bb = buildings[0]
+            bb.queue.append(unit_name)
+            if len(bb.queue) == 1:
+                bb.queue_time = build_time
+            game.money[C.PLAYER_TEAM] -= cost
+
     running = True
     while running:
         dt = clock.tick(C.FPS) / 1000.0
@@ -65,8 +77,9 @@ def main():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     # cancel build mode or clear selection
-                    if game.build_mode:
+                    if game.build_mode or game.sell_mode:
                         game.build_mode = False
+                        game.sell_mode = False
                     else:
                         for u in game.selected_units: u.selected = False
                         game.selected_units.clear()
@@ -76,6 +89,9 @@ def main():
 
                 elif event.key == pygame.K_m:
                     game.map_edit = not game.map_edit
+
+                elif event.key == pygame.K_r:
+                    game.resource_mode = not game.resource_mode
 
                 elif event.key == pygame.K_LEFTBRACKET:
                     game.paint_tile = C.T_WALL
@@ -88,51 +104,93 @@ def main():
                         game.build_mode = True
                         game.build_kind = "barracks"
 
+                elif event.key == pygame.K_c:
+                    # enter build mode (Barracks)
+                    if game.money[C.PLAYER_TEAM] >= C.COST_BASE:
+                        game.build_mode = True
+                        game.build_kind = "base"
+
                 elif event.key == pygame.K_w:
                     # enter build mode (Warfactory)
                     if game.money[C.PLAYER_TEAM] >= C.COST_TANK_FACTORY:
                         game.build_mode = True
                         game.build_kind = "tank_factory"
 
-                elif event.key == pygame.K_u:
-                    # queue a worker at player's base
-                    base = game.player_base
-                    if base and game.money[C.PLAYER_TEAM] >= C.COST_WORKER:
-                        base.queue.append("worker")
-                        if len(base.queue) == 1:
-                            base.queue_time = C.BUILD_WORKER_TIME
-                        game.money[C.PLAYER_TEAM] -= C.COST_WORKER
-
                 elif event.key == pygame.K_s:
-                    # queue a soldier at any selected barracks
-                    selected_barracks = [b for b in game.buildings if b.team==C.PLAYER_TEAM and b.kind=="barracks"
-                                         and pygame.Rect(0,0,C.TILE,C.TILE).inflate(0,0)]
-                    # if player selected a barracks, use that; otherwise first barracks
-                    # (for simplicity here we'll just use the first owned barracks)
-                    own_barracks = [b for b in game.buildings if b.team==C.PLAYER_TEAM and b.kind=="barracks"]
-                    if own_barracks and game.money[C.PLAYER_TEAM] >= C.COST_SOLDIER:
-                        bb = own_barracks[0]
-                        bb.queue.append("soldier")
-                        if len(bb.queue) == 1:
-                            bb.queue_time = C.BUILD_SOLDIER_TIME
-                        game.money[C.PLAYER_TEAM] -= C.COST_SOLDIER
+                    queue_unit(game, "barracks", "soldier", C.COST_SOLDIER, C.BUILD_SOLDIER_TIME)
 
                 elif event.key == pygame.K_t:
-                    # queue a tank at any selected warfactory
-                    selected_tank_factory = [b for b in game.buildings if b.team==C.PLAYER_TEAM and b.kind=="tank_factory"
-                                         and pygame.Rect(0,0,C.TILE,C.TILE).inflate(0,0)]
-                    # if player selected a tank factory, use that; otherwise first tank factory
-                    # (for simplicity here we'll just use the first owned tank factory)
-                    own_tank_factory = [b for b in game.buildings if b.team==C.PLAYER_TEAM and b.kind=="tank_factory"]
-                    if own_tank_factory and game.money[C.PLAYER_TEAM] >= C.COST_TANK:
-                        bb = own_tank_factory[0]
-                        bb.queue.append("tank")
-                        if len(bb.queue) == 1:
-                            bb.queue_time = C.BUILD_TANK_TIME
-                        game.money[C.PLAYER_TEAM] -= C.COST_TANK
+                    queue_unit(game, "tank_factory", "tank", C.COST_TANK, C.BUILD_TANK_TIME)
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:  # left
+                    
+                    # Sell the Building
+                    if game.building_at_point(event.pos) is not None and game.sell_mode:
+                        b_at_point = game.building_at_point(event.pos)
+                        
+                        if b_at_point.team == C.PLAYER_TEAM:
+                            b_at_point.sold = True
+                            b_at_point.Tile.occupied = False
+                            
+                            for name, stats in C.UNIT_STATS.items():
+                                if stats["kind"] == b_at_point.kind:
+                                    game.money[C.PLAYER_TEAM] += (stats["cost"] // 2)
+
+                        game.sell_mode = False
+                        game.ghost_valid = False
+
+                    # Repair the building
+                    if game.building_at_point(event.pos) is not None and game.repair_mode:
+                        b_at_point = game.building_at_point(event.pos)
+                        
+                        if b_at_point.team == C.PLAYER_TEAM:
+                            
+                            # If missing health
+                            if b_at_point.hp < b_at_point.max_hp and game.money[C.PLAYER_TEAM] > 0:
+                                hp_diff = b_at_point.max_hp - b_at_point.hp
+                                hp_diff = hp_diff // 2
+                                game.money[C.PLAYER_TEAM] -= hp_diff
+                                b_at_point.hp = b_at_point.max_hp
+                            
+                        game.repair_mode = False
+                        game.ghost_valid = False
+
+                    for label, rect in game.menu.buttons:
+                        if rect.collidepoint(event.pos):
+                            
+                            if label == "Barracks":
+                                # enter build mode (Barracks)
+                                if game.money[C.PLAYER_TEAM] >= C.COST_BARRACKS:
+                                    game.build_mode = True
+                                    game.build_kind = "barracks"
+
+                            elif label == "Base":
+                                # enter build mode (Barracks)
+                                if game.money[C.PLAYER_TEAM] >= C.COST_BASE:
+                                    game.build_mode = True
+                                    game.build_kind = "base"
+
+                            elif label == "Tank Factory":
+                                # enter build mode (Warfactory)
+                                if game.money[C.PLAYER_TEAM] >= C.COST_TANK_FACTORY:
+                                    game.build_mode = True
+                                    game.build_kind = "tank_factory"
+
+                            elif label == "Soldier":
+                                queue_unit(game, "barracks", "soldier", C.COST_SOLDIER, C.BUILD_SOLDIER_TIME)
+
+                            elif label == "Tank":
+                                queue_unit(game, "tank_factory", "tank", C.COST_TANK, C.BUILD_TANK_TIME)
+
+                            elif label == "Sell":
+                                game.sell_mode = True
+                                game.repair_mode = False
+
+                            elif label == "Repair":
+                                game.repair_mode = True
+                                game.sell_mode = False
+
                     if game.build_mode and game.build_kind == "barracks":
                         # attempt to place building
                         if game.ghost_valid and game.money[C.PLAYER_TEAM] >= C.COST_BARRACKS:
@@ -140,6 +198,8 @@ def main():
                             game.spawn_building(C.PLAYER_TEAM, px, py, C.BARRACKS_IMAGE, "barracks")
                             game.money[C.PLAYER_TEAM] -= C.COST_BARRACKS
                             game.build_mode = False
+                            game.ghost_valid = False
+
                     elif game.build_mode and game.build_kind == "tank_factory":
                         # attempt to place building
                         if game.ghost_valid and game.money[C.PLAYER_TEAM] >= C.COST_TANK_FACTORY:
@@ -147,6 +207,17 @@ def main():
                             game.spawn_building(C.PLAYER_TEAM, px, py, C.TANK_FACTORY_IMAGE, "tank_factory")
                             game.money[C.PLAYER_TEAM] -= C.COST_TANK_FACTORY
                             game.build_mode = False
+                            game.ghost_valid = False
+
+                    elif game.build_mode and game.build_kind == "base":
+                        # attempt to place building
+                        if game.ghost_valid and game.money[C.PLAYER_TEAM] >= C.COST_BASE:
+                            px, py = game.ghost_pos
+                            game.spawn_building(C.PLAYER_TEAM, px, py, C.BASE_IMAGE, "base")
+                            game.money[C.PLAYER_TEAM] -= C.COST_BASE
+                            game.build_mode = False
+                            game.ghost_valid = False
+
                     elif game.map_edit:
                         tx, ty = UT.to_grid(event.pos)
                         # paint chosen tile (or grass with middle click, but here: toggle between selected and grass with shift)
@@ -176,14 +247,7 @@ def main():
                                 u.target = enemy
                         else:
                             tx, ty = UT.to_grid(event.pos)
-                            #print(tx)
-                            #print(ty)
-                            if UT.in_bounds(tx, ty) and (game.grid.tiles[ty][tx] == C.T_RESOURCE or game.grid.tiles[ty][tx] == C.T_GEMS):
-                                                         #and game.selected_units.kind == "worker"):
-                                game.order_harvest(game.selected_units, (tx, ty))
-                                #print("harvesting")
-                            else:
-                                game.order_move(game.selected_units, event.pos)
+                            game.order_move(game.selected_units, event.pos)
 
             elif event.type == pygame.MOUSEBUTTONUP:
                 if event.button == 1 and game.select_start:

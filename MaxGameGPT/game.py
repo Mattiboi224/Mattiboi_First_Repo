@@ -7,10 +7,12 @@ import random
 import Config as C
 from units import Unit
 from building import Building
+from menu import Menu
 
 class Game:
     def __init__(self):
         self.grid = GridMap(C.GRID_W, C.GRID_H)
+        self.menu = Menu()
         
         self.tile_map = self.grid.assign_tiles()
         self.units = []
@@ -18,13 +20,16 @@ class Game:
         self.total_buildings = []
         self.total_units = []
         self.money = {t: C.INITIAL_MONEY for t in [C.PLAYER_TEAM] + C.AI_TEAMS}
+        self.fuel = {t: 0 for t in [C.PLAYER_TEAM] + C.AI_TEAMS}
+        self.gold = {t: 0 for t in [C.PLAYER_TEAM] + C.AI_TEAMS}
         self.help_on = False
 
         # Place bases
-        spawns = [(2,2), (C.GRID_W-3, C.GRID_H-3), (C.GRID_W-3, 2), (2, C.GRID_H-3), (C.GRID_W//2, C.GRID_H-3)]
+        spawns = [(1,1), (C.GRID_W-3, C.GRID_H-3), (C.GRID_W-3, 2), (2, C.GRID_H-3), (C.GRID_W//2, C.GRID_H-3)]
         #print(self.grid.spawns)
         if len(self.grid.spawns) != 0:
             spawns = self.grid.spawns
+            #print(spawns)
         #print(spawns)
         random.shuffle(spawns)
         # Player base
@@ -32,14 +37,14 @@ class Game:
         #print(tx, ty)
         self.player_base = self.spawn_building(C.PLAYER_TEAM, *m.tile_center(tx, ty), C.BASE_IMAGE, "base")
     
-        # Give player a worker
-        self.spawn_unit(C.PLAYER_TEAM, *m.tile_center(tx+1, ty), C.WORKER_IMAGE, "worker")
+        # # Give player a worker
+        # self.spawn_unit(C.PLAYER_TEAM, *m.tile_center(tx+1, ty), C.WORKER_IMAGE, "worker")
 
         # AI bases
         for i, team in enumerate(C.AI_TEAMS, start=1):
             tx, ty = spawns[i % len(spawns)]
             self.spawn_building(team, *m.tile_center(tx, ty), C.BASE_IMAGE, "base")
-            self.spawn_unit(team, *m.tile_center(tx+1, ty), C.WORKER_IMAGE, "worker")  # give AI a worker too
+            # self.spawn_unit(team, *m.tile_center(tx+1, ty), C.WORKER_IMAGE, "worker")  # give AI a worker too
            # print(tx, ty)
 
         # Selection
@@ -54,6 +59,9 @@ class Game:
         self.build_kind = "barracks"  # only building type available for now
         self.ghost_valid = False
         self.ghost_pos = (0,0)
+        self.resource_mode = False
+        self.sell_mode = False
+        self.repair_mode = False
 
         # AI
         self.ai_timers = {team: 0.0 for team in C.AI_TEAMS}
@@ -67,6 +75,7 @@ class Game:
 
     def spawn_building(self, team, x, y, image, kind):
         b = Building(team, x, y, image, kind)
+        b.assign_tile(self.tile_map)
         self.buildings.append(b)
         self.total_buildings.append(b)  ## Used in End Game Stats
         return b
@@ -163,33 +172,30 @@ class Game:
             if rect.collidepoint(p): return b
         return None
 
+    def occupied_tiles(self):
+
+        self.occupied = []
+        for y in self.tile_map:
+            for x in self.tile_map[y]:
+                if self.tile_map[y][x].occupied == True:
+                    print("Tile is occupied")
+                    print(self.tile_map[y][x].x)
+                    print(self.tile_map[y][x].y)
+                    self.occupied.append((x,y))
+            
+
     # ---- Commands ----
     def order_move(self, units, dest_px):
         gx, gy = m.to_grid(dest_px)
         for u in units:
             sx, sy = m.to_grid(u.pos())
-            path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), passable=lambda t: t!=C.T_WALL)
+            path = m.astar(self.grid.tiles, self.occupied, (sx, sy), (gx, gy), passable=lambda t: t!=C.T_WALL)
             if path:
                 u.set_path(path)
 
     def order_attack(self, units, target):
         for u in units:
             u.target = target
-
-    def order_harvest(self, units, tile):
-        tx, ty = tile
-        for u in units:
-            if u.kind != "worker": continue
-            # path to the resource tile
-            sx, sy = m.to_grid(u.pos())
-            path = m.astar(self.grid.tiles, (sx, sy), (tx, ty), passable=lambda t: t!=C.T_WALL)
-            if path:
-                u.set_path(path)
-                # when they arrive, start harvesting
-                u.harvesting = True
-                new_resource = self.tile_map[tx][ty]
-                #print(new_resource.harvest_timer)
-                u.harvest_timer = new_resource.harvest_timer
 
     # ---- Update ----
     def update(self, dt):
@@ -210,6 +216,9 @@ class Game:
         # AI
         self.update_ai(dt)
 
+        # Update what's occupied
+        self.occupied_tiles()
+
     def update_ai(self, dt):
         for team in C.AI_TEAMS:
             self.ai_timers[team] -= dt
@@ -221,65 +230,8 @@ class Game:
                 base = next((b for b in self.buildings if b.team == team and b.kind=="base"), None)
                 barracks = next((b for b in self.buildings if b.team == team and b.kind=="barracks"), None)
                 tank_factory = next((b for b in self.buildings if b.team == team and b.kind=="tank_factory"), None)
-                worker = next((u for u in self.units if u.team == team and u.kind=="worker"), None)
-
-                # Find Worker and Tell them to harvest
-                if worker:
-                    for u in self.units:
-                        if u.team == team and u.kind=="worker" and u.harvesting == False and len(u.path) == 0:
-                            res_loc = self.find_nearest_resource(u.pos())
-                            tx, ty = res_loc
-                            sx, sy = m.to_grid(u.pos())
-                            path = m.astar(self.grid.tiles, (sx, sy), (tx, ty), passable=lambda t: t!=C.T_WALL)
-                            if path:
-                                u.set_path(path)
-                                # when they arrive, start harvesting
-                                u.harvesting = True
-                                new_resource = self.tile_map[tx][ty]
-                                u.harvest_timer = new_resource.harvest_timer
-                               # u.harvest_timer = C.HARVEST_TIME
 
                 if base:
-                    worker_count = 1 ## Added One for Logic Reasons
-                    for b in self.units:
-                        if b.team == team and b.kind == "worker":
-                            worker_count += 1
-                    
-                    # queue a worker somewhere at base
-                    target_build = random.choice([b for b in self.buildings if b.team==team and b.kind=="base"])
-
-                    worker_count = worker_count + len(target_build.queue)
-
-                    # More Workers Less Likely to build
-                    if self.money[team] >= C.COST_WORKER and random.random() < 1/worker_count:
-                        target_build.queue.append("worker")
-                        target_build.queue_time = C.BUILD_WORKER_TIME if len(target_build.queue)==1 else target_build.queue_time
-                        self.money[team] -= C.COST_WORKER
-                        break
-                    
-                    # No Workers and No Money
-                    if self.money[team] < C.COST_WORKER and worker_count == 1 \
-                    and len([b for b in self.buildings if b.team==team and b.kind!="base"]) > 0 and len(target_build.queue) == 0: 
-
-                        # Sell Building to cover cost
-                        sold_building = random.choice([b for b in self.buildings if b.team==team and b.kind!="base"])
-                        sold_building.sold = True
-
-                        #print(sold_building.kind)
-
-                        if sold_building.kind == "barracks":
-                            cost_value = C.COST_BARRACKS
-                        elif sold_building.kind == "tank_factory":
-                            cost_value = C.COST_TANK_FACTORY
-
-                        self.money[team] += cost_value * C.SELL_PERCENTAGE
-
-                        #print(self.money[team])
-
-                        break
-
-
-
 
                     barracks_count = 1 ## Added One for Logic Reasons
                     for b in self.buildings:
@@ -293,7 +245,7 @@ class Game:
                             ox = random.randint(-3,3)
                             oy = random.randint(-3,3)
                             tx, ty = gx+ox, gy+oy
-                            if not m.in_bounds(tx, ty): continue
+                            if not m.in_bounds(tx, ty) or self.grid.tiles[ty][tx]!=C.T_GRASS or tx < C.GRID_W - C.MENU_TILE: continue
                             if self.grid.tiles[ty][tx] == C.T_GRASS:
                                 px, py = m.tile_center(tx, ty)
                                 self.spawn_building(team, px, py, C.BARRACKS_IMAGE, "barracks")
@@ -307,7 +259,7 @@ class Game:
                             ox = random.randint(-3,3)
                             oy = random.randint(-3,3)
                             tx, ty = gx+ox, gy+oy
-                            if not m.in_bounds(tx, ty): continue
+                            if not m.in_bounds(tx, ty) and self.grid.tiles[ty][tx]==C.T_GRASS and tx < C.GRID_W - C.MENU_TILE: continue
                             if self.grid.tiles[ty][tx] == C.T_GRASS:
                                 px, py = m.tile_center(tx, ty)
                                 self.spawn_building(team, px, py, C.TANK_FACTORY_IMAGE, "tank_factory")
@@ -405,6 +357,8 @@ class Game:
     def draw(self, surf, font):
         self.grid.draw(surf)
 
+        self.menu.draw(surf, font)
+
         # Draw buildings
         for b in self.buildings:
             b.draw(surf)
@@ -429,6 +383,18 @@ class Game:
             self.ghost_pos = (px, py)
             pygame.draw.rect(surf, (200,200,200) if valid else (200,80,80), rect, 2)
 
+        # sell ghost
+        if self.sell_mode:
+            mx, my = pygame.mouse.get_pos()
+            tx, ty = m.to_grid((mx, my))
+            px, py = m.tile_center(tx, ty)
+            rect = pygame.Rect(0,0,C.TILE,C.TILE)
+            rect.center = (px, py)
+            valid = m.in_bounds(tx, ty) and self.grid.tiles[ty][tx]==C.T_GRASS
+            self.ghost_valid = valid
+            self.ghost_pos = (px, py)
+            pygame.draw.rect(surf, (200,200,200) if valid else (200,80,80), rect, 2)
+
         # UI
         pygame.draw.rect(surf, (0,0,0), (0, C.HEIGHT-28, C.WIDTH, 28))
         money_text = font.render(f"Money: {self.money[C.PLAYER_TEAM]}   Units: {len([u for u in self.units if u.team==C.PLAYER_TEAM])}   Buildings: {len([b for b in self.buildings if b.team==C.PLAYER_TEAM])}", True, (255,255,255))
@@ -437,12 +403,14 @@ class Game:
         if self.help_on:
             self.draw_help(surf, font)
 
+        self.grid.draw_resources(surf, font, self.resource_mode)
+
     def draw_help(self, surf, font):
         lines = [
             "Controls: Left-drag = select units | Right-click = move/attack/harvest | ESC = cancel/clear",
-            "B: place Barracks (75) | U: train Worker at Base (50) | S: train Soldier at Barracks (60)",
-            "W: place Tank Factory (100) | T: train Tank at Tank Factory (100)",
-            "M: toggle Map Edit | [ / ] choose tile: Wall / Resource (paint while in Map Edit) | F1: toggle help",
+            f"B: place Barracks ({C.COST_BARRACKS}) | S: train Soldier at Barracks ({C.COST_SOLDIER})",
+            f"W: place Tank Factory ({C.COST_TANK_FACTORY}) | T: train Tank at Tank Factory ({C.COST_TANK})",
+            f"R: Show the Resource Map | C: Build Base ({C.COST_BASE}) | F1: toggle help",
         ]
         y = 6
         for line in lines:

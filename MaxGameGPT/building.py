@@ -19,12 +19,28 @@ class Building(Entity):
         self.queue_time = 0.0
         self.image = pygame.image.load(image).convert_alpha()
         self.sold = False
+        self.resupply_time = C.MINERAL_SUPPLY_TIME
+        self.count = 0
+        if kind == "base":
+            self.supply = True
+        else:
+            self.supply = False
 
     def pos(self):
         return (self.x, self.y)
 
     def grid_pos(self):
         return m.to_grid(self.pos())
+
+    def assign_tile(self, tiles_mat):
+        x, y = m.to_grid(self.pos())
+        self.Tile = tiles_mat[x][y]
+        self.Tile.occupied = True
+
+    def repairing(self):
+        if self.repair_mode:
+            if self.hp < self.max_hp:
+                self.hp += 1
 
     def update(self, dt, game):
         # process production queue
@@ -44,16 +60,46 @@ class Building(Entity):
                         continue
                     spawn_point = False
 
-                if unit_type == "worker":
-                    image_to_use = C.WORKER_IMAGE
-                elif unit_type == "soldier":
+                # if unit_type == "worker":
+                #     image_to_use = C.WORKER_IMAGE
+                if unit_type == "soldier":
                     image_to_use = C.SOLDIER_IMAGE
                 elif unit_type == "tank":
                     image_to_use = C.TANK_IMAGE
                 game.spawn_unit(self.team, px, py, image_to_use, unit_type)
                 # reset timer if more remain
                 if self.queue:
-                    self.queue_time = C.BUILD_WORKER_TIME if self.queue[0] == "worker" else C.BUILD_SOLDIER_TIME
+                    if self.queue[0] == "worker":
+                        self.queue_time = C.BUILD_WORKER_TIME
+                    elif self.queue[0] == 'soldier':
+                        self.queue_time = C.BUILD_SOLDIER_TIME
+                    elif self.queue[0] == "tank":
+                        self.queue_time = C.BUILD_TANK_TIME
+                    else:
+                        self.queue_time = C.BUILD_WORKER_TIME
+        
+        if self.supply:
+            self.resupply_time -= dt
+
+            # Every 10 Ticks Supply Money
+            if self.resupply_time <= 0:
+
+                #if self.count == 0 and self.team == 0:
+                #    print(self.grid_pos())
+            
+                if self.Tile.resource_type == 'Minerals':
+                    game.money[self.team] += self.Tile.resource_amount
+                    self.resupply_time = C.MINERAL_SUPPLY_TIME
+                    #print(self.resupply_time)
+                
+                elif self.Tile.resource_type == 'Fuel':
+                    game.fuel[self.team] += self.Tile.resource_amount
+                    self.resupply_time = 0
+
+                elif self.Tile.resource_type == 'Gold':
+                    game.gold[self.team] += self.Tile.resource_amount
+                    self.resupply_time = 0
+
 
     def draw(self, surf):
         col = C.TEAM_COLORS.get(self.team, (200,200,200))

@@ -8,9 +8,9 @@ import time
 # Define constant values used in the main program that sets up
 # the drawing canvas.  Do not change any of these values unless
 # instructed.
-grid_width = 5
-grid_height = 5
-cell_size = 50 # pixels (default is 100)
+grid_width = 10
+grid_height = 10
+cell_size = 59 # pixels (default is 100)
 x_margin = cell_size * 2.5 # pixels, the size of the margin left/right of the grid
 y_margin = cell_size // 2 # pixels, the size of the margin below/above the grid
 window_grid_height = grid_height * cell_size + y_margin * 2

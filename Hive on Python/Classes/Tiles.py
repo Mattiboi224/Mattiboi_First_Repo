@@ -10,9 +10,7 @@ class Tiles():
         self.radius = C.radius
         self.is_occupied = 0
         self.nearby_tiles = []
-
-
-
+        
     def pos(self):
         return [self.x, self.y]
     
