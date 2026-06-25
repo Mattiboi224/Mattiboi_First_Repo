@@ -1,5 +1,11 @@
-# Let's create a complete, runnable Pygame prototype for a grid-based base-building RTS with selection,
-# simple AI opponents, map editing, and basic building/unit behaviors.
+# Improvements
+
+# Make it turn based
+    # Convert speed to tiles rather than pixels per second
+    # Add shots in so 
+
+
+
 
 import os, textwrap, json, math, random, sys, time
 
@@ -122,6 +128,9 @@ def main():
                 elif event.key == pygame.K_t:
                     queue_unit(game, "tank_factory", "tank", C.COST_TANK, C.BUILD_TANK_TIME)
 
+                elif event.key == pygame.K_a:
+                    queue_unit(game, "tank_factory", "ammo_truck", C.COST_AMMO_TRUCK, C.BUILD_AMMO_TRUCK_TIME)
+
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:  # left
                     
@@ -135,7 +144,7 @@ def main():
                             
                             for name, stats in C.UNIT_STATS.items():
                                 if stats["kind"] == b_at_point.kind:
-                                    game.money[C.PLAYER_TEAM] += (stats["cost"] // 2)
+                                    game.money[C.PLAYER_TEAM] += (stats["cost"] * C.SELL_PERCENTAGE)
 
                         game.sell_mode = False
                         game.ghost_valid = False
@@ -182,6 +191,9 @@ def main():
 
                             elif label == "Tank":
                                 queue_unit(game, "tank_factory", "tank", C.COST_TANK, C.BUILD_TANK_TIME)
+
+                            elif label == "Ammo Truck":
+                                queue_unit(game, "tank_factory", "ammo_truck", C.COST_AMMO_TRUCK, C.BUILD_AMMO_TRUCK_TIME)
 
                             elif label == "Sell":
                                 game.sell_mode = True

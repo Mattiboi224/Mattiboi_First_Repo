@@ -8,7 +8,7 @@ class Menu:
 
         # Menu buttons
         self.buildings_labels = ["Base", "Barracks", "Tank Factory"]
-        self.unit_labels = ["Soldier", "Tank"]
+        self.unit_labels = ["Soldier", "Tank", "Ammo Truck"]
         self.helpful_labels = ["Sell", "Repair"]
         self.labels = self.buildings_labels + self.unit_labels + self.helpful_labels
 

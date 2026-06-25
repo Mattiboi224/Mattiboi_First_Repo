@@ -7,20 +7,25 @@ import util as m
 
 class Building(Entity):
     def __init__(self, team, x, y, image, kind="base"):
-        super().__init__(team, x, y, image, radius=16)
+        super().__init__(team, x, y, image, kind, radius=16)
         self.kind = kind
         if kind == "base":
             self.hp = self.max_hp = C.BASE_HP
+            self.armour = C.BASE_ARMOUR
+        elif kind == "barracks":    
+            self.hp = self.max_hp = C.BARRACKS_HP
+            self.armour = C.BARRACKS_ARMOUR
         elif kind == "tank_factory":
             self.hp = self.max_hp = C.TANK_FACTORY_HP
-        else:
-            self.hp = self.max_hp = C.BARRACKS_HP
+            self.armour = C.TANK_FACTORY_ARMOUR
+
         self.queue = []     # production queue of ("worker" or "soldier")
         self.queue_time = 0.0
         self.image = pygame.image.load(image).convert_alpha()
         self.sold = False
         self.resupply_time = C.MINERAL_SUPPLY_TIME
         self.count = 0
+        
         if kind == "base":
             self.supply = True
         else:

@@ -8,24 +8,41 @@ import util as m
 # pyright: ignore[reportMissingImports]
 
 class Unit(Entity):
-    def __init__(self, team, x, y, image, kind="worker"):
-        super().__init__(team, x, y, image, radius=12)
+    def __init__(self, team, x, y, image, kind="soldier"):
+        super().__init__(team, x, y, image, kind, radius=12)
         self.kind = kind
-        if kind == "worker":
-            self.hp = self.max_hp = C.WORKER_HP
-            self.atk = C.WORKER_ATK
-            self.range = C.WORKER_RANGE
-            self.speed = C.WORKER_SPEED
-        elif kind == "tank":
+        if kind == "tank":
             self.hp = self.max_hp = C.TANK_HP
             self.atk = C.TANK_ATK
             self.range = C.TANK_RANGE
             self.speed = C.TANK_SPEED
+            self.armour = C.TANK_ARMOUR
+            self.ammo = C.TANK_AMMO
+            self.shots = C.TANK_SHOTS
+
+        elif kind == "ammo_truck":
+            self.hp = self.max_hp = C.AMMO_TRUCK_HP
+            self.atk = C.AMMO_TRUCK_ATK
+            self.range = C.AMMO_TRUCK_RANGE
+            self.speed = C.AMMO_TRUCK_SPEED
+            self.armour = C.AMMO_TRUCK_ARMOUR
+            self.ammo = C.AMMO_TRUCK_AMMO
+            self.shots = C.AMMO_TRUCK_SHOTS
+
         else:
             self.hp = self.max_hp = C.SOLDIER_HP
             self.atk = C.SOLDIER_ATK
             self.range = C.SOLDIER_RANGE
             self.speed = C.SOLDIER_SPEED
+            self.armour = C.SOLDIER_ARMOUR
+            self.ammo = C.SOLDIER_AMMO
+            self.shots = C.SOLDIER_SHOTS
+        
+        if kind == "ammo_truck":
+            self.carry_max = C.AMMO_TRUCK_CARGO
+        else:
+            self.carry_max = 0
+
         self.path = []
         self.path_px = []
         self.target = None
