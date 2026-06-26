@@ -1,6 +1,7 @@
 import Config
 import pygame
 import util as m
+import Config as C
 
 # ------------------ ENTITIES ------------------
 NEXT_ID = 1
@@ -11,22 +12,36 @@ def gen_id():
     return i
 
 class Entity(pygame.sprite.Sprite):
-    def __init__(self, team, x, y, image, radius=12):
+    def __init__(self, team, x, y, image, kind, radius=12):
         self.id = gen_id()
         self.team = team
         self.x = x
         self.y = y
+        self.kind = kind
         self.radius = radius
         self.hp = 1
         self.max_hp = 1
         self.image = image
         self.dead = False
+        
+        if kind == "tank":
+            self.armour = C.SOLDIER_ARMOUR
+        elif kind == "tank":
+            self.armour = C.TANK_ARMOUR
+        elif kind == "ammo_truck":
+            self.armour = C.AMMO_TRUCK_ARMOUR
+        elif kind == "base":
+            self.armour = C.BASE_ARMOUR
+        elif kind == "barracks":
+            self.armour = C.BARRACKS_ARMOUR
+        elif kind == "tank_factory":
+            self.armour = C.TANK_FACTORY_ARMOUR
 
     def pos(self):
         return (self.x, self.y)
 
     def take_damage(self, dmg):
-        self.hp -= dmg
+        self.hp -= dmg - self.armour
         if self.hp <= 0:
             self.dead = True
 
