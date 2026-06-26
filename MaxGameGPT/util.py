@@ -1,6 +1,7 @@
 import Config as C
 import heapq
 import math
+from PIL import Image
 
 # ------------------ UTILS ------------------
 def clamp(v, lo, hi):
@@ -27,6 +28,18 @@ def is_occupied(tile_map, gx, gy):
                         return False
                     else:
                         return True
+
+def convert_image_to_team(image_used, team_number):
+    image = Image.open(image_used).convert("RGB")
+    pixels = list(image.getdata())
+    old = (52, 68, 32)
+
+    new = C.TEAM_COLORS[team_number]     
+
+    updated = [new if p == old else p for p in pixels]
+
+    out = Image.new("RGB", image.size)
+    return out
 
 # ------------------ PATHFINDING ------------------
 def astar(grid, start, goal, occupied_tiles=set(), passable=lambda t: t != C.T_WALL):

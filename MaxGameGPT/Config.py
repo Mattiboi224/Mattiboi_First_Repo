@@ -1,6 +1,8 @@
 # ------------------ CONFIG ------------------
 WIDTH, HEIGHT = 1024, 704
 MENU_WIDTH = 192
+UNIT_MENU_WIDTH = 128
+UNIT_MENU_HEIGHT = 128
 TILE = 32
 
 # GRID HEIGHT = 22
@@ -16,6 +18,8 @@ TEXT_COLOR = (230, 230, 230)
 
 BTN_HEIGHT = 60
 PADDING = 20
+
+UNIT_PROP_HEIGHT = 20
 
 FPS = 60
 
@@ -120,6 +124,7 @@ SOLDIER_IMAGE = 'assets/units/soldier.png'
 TANK_FACTORY_IMAGE = 'assets/buildings/tank_factory.png'
 TANK_IMAGE = 'assets/units/tank.png'
 GOLD_MINER_IMAGE = 'assets/units/gold_miner.png'
+AMMO_TRUCK_IMAGE = 'assets/units/ammo_truck.png'
 
 # Game Map Location
 GAME_MAP = 'game_map.png'
@@ -147,3 +152,13 @@ TEAM_COLORS = {
     3: (160, 255, 120),  # green
     4: (200, 120, 255),  # purple
 }
+
+# Convert This Colour to Team Colour
+# Tanks
+TANK_OLD = (74, 98, 48)
+
+# Ammo Truck
+AMMO_TRUCK_OLD = (74, 104, 40)
+
+# Soldier
+SOLDIER_OLD = (52, 68, 32)

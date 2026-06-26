@@ -239,7 +239,6 @@ def main():
                             else:
                                 game.grid.toggle_at(tx, ty, game.paint_tile)
                     else:
-                        # print("starting sel")
                         # begin selection
                         game.select_start = event.pos
                         #game.selection_rect = pygame.Rect(event.pos, (0,0))
@@ -264,7 +263,6 @@ def main():
             elif event.type == pygame.MOUSEBUTTONUP:
                 if event.button == 1 and game.select_start:
 
-                    #print("selection ava")
                     # finalize selection
                     if not (pygame.key.get_mods() & pygame.KMOD_SHIFT):
                         # clear previous unless holding shift
@@ -278,7 +276,6 @@ def main():
                         u.selected = True
                         if u not in game.selected_units:
                             game.selected_units.append(u)
-                            #print("found unit")
                     else:
                         # clicked empty space: clear selection (if not shift)
                         if not (pygame.key.get_mods() & pygame.KMOD_SHIFT):

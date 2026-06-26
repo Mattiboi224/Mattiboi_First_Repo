@@ -1,19 +1,38 @@
-# Costs
-COST_WORKER = 50
-COST_SOLDIER = 60
-COST_BARRACKS = 75
-COST_TANK = 150
-COST_TANK_FACTORY = 100
-COST_BASE = 100
+import Config as C
+from PIL import Image
+from collections import Counter
 
+image = Image.open(C.SOLDIER_IMAGE).convert("RGB")
+pixels = list(image.getdata())
 
-UNIT_STATS = {
-    "Barracks": {"cost": COST_BARRACKS, "kind": "barracks"},
-    "Soldier":  {"cost": COST_SOLDIER,  "kind": "soldier"},
-    "Tank":     {"cost": COST_TANK,     "kind": "tank"},
-    "Base":     {"cost": COST_BASE,     "kind": "base"},
-    "Tank Factory":     {"cost": COST_TANK_FACTORY,     "kind": "tank_factory"},
-}
+#print(pixels)
 
-if "tank" in UNIT_STATS.get("tank"):
-    print("In")
+counts = Counter(pixels)
+print("Counts of all items:")
+for item, count in sorted(counts.items(), key=lambda x: x[1], reverse=True):
+    print(f"{item}: {count}")
+
+# (52, 68, 32): 250
+# (38, 50, 22): 104
+# (30, 40, 14): 71
+# (50, 50, 46): 36
+
+old = (52, 68, 32)
+
+new = C.TEAM_COLORS[1]      # red
+
+updated = [new if p == old else p for p in pixels]
+
+out = Image.new("RGB", image.size)
+out.putdata(updated)
+out.save("player_red.png")
+
+# Convert This Colour to Team Colour
+# Tanks
+# (74, 98, 48)
+
+# Ammo Truck
+# (74, 104, 40)
+
+# Soldier
+# (52, 68, 32)

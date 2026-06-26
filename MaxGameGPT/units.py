@@ -15,29 +15,29 @@ class Unit(Entity):
             self.hp = self.max_hp = C.TANK_HP
             self.atk = C.TANK_ATK
             self.range = C.TANK_RANGE
-            self.speed = C.TANK_SPEED
+            self.speed = self.max_speed =C.TANK_SPEED
             self.armour = C.TANK_ARMOUR
-            self.ammo = C.TANK_AMMO
-            self.shots = C.TANK_SHOTS
-
+            self.ammo = self.max_ammo = C.TANK_AMMO
+            self.shots = self.max_shots = C.TANK_SHOTS
+    
         elif kind == "ammo_truck":
             self.hp = self.max_hp = C.AMMO_TRUCK_HP
             self.atk = C.AMMO_TRUCK_ATK
             self.range = C.AMMO_TRUCK_RANGE
-            self.speed = C.AMMO_TRUCK_SPEED
+            self.speed = self.max_speed = C.AMMO_TRUCK_SPEED
             self.armour = C.AMMO_TRUCK_ARMOUR
-            self.ammo = C.AMMO_TRUCK_AMMO
-            self.shots = C.AMMO_TRUCK_SHOTS
+            self.ammo = self.max_ammo = C.AMMO_TRUCK_AMMO
+            self.shots = self.max_shots = C.AMMO_TRUCK_SHOTS
 
         else:
             self.hp = self.max_hp = C.SOLDIER_HP
             self.atk = C.SOLDIER_ATK
             self.range = C.SOLDIER_RANGE
-            self.speed = C.SOLDIER_SPEED
+            self.speed = self.max_speed = C.SOLDIER_SPEED
             self.armour = C.SOLDIER_ARMOUR
-            self.ammo = C.SOLDIER_AMMO
-            self.shots = C.SOLDIER_SHOTS
-        
+            self.ammo = self.max_ammo = C.SOLDIER_AMMO
+            self.shots = self.max_shots = C.SOLDIER_SHOTS
+
         if kind == "ammo_truck":
             self.carry_max = C.AMMO_TRUCK_CARGO
         else:
@@ -52,9 +52,20 @@ class Unit(Entity):
         self.harvesting = False
         self.harvest_timer = 0.0
         self.carry = 0
-        self.carry_max = C.HARVEST_PER_TRIP
         self.old_res = None
-        self.image = pygame.image.load(image).convert_alpha()
+        self.image = pygame.image.fromstring(image.tobytes(), image.size, image.mode)#.convert_alpha()
+
+        self.labels = [f'hp: {self.hp}/{self.max_hp}',f'ammo: {self.ammo}/{self.max_ammo}', f'shots: {self.shots}/{self.max_shots}', f'speed: {self.speed}/{self.max_speed}', f'carry: {self.carry}/{self.carry_max}']
+
+        self.rects = []
+        for i in range(len(self.labels)):   # or a fixed number of buttons
+            rect = pygame.Rect(
+                20,
+                10 + i * (C.UNIT_PROP_HEIGHT),
+                C.UNIT_MENU_WIDTH - 40,
+                C.BTN_HEIGHT
+            )
+            self.rects.append(rect)
 
     def set_path(self, path_tiles):
         self.path = path_tiles
@@ -80,96 +91,13 @@ class Unit(Entity):
                 self.x += vx * dt
                 self.y += vy * dt
 
-        #if len(self.path) > 1:
-        #    tx, ty = m.to_grid(self.pos())
-        #    occupied_tile = game.tile_map[tx][ty]
-        #    occupied_tile.occupied = True
-
-        # If harvesting
-        if self.harvesting:
-            res = game.find_nearest_resource(self.pos())
-            tx, ty = m.to_grid(self.pos()) 
-
-            if res != self.old_res and self.old_res != None:
-                ux, uy = res
-                path = m.astar(game.grid.tiles, m.to_grid(self.pos()), (ux, uy))
-                self.set_path(path)
-                
-
-            #print(res)
-            #print(tx, ty)
-            #print(m.dist((tx, ty), res))
-            if res and m.dist((tx, ty), res) < 2:
-                self.harvest_timer -= dt
-                if self.harvest_timer <= 0:
-
-                    #print(game.tile_map[0][0])
-
-                    affected_resource = game.tile_map[res[0]][res[1]]
-                    
-                    #print(affected_resource.x_cord)
-                    #print(affected_resource.y_cord)
-                    affected_resource.resource_health -= C.HARVEST_PER_TRIP
-
-#                    if affected_resource.resource_health != 200:
-#                        print(affected_resource.resource_health)
-
-                    if affected_resource.resource_health == 0:
-                        affected_resource.land_type = 0
-                        #print(res)
-                        #print("Grid:", game.grid.tiles[ty][tx])
-                        game.grid.tiles[ty][tx] = 0
-
-                    # deliver resources
-                    self.carry = C.HARVEST_PER_TRIP
-                    self.harvesting = False
-                    # auto-return to nearest friendly building to drop off (Base or Barracks)
-                    dest = game.find_nearest_dropoff(self.team, self.pos())
-                    if dest:
-                        tx, ty = m.to_grid(dest.pos())
-                        #print(tx)
-                        #print(ty)
-                        path = m.astar(game.grid.tiles, m.to_grid(self.pos()), (tx, ty))
-                        self.set_path(path)
-                        #print("Drop-Off:", path)
-
-            self.old_res = res
-            return
-
-        # If carrying and at a drop-off, deposit
-        if self.carry > 0:
-            # If near friendly building
-            drop = game.find_nearest_dropoff(self.team, self.pos())
-            #print(drop)
-            if drop and m.dist(self.pos(), drop.pos()) < 40:
-                game.money[self.team] += self.carry
-                self.carry = 0
-        
-
-                dest2 = game.find_nearest_resource(self.pos())
-                #print(dest2)
-                if dest2 is not None:
-                    #print("Going back to harvest")
-                    ux, uy = dest2
-                    new_resource = game.tile_map[ux][uy]
-                    #print("Resource:", ux)
-                    #print("Resource:", uy)
-                    #tx, ty = to_grid(dest2.pos())
-                    path = m.astar(game.grid.tiles, m.to_grid(self.pos()), (ux, uy))
-                    self.set_path(path)
-                    #print("Finding Resource: ", path)
-                    self.harvesting = True
-                    self.harvest_timer = new_resource.harvest_timer
-                    #print("finish")
-                    #print(self.carry)
-                    return
-
 
         # Auto-target enemies in range
         if not self.harvesting:
             enemy = game.find_nearest_enemy(self.team, self.pos(), within=self.range)
             if enemy:
                 self.try_attack(enemy, dt)
+
                 return
 
 
@@ -178,12 +106,13 @@ class Unit(Entity):
         if d <= self.range and self.attack_cooldown <= 0:
             enemy.take_damage(self.atk)
             self.attack_cooldown = 0.8
+            self.ammo -= 1
 
-    def draw(self, surf):
-        col = C.TEAM_COLORS.get(self.team, (200,200,200))
-        rect = pygame.Rect(0,0, C.TILE, C.TILE)
-        rect.center = (int(self.x), int(self.y))
-        pygame.draw.rect(surf, col, rect)
+    def draw(self, surf, font):
+        # col = C.TEAM_COLORS.get(self.team, (200,200,200))
+        # rect = pygame.Rect(0,0, C.TILE, C.TILE)
+        # rect.center = (int(self.x), int(self.y))
+        # pygame.draw.rect(surf, col, rect)
         #pygame.draw.circle(surf, col, (int(self.x), int(self.y)), self.radius)
         # if self.kind == "worker":
         #     pygame.draw.circle(surf, (240,240,240), (int(self.x), int(self.y)), 6)
@@ -204,3 +133,21 @@ class Unit(Entity):
         surf.blit(self.image, rect)
 
         self.draw_health_bar(surf)
+
+        # Draw Box in top corner showing hp, speed, ammo, and carry/shots
+        if self.selected:
+
+            pygame.draw.rect(surf, C.MENU_BG, (0, 0, C.UNIT_MENU_WIDTH, C.UNIT_MENU_HEIGHT))
+
+            if self.carry_max > 0:
+                self.labels = [f'hp: {self.hp}/{self.max_hp}',f'ammo: {self.ammo}/{self.max_ammo}', f'shots: {self.shots}/{self.max_shots}', f'speed: {self.speed}/{self.max_speed}', f'carry: {self.carry}/{self.carry_max}']
+            else:
+                self.labels = [f'hp: {self.hp}/{self.max_hp}',f'ammo: {self.ammo}/{self.max_ammo}', f'shots: {self.shots}/{self.max_shots}', f'speed: {self.speed}/{self.max_speed}', '']
+            
+            buttons = list(zip(self.labels, self.rects))
+
+            for label, rect in buttons:
+                # Draw text
+                text = font.render(label, True, C.TEXT_COLOR)
+                surf.blit(text, (rect.x, rect.y))
+            

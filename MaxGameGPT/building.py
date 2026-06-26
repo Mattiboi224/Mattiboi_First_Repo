@@ -26,6 +26,20 @@ class Building(Entity):
         self.resupply_time = C.MINERAL_SUPPLY_TIME
         self.count = 0
         
+        if kind == "small_power_plant":
+            self.power_used = 10
+        elif kind == "barracks":
+            self.power_used = -1
+        elif kind == "tank_factory":
+            self.power_used = -2
+        else:
+            self.power_used = 0
+
+        if kind in ('base', 'barracks', 'tank_factory'):
+            self.power_on = False
+        else:
+            self.power_on = True
+
         if kind == "base":
             self.supply = True
         else:
@@ -70,9 +84,12 @@ class Building(Entity):
                 # if unit_type == "worker":
                 #     image_to_use = C.WORKER_IMAGE
                 if unit_type == "soldier":
-                    image_to_use = C.SOLDIER_IMAGE
+                    image_to_use = m.convert_image_to_team(C.SOLDIER_IMAGE, self.team)
                 elif unit_type == "tank":
-                    image_to_use = C.TANK_IMAGE
+                    image_to_use = m.convert_image_to_team(C.TANK_IMAGE, self.team)
+                elif unit_type == "ammo_truck":
+                    image_to_use = m.convert_image_to_team(C.AMMO_TRUCK_IMAGE, self.team)
+
                 tx, ty = m.tile_center(gx, gy)
                 game.spawn_unit(self.team, tx, ty, image_to_use, unit_type)
                 # reset timer if more remain
@@ -83,6 +100,8 @@ class Building(Entity):
                         self.queue_time = C.BUILD_SOLDIER_TIME
                     elif self.queue[0] == "tank":
                         self.queue_time = C.BUILD_TANK_TIME
+                    elif self.queue[0] == "ammo_truck":
+                        self.queue_time = C.BUILD_AMMO_TRUCK_TIME
                     else:
                         self.queue_time = C.BUILD_WORKER_TIME
         

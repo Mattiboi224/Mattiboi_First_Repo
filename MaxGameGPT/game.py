@@ -26,15 +26,12 @@ class Game:
 
         # Place bases
         spawns = [(1,1), (C.GRID_W-3, C.GRID_H-3), (C.GRID_W-3, 2), (2, C.GRID_H-3), (C.GRID_W//2, C.GRID_H-3)]
-        #print(self.grid.spawns)
         if len(self.grid.spawns) != 0:
             spawns = self.grid.spawns
-            #print(spawns)
-        #print(spawns)
         random.shuffle(spawns)
+
         # Player base
         tx, ty = spawns[0]
-        #print(tx, ty)
         self.player_base = self.spawn_building(C.PLAYER_TEAM, *m.tile_center(tx, ty), C.BASE_IMAGE, "base")
     
         # # Give player a worker
@@ -45,7 +42,6 @@ class Game:
             tx, ty = spawns[i % len(spawns)]
             self.spawn_building(team, *m.tile_center(tx, ty), C.BASE_IMAGE, "base")
             # self.spawn_unit(team, *m.tile_center(tx+1, ty), C.WORKER_IMAGE, "worker")  # give AI a worker too
-           # print(tx, ty)
 
         # Selection
         self.select_start = None
@@ -138,20 +134,15 @@ class Game:
         best = None
         bd = 1e9
         x, y = m.to_grid(pos)
-        #print(x, y)
         #count = 0
         for i in range(C.GRID_H):
             for j in range(C.GRID_W):
-                #print(self.grid.tiles[i][j])
                 if self.grid.tiles[i][j] == C.T_RESOURCE or self.grid.tiles[i][j] == C.T_GEMS:
                     d = m.dist((y,x), (i,j))
                     #count += 1
                     if d < bd:
                         bd = d; best = (j,i)
-                        #print("bd:", bd)
-                        #print(i, j)
-        #print("Resource Loc:", best)
-        #print(count)
+
         return best
 
 
@@ -197,8 +188,6 @@ class Game:
         gx, gy = m.to_grid(dest_px)
         for u in units:
             sx, sy = m.to_grid(u.pos())
-            print(sx, sy)
-            print(self.unit_locs)
             path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), self.unit_locs, passable=lambda t: t!=C.T_WALL)
             if path:
                 u.set_path(path)
@@ -381,7 +370,7 @@ class Game:
 
         # Draw units
         for u in self.units:
-            u.draw(surf)
+            u.draw(surf, font)
 
         # selection rectangle
         if self.selection_rect:
@@ -413,7 +402,7 @@ class Game:
 
         # UI
         pygame.draw.rect(surf, (0,0,0), (0, C.HEIGHT-28, C.WIDTH, 28))
-        money_text = font.render(f"Money: {self.money[C.PLAYER_TEAM]}   Units: {len([u for u in self.units if u.team==C.PLAYER_TEAM])}   Buildings: {len([b for b in self.buildings if b.team==C.PLAYER_TEAM])}", True, (255,255,255))
+        money_text = font.render(f"Money: {self.money[C.PLAYER_TEAM]}   Fuel: {self.fuel[C.PLAYER_TEAM]}   Gold: {self.gold[C.PLAYER_TEAM]}", True, (255,255,255))
         surf.blit(money_text, (6, C.HEIGHT-24))
 
         if self.help_on:
