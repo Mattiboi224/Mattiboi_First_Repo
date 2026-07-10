@@ -21,7 +21,7 @@ class Building(Entity):
 
         self.queue = []     # production queue of ("worker" or "soldier")
         self.queue_time = 0.0
-        self.image = pygame.image.load(image).convert_alpha()
+        self.image = pygame.image.frombytes(image.tobytes(), image.size, image.mode).convert_alpha()
         self.sold = False
         self.resupply_time = C.MINERAL_SUPPLY_TIME
         self.count = 0
@@ -62,6 +62,7 @@ class Building(Entity):
                 self.hp += 1
 
     def update(self, dt, game):
+
         # process production queue
         if self.queue:
             self.queue_time -= dt
@@ -79,16 +80,20 @@ class Building(Entity):
                         continue
                     if m.is_occupied(game.tile_map, gx, gy):
                         continue
+                    if game.tile_map[gx][gy].occupied:
+                        continue
+                    if game.grid.tiles[gy][gx] == C.T_WALL or game.grid.tiles[gy][gx] == C.T_WATER:
+                        continue
                     spawn_point = False
 
                 # if unit_type == "worker":
                 #     image_to_use = C.WORKER_IMAGE
                 if unit_type == "soldier":
-                    image_to_use = m.convert_image_to_team(C.SOLDIER_IMAGE, self.team)
+                    image_to_use = m.convert_image_to_team(C.SOLDIER_IMAGE, self.team, unit_type)
                 elif unit_type == "tank":
-                    image_to_use = m.convert_image_to_team(C.TANK_IMAGE, self.team)
+                    image_to_use = m.convert_image_to_team(C.TANK_IMAGE, self.team, unit_type)
                 elif unit_type == "ammo_truck":
-                    image_to_use = m.convert_image_to_team(C.AMMO_TRUCK_IMAGE, self.team)
+                    image_to_use = m.convert_image_to_team(C.AMMO_TRUCK_IMAGE, self.team, unit_type)
 
                 tx, ty = m.tile_center(gx, gy)
                 game.spawn_unit(self.team, tx, ty, image_to_use, unit_type)
@@ -128,26 +133,11 @@ class Building(Entity):
                     self.resupply_time = 0
 
 
-    def draw(self, surf):
-        col = C.TEAM_COLORS.get(self.team, (200,200,200))
-        rect = pygame.Rect(0,0, C.TILE, C.TILE)
-        rect.center = (int(self.x), int(self.y))
-        pygame.draw.rect(surf, col, rect)
-#        pygame.draw(surf)
-        # icon
-#        if self.kind == "base":
-#            #pygame.draw.rect(surf, (20,20,20), rect.inflate(-10,-10))
-#            self.image.get_rect()#
-#
-#        elif self.kind == "tank_factory":
-#            pygame.draw.rect(surf, (100,100,100), rect.inflate(-10,-10))
-#        else:
-#            pygame.draw.rect(surf, (220,220,220), rect.inflate(-10,-10))
-#        # selection ring (for player only) """
-
-        rect = self.image.get_rect(center=(int(self.x), int(self.y)))
+    def draw(self, surf, camera_x, camera_y):
+        screen_x = self.x - camera_x
+        screen_y = self.y - camera_y
+          
+        rect = self.image.get_rect(center=(int(screen_x), int(screen_y)))
         surf.blit(self.image, rect)
-        
-        
 
-        self.draw_health_bar(surf)
+        self.draw_health_bar(surf, camera_x, camera_y)

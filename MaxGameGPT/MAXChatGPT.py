@@ -3,11 +3,38 @@
 # Make it turn based
     # Convert speed to tiles rather than pixels per second
     # Add shots in so 
+# Add Option Box to next to the unit
+# Proper Side Menu
+    # Pause Save Load Exit
+    # Stats
+    # Mini Map
+    # Buttons: Range, Scan
+# Remove the option box on the right hand side
+# Create a heavy constructor unit
+# Create a light constructor unit
+# Create a screen for construction with unit stats
+    # Note this pauses the screen
+# Transfer resources between unit and base
+    # Make losing ammo mean finding ammo trucks to resupply
+# Add Power Plant
+# Make random resource spawns instead of fixed
+# Change some buildings to 2x2 or 3x3
+# Add resource storage to buildings 
+# Add base defence turrets
+# Upgrade AI
+# Add more units
+# Add Radar/Fog of war
+# Add locator piece on side bar to tell which tile I'm on
+# Add starting units
+# Add Amphib units
+# Create Buildings you can pass through/under
+
 
 
 
 
 import os, textwrap, json, math, random, sys, time
+import util as m
 
 ##code = r'''# grid_rts.py
 # A minimal grid-based base-building game prototype in Pygame
@@ -207,7 +234,8 @@ def main():
                         # attempt to place building
                         if game.ghost_valid and game.money[C.PLAYER_TEAM] >= C.COST_BARRACKS:
                             px, py = game.ghost_pos
-                            game.spawn_building(C.PLAYER_TEAM, px, py, C.BARRACKS_IMAGE, "barracks")
+                            image_to_use = m.convert_image_to_team(C.BARRACKS_IMAGE, C.PLAYER_TEAM, "barracks")
+                            game.spawn_building(C.PLAYER_TEAM, px + game.camera_x, py + game.camera_y, image_to_use, "barracks")
                             game.money[C.PLAYER_TEAM] -= C.COST_BARRACKS
                             game.build_mode = False
                             game.ghost_valid = False
@@ -216,7 +244,8 @@ def main():
                         # attempt to place building
                         if game.ghost_valid and game.money[C.PLAYER_TEAM] >= C.COST_TANK_FACTORY:
                             px, py = game.ghost_pos
-                            game.spawn_building(C.PLAYER_TEAM, px, py, C.TANK_FACTORY_IMAGE, "tank_factory")
+                            image_to_use = m.convert_image_to_team(C.TANK_FACTORY_IMAGE, C.PLAYER_TEAM, "tank_factory")
+                            game.spawn_building(C.PLAYER_TEAM, px + game.camera_x, py + game.camera_y, image_to_use, "tank_factory")
                             game.money[C.PLAYER_TEAM] -= C.COST_TANK_FACTORY
                             game.build_mode = False
                             game.ghost_valid = False
@@ -225,7 +254,8 @@ def main():
                         # attempt to place building
                         if game.ghost_valid and game.money[C.PLAYER_TEAM] >= C.COST_BASE:
                             px, py = game.ghost_pos
-                            game.spawn_building(C.PLAYER_TEAM, px, py, C.BASE_IMAGE, "base")
+                            image_to_use = m.convert_image_to_team(C.BASE_IMAGE, C.PLAYER_TEAM, "base")
+                            game.spawn_building(C.PLAYER_TEAM, px + game.camera_x, py + game.camera_y, image_to_use, "base")
                             game.money[C.PLAYER_TEAM] -= C.COST_BASE
                             game.build_mode = False
                             game.ghost_valid = False
@@ -305,6 +335,17 @@ def main():
                     w = abs(x1 - x0)
                     h = abs(y1 - y0)
                     game.selection_rect = pygame.Rect(x, y, w, h)
+
+        # Get pressed keys
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT]:
+            game.camera_x = max(game.camera_x - game.camera_speed, 0)
+        if keys[pygame.K_RIGHT]:
+            game.camera_x = min(game.camera_x + game.camera_speed, game.grid.w * C.TILE - C.WIDTH + C.MENU_WIDTH)
+        if keys[pygame.K_UP]:
+            game.camera_y = max(game.camera_y - game.camera_speed, 0)
+        if keys[pygame.K_DOWN]:
+            game.camera_y = min(game.camera_y + game.camera_speed, game.grid.h * C.TILE - C.HEIGHT)
 
         # ------------- UPDATE -------------
         game.update(dt)

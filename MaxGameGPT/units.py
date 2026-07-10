@@ -48,12 +48,21 @@ class Unit(Entity):
         self.target = None
         self.attack_cooldown = 0.0
         self.selected = False
+
         # Harvesting
         self.harvesting = False
         self.harvest_timer = 0.0
         self.carry = 0
         self.old_res = None
-        self.image = pygame.image.fromstring(image.tobytes(), image.size, image.mode)#.convert_alpha()
+        self.image = pygame.image.frombytes(image.tobytes(), image.size, image.mode).convert_alpha()
+        self.current_angle = 0
+
+        self.local_labels = ['Move', 'Attack', 'Stop']
+
+        if self.carry_max > 0:
+            self.local_labels.append('Transfer')
+
+
 
         self.labels = [f'hp: {self.hp}/{self.max_hp}',f'ammo: {self.ammo}/{self.max_ammo}', f'shots: {self.shots}/{self.max_shots}', f'speed: {self.speed}/{self.max_speed}', f'carry: {self.carry}/{self.carry_max}']
 
@@ -71,6 +80,13 @@ class Unit(Entity):
         self.path = path_tiles
         # convert to centers
         self.path_px = [m.tile_center(tx, ty) for (tx,ty) in self.path]
+
+    def calculate_angle(self):
+        if len(self.path_px) >= 1:
+            tx, ty = self.path_px[0]
+            dx = tx - self.x
+            dy = ty - self.y
+            self.current_angle = math.degrees(math.atan2(-dy, dx))  # negative dy because y-axis is inverted in Pygame
 
     def update(self, dt, game):
         # Attack cooldown
@@ -99,6 +115,9 @@ class Unit(Entity):
                 self.try_attack(enemy, dt)
 
                 return
+        
+        self.calculate_angle()
+
 
 
     def try_attack(self, enemy, dt):
@@ -108,35 +127,24 @@ class Unit(Entity):
             self.attack_cooldown = 0.8
             self.ammo -= 1
 
-    def draw(self, surf, font):
-        # col = C.TEAM_COLORS.get(self.team, (200,200,200))
-        # rect = pygame.Rect(0,0, C.TILE, C.TILE)
-        # rect.center = (int(self.x), int(self.y))
-        # pygame.draw.rect(surf, col, rect)
-        #pygame.draw.circle(surf, col, (int(self.x), int(self.y)), self.radius)
-        # if self.kind == "worker":
-        #     pygame.draw.circle(surf, (240,240,240), (int(self.x), int(self.y)), 6)
-        #     text = font.render("W", True, (0,0,0))
-        #     surf.blit(text, (int(self.x) - 7, int(self.y) - 7))
-        # elif self.kind == "tank":
-        #     pygame.draw.circle(surf, (100,100,100), (int(self.x), int(self.y)), 6)
-        #     text = font.render("T", True, (0,0,0))
-        #     surf.blit(text, (int(self.x) - 7, int(self.y) - 7))
-        # else:
-        #     pygame.draw.circle(surf, (80,80,80), (int(self.x), int(self.y)), 6)
-        #     text = font.render("S", True, (0,0,0))
-        #     surf.blit(text, (int(self.x) - 7, int(self.y) - 7))
-        # if self.selected:
-        #     pygame.draw.circle(surf, (255,255,255), (int(self.x), int(self.y)), self.radius+2, 2)
+    def draw(self, surf, font, camera_x, camera_y):
+        
+        # Calculate screen position
+        screen_x = self.x - camera_x
+        screen_y = self.y - camera_y
 
-        rect = self.image.get_rect(center=(int(self.x)+1, int(self.y)+1))
-        surf.blit(self.image, rect)
+        rotated_image = pygame.transform.rotate(self.image, self.current_angle)
+        new_rect = rotated_image.get_rect(center=(int(screen_x), int(screen_y)))
 
-        self.draw_health_bar(surf)
+        surf.blit(rotated_image, new_rect)
 
-        # Draw Box in top corner showing hp, speed, ammo, and carry/shots
+        self.draw_health_bar(surf, camera_x, camera_y)
+        
+
+        
         if self.selected:
 
+            # Draw Box in top corner showing hp, speed, ammo, and carry/shots
             pygame.draw.rect(surf, C.MENU_BG, (0, 0, C.UNIT_MENU_WIDTH, C.UNIT_MENU_HEIGHT))
 
             if self.carry_max > 0:
@@ -150,4 +158,29 @@ class Unit(Entity):
                 # Draw text
                 text = font.render(label, True, C.TEXT_COLOR)
                 surf.blit(text, (rect.x, rect.y))
+
+
+            # Draw box on the top right of the unit with labels
+
+            # Don't draw the box if the unit is moving
+            if len(self.path_px) == 0:
+                local_rect = pygame.Rect(screen_x + C.TILE, screen_y - C.TILE, C.TILE * 2, C.TILE * 2)
+                pygame.draw.rect(surf, C.MENU_BG, local_rect)
             
+
+                rects = []
+                for i in range(len(self.local_labels)):   # or a fixed number of buttons
+                    rect = pygame.Rect(
+                        screen_x + C.TILE + 10,
+                        screen_y - C.TILE + 10 + i * 15,
+                        10,
+                        10
+                    )
+                    rects.append(rect)
+
+                local_buttons = list(zip(self.local_labels, rects))
+
+                for label, rect in local_buttons:
+                    # Draw text
+                    text = font.render(label, True, C.TEXT_COLOR)
+                    surf.blit(text, (rect.x, rect.y))

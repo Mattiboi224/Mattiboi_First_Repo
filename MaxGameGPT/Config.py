@@ -1,14 +1,29 @@
+import PIL.Image as Image
+
 # ------------------ CONFIG ------------------
+# Screen Width and Height
 WIDTH, HEIGHT = 1024, 704
 MENU_WIDTH = 192
+
+
 UNIT_MENU_WIDTH = 128
 UNIT_MENU_HEIGHT = 128
+BOTTOM_MENU_HEIGHT = 32
 TILE = 32
 
+SCREEN_WIDTH = WIDTH - MENU_WIDTH# - UNIT_MENU_WIDTH
+SCREEN_HEIGHT = HEIGHT - BOTTOM_MENU_HEIGHT
+
+# Screen Grid Width and Height
 # GRID HEIGHT = 22
-# GRID WIDTH = 26
-GRID_W, GRID_H = (WIDTH - MENU_WIDTH) // TILE, HEIGHT // TILE
+# GRID WIDTH = 22
+GRID_W, GRID_H = (WIDTH - MENU_WIDTH - UNIT_MENU_WIDTH) // TILE, (HEIGHT - BOTTOM_MENU_HEIGHT) // TILE
 MENU_TILE = MENU_WIDTH // TILE
+
+# Camera Settings
+CAMERA_SPEED = 5
+CAMERA_X, CAMERA_Y = 0, 0
+
 
 # Menu Settings
 MENU_BG = (50, 50, 50)
@@ -114,6 +129,7 @@ T_PLAYER_LOC = 3
 T_FUEL = 4
 T_GOLD = 5
 T_BLANK = 6
+T_WATER = 7
 
 # Image Location
 #pg.image.load('assets/tank.png').convert_alpha()
@@ -132,17 +148,23 @@ GAME_MAP = 'game_map.png'
 # Resource Map
 RESOURCE_MAP = 'resource_map.png'
 
+# Adding Image
+image = Image.open(GAME_MAP)
+MAP_WIDTH, MAP_HEIGHT = image.size
+
+
 TILE_COLORS = {
     #T_GRASS: (40, 110, 40),
     T_GRASS: (34, 177, 76),
     #T_WALL: (70, 70, 70),
-    T_WALL: (127, 127, 127),
+    T_WALL: (195, 195, 195),
     #T_RESOURCE: (120, 85, 30),
     T_RESOURCE: (0, 0, 0),
     T_PLAYER_LOC: (237, 28, 36),
     T_FUEL: (181, 230, 29),
     T_GOLD: (255, 242, 0),
-    T_BLANK: (255, 255, 255)
+    T_BLANK: (255, 255, 255),
+    T_WATER: (63, 72, 204)
 }
 
 TEAM_COLORS = {
@@ -151,6 +173,8 @@ TEAM_COLORS = {
     2: (255, 200, 80),   # yellow
     3: (160, 255, 120),  # green
     4: (200, 120, 255),  # purple
+    5: (255, 120, 200),  # pink
+    6: (0, 0, 0)        # black
 }
 
 # Convert This Colour to Team Colour
@@ -162,3 +186,12 @@ AMMO_TRUCK_OLD = (74, 104, 40)
 
 # Soldier
 SOLDIER_OLD = (52, 68, 32)
+
+# Base
+BASE_OLD = (98, 80, 52)
+
+# Barracks
+BARRACKS_OLD = (104, 114, 78)
+
+# Tank Factory
+TANK_FACTORY_OLD = (74, 84, 58)

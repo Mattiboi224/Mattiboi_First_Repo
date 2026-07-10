@@ -1,38 +1,23 @@
-import Config as C
-from PIL import Image
-from collections import Counter
+import pygame
 
-image = Image.open(C.SOLDIER_IMAGE).convert("RGB")
-pixels = list(image.getdata())
+pygame.init()
+screen = pygame.display.set_mode((500, 400))
+pygame.display.set_caption("pygame.draw.rect Example")
 
-#print(pixels)
+# Colors
+red = (255, 0, 0)
+green = (0, 255, 0)
+blue = (0, 0, 255)
 
-counts = Counter(pixels)
-print("Counts of all items:")
-for item, count in sorted(counts.items(), key=lambda x: x[1], reverse=True):
-    print(f"{item}: {count}")
+# Draw a filled red rectangle
+pygame.draw.rect(screen, red, pygame.Rect(50, 50, 100, 80))
 
-# (52, 68, 32): 250
-# (38, 50, 22): 104
-# (30, 40, 14): 71
-# (50, 50, 46): 36
+# Draw a green rectangle with a 5px border
+pygame.draw.rect(screen, green, pygame.Rect(200, 50, 100, 80), 5)
 
-old = (52, 68, 32)
+# Draw a blue rectangle with rounded corners
+pygame.draw.rect(screen, blue, (350, 50, 100, 80), border_radius=15)
 
-new = C.TEAM_COLORS[1]      # red
-
-updated = [new if p == old else p for p in pixels]
-
-out = Image.new("RGB", image.size)
-out.putdata(updated)
-out.save("player_red.png")
-
-# Convert This Colour to Team Colour
-# Tanks
-# (74, 98, 48)
-
-# Ammo Truck
-# (74, 104, 40)
-
-# Soldier
-# (52, 68, 32)
+pygame.display.flip()
+pygame.time.wait(3000)
+pygame.quit()

@@ -20,6 +20,10 @@ class Tiles:
             self.land_movable = 0
             self.water_movable = 0
 
+        elif land_type == C.T_WATER: ## Water
+            self.land_movable = 0
+            self.water_movable = 1
+
         else:
             self.land_movable = 0
             self.water_movable = 0

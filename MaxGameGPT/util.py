@@ -18,7 +18,7 @@ def to_grid(pos):
     return int(x // C.TILE), int(y // C.TILE)
 
 def in_bounds(tx, ty):
-    return 0 <= tx < C.GRID_W and 0 <= ty < C.GRID_H - 1 # Adding Boundary
+    return 0 <= tx < C.MAP_WIDTH and 0 <= ty < C.MAP_HEIGHT  # Adding Boundary
 
 def is_occupied(tile_map, gx, gy):
         for w in range(len(tile_map)):
@@ -29,20 +29,39 @@ def is_occupied(tile_map, gx, gy):
                     else:
                         return True
 
-def convert_image_to_team(image_used, team_number):
-    image = Image.open(image_used).convert("RGB")
+def convert_image_to_team(image_used, team_number, unit_type):
+    image = Image.open(image_used).convert("RGBA")
     pixels = list(image.getdata())
-    old = (52, 68, 32)
 
-    new = C.TEAM_COLORS[team_number]     
+    if unit_type == "soldier":
+        old = C.SOLDIER_OLD
+    elif unit_type == "tank":
+        old = C.TANK_OLD
+    elif unit_type == "ammo_truck":
+        old = C.AMMO_TRUCK_OLD
+    elif unit_type == "barracks":
+        old = C.BARRACKS_OLD
+    elif unit_type == "tank_factory":
+        old = C.TANK_FACTORY_OLD
+    elif unit_type == "base":
+        old = C.BASE_OLD
 
-    updated = [new if p == old else p for p in pixels]
+    new = C.TEAM_COLORS[team_number]  
+    bg_colour = (0, 0, 0, 255)    
 
-    out = Image.new("RGB", image.size)
+    updated = [
+        (0, 0, 0, 0) if p == bg_colour                 # transparent if background
+        else new if p[:3] == old[:3]                    # recoloured if team colour
+        else p                                          # unchanged otherwise
+        for p in pixels
+    ]
+
+    out = Image.new("RGBA", image.size)
+    out.putdata(updated)                    # Fix 2: write the updated pixels into out
     return out
 
 # ------------------ PATHFINDING ------------------
-def astar(grid, start, goal, occupied_tiles=set(), passable=lambda t: t != C.T_WALL):
+def astar(grid, start, goal, occupied_tiles=set(), passable=lambda t: t != C.T_WALL and t != C.T_WATER):
     sx, sy = start
     gx, gy = goal
     if not in_bounds(gx, gy) or not passable(grid[gy][gx]):
@@ -54,7 +73,8 @@ def astar(grid, start, goal, occupied_tiles=set(), passable=lambda t: t != C.T_W
     heapq.heappush(open_set, (0, start))
     came = {start: None}
     g = {start: 0}
-    dirs = [(1,0),(-1,0),(0,1),(0,-1)]
+    dirs = [(1,0),(-1,0),(0,1),(0,-1),   # cardinal
+            (1,1),(1,-1),(-1,1),(-1,-1)]  # diagonal
 
     while open_set:
         _, cur = heapq.heappop(open_set)
@@ -81,11 +101,17 @@ def astar(grid, start, goal, occupied_tiles=set(), passable=lambda t: t != C.T_W
             if (nx, ny) in occupied_tiles:
                 continue
 
-            nd = g[cur] + 1
+            # 📐 prevent clipping through wall corners on diagonals
+            if dx != 0 and dy != 0:
+                if not passable(grid[cy][nx]) or not passable(grid[ny][cx]):
+                    continue
+
+            nd = g[cur] + (1.414 if dx != 0 and dy != 0 else 1)
             if (nx, ny) not in g or nd < g[(nx, ny)]:
                 g[(nx, ny)] = nd
                 came[(nx, ny)] = cur
-                h = abs(nx - gx) + abs(ny - gy)
+                dx_h, dy_h = abs(nx - gx), abs(ny - gy)
+                h = 1.414 * min(dx_h, dy_h) + abs(dx_h - dy_h)
                 heapq.heappush(open_set, (nd + h, (nx, ny)))
 
     return []

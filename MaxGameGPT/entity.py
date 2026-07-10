@@ -45,12 +45,19 @@ class Entity(pygame.sprite.Sprite):
         if self.hp <= 0:
             self.dead = True
 
-    def draw_health_bar(self, surf):
+    def pos_camera(self, camera_x, camera_y):
+        return (self.x - camera_x, self.y - camera_y)
+
+    def update_position(self, camera_x, camera_y):
+        self.x = self.x - camera_x
+        self.y = self.y - camera_y
+
+    def draw_health_bar(self, surf, camera_x, camera_y):
         if self.hp >= self.max_hp: return
         w = 24
         h = 4
-        x = self.x - w//2
-        y = self.y - self.radius - 8
+        x = self.x - camera_x - w//2
+        y = self.y - camera_y - self.radius - 8
         pct = m.clamp(self.hp / self.max_hp, 0, 1)
         pygame.draw.rect(surf, (0,0,0), (x-1, y-1, w+2, h+2))
         pygame.draw.rect(surf, (180,30,30), (x, y, w, h))

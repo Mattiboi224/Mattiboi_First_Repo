@@ -11,7 +11,7 @@ from menu import Menu
 
 class Game:
     def __init__(self):
-        self.grid = GridMap(C.GRID_W, C.GRID_H)
+        self.grid = GridMap()
         self.menu = Menu()
         
         self.tile_map = self.grid.assign_tiles()
@@ -32,21 +32,27 @@ class Game:
 
         # Player base
         tx, ty = spawns[0]
-        self.player_base = self.spawn_building(C.PLAYER_TEAM, *m.tile_center(tx, ty), C.BASE_IMAGE, "base")
-    
+        image_to_use = m.convert_image_to_team(C.BASE_IMAGE, C.PLAYER_TEAM, "base")
+        self.player_base = self.spawn_building(C.PLAYER_TEAM, *m.tile_center(tx, ty), image_to_use, "base")
+
         # # Give player a worker
         # self.spawn_unit(C.PLAYER_TEAM, *m.tile_center(tx+1, ty), C.WORKER_IMAGE, "worker")
 
         # AI bases
         for i, team in enumerate(C.AI_TEAMS, start=1):
             tx, ty = spawns[i % len(spawns)]
-            self.spawn_building(team, *m.tile_center(tx, ty), C.BASE_IMAGE, "base")
+            image_to_use = m.convert_image_to_team(C.BASE_IMAGE, team, "base")
+            self.spawn_building(team, *m.tile_center(tx, ty), image_to_use, "base")
             # self.spawn_unit(team, *m.tile_center(tx+1, ty), C.WORKER_IMAGE, "worker")  # give AI a worker too
 
         # Selection
         self.select_start = None
         self.selection_rect = None
         self.selected_units = []
+
+        # Camera
+        self.camera_x, self.camera_y = C.CAMERA_X, C.CAMERA_Y
+        self.camera_speed = C.CAMERA_SPEED
 
         # Modes
         self.map_edit = False
@@ -151,7 +157,7 @@ class Game:
         for u in reversed(self.units):
             if u.dead: continue
             if team is not None and u.team != team: continue
-            if m.dist(p, u.pos()) <= u.radius:
+            if m.dist(p, u.pos_camera(self.camera_x, self.camera_y)) <= u.radius:
                 return u
         return None
 
@@ -185,10 +191,11 @@ class Game:
 
     # ---- Commands ----
     def order_move(self, units, dest_px):
+        dest_px = (dest_px[0] + self.camera_x, dest_px[1] + self.camera_y)
         gx, gy = m.to_grid(dest_px)
         for u in units:
             sx, sy = m.to_grid(u.pos())
-            path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), self.unit_locs, passable=lambda t: t!=C.T_WALL)
+            path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), self.unit_locs, passable=lambda t: t!=C.T_WALL and t!=C.T_WATER)
             if path:
                 u.set_path(path)
 
@@ -217,6 +224,12 @@ class Game:
 
         # Update what's occupied
         self.occupied_tiles()
+
+    def update_positons(self, camera_x, camera_y):
+        for u in self.units:
+            u.update_position(camera_x, camera_y)
+        for b in self.buildings:
+            b.update_position(camera_x, camera_y)
 
     def update_ai(self, dt):
         for team in C.AI_TEAMS:
@@ -250,7 +263,8 @@ class Game:
                             if m.is_occupied(self.tile_map, tx, ty): continue
                             if self.grid.tiles[ty][tx] == C.T_GRASS:
                                 px, py = m.tile_center(tx, ty)
-                                self.spawn_building(team, px, py, C.BARRACKS_IMAGE, "barracks")
+                                image_to_use = m.convert_image_to_team(C.BARRACKS_IMAGE, team, "barracks")
+                                self.spawn_building(team, px, py, image_to_use, "barracks")
                                 self.money[team] -= C.COST_BARRACKS
                                 break
                 # 30% chance to build a tank factory near base if enough money
@@ -267,7 +281,8 @@ class Game:
                             if m.is_occupied(self.tile_map, tx, ty): continue
                             if self.grid.tiles[ty][tx] == C.T_GRASS:
                                 px, py = m.tile_center(tx, ty)
-                                self.spawn_building(team, px, py, C.TANK_FACTORY_IMAGE, "tank_factory")
+                                image_to_use = m.convert_image_to_team(C.TANK_FACTORY_IMAGE, team, "tank_factory")
+                                self.spawn_building(team, px, py, image_to_use, "tank_factory")
                                 self.money[team] -= C.COST_TANK_FACTORY
                                 break
 
@@ -300,17 +315,17 @@ class Game:
                                     choice = "Building"
 
                                 if choice == "Unit":
-                                    dest = self.find_nearest_unit(C.PLAYER_TEAM, u.pos(), ("worker", "soldier", "tank"))
+                                    dest = self.find_nearest_unit(C.PLAYER_TEAM, u.pos(), ("soldier", "tank"))
                                     gx, gy = m.to_grid(dest.pos())
                                     sx, sy = m.to_grid(u.pos())
-                                    path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), self.unit_locs, passable=lambda t: t!=C.T_WALL)
+                                    path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), self.unit_locs, passable=lambda t: t!=C.T_WALL or C.T_WATER)
                                     if path:
                                         u.set_path(path)
                                 elif choice == "Building":
                                     dest = self.find_nearest_building(C.PLAYER_TEAM, u.pos(), ("base", "barracks", "tank_factory"))
                                     gx, gy = m.to_grid(dest.pos())
                                     sx, sy = m.to_grid(u.pos())
-                                    path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), self.unit_locs, passable=lambda t: t!=C.T_WALL)
+                                    path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), self.unit_locs, passable=lambda t: t!=C.T_WALL or C.T_WATER)
                                     if path:
                                         u.set_path(path)
                 if tank_factory:
@@ -342,17 +357,17 @@ class Game:
                                     choice = "Building"
 
                                 if choice == "Unit":
-                                    dest = self.find_nearest_unit(C.PLAYER_TEAM, u.pos(), ("worker", "soldier", "tank"))
+                                    dest = self.find_nearest_unit(C.PLAYER_TEAM, u.pos(), ("soldier", "tank"))
                                     gx, gy = m.to_grid(dest.pos())
                                     sx, sy = m.to_grid(u.pos())
-                                    path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), self.unit_locs, passable=lambda t: t!=C.T_WALL)
+                                    path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), self.unit_locs, passable=lambda t: t!=C.T_WALL and t!=C.T_WATER)
                                     if path:
                                         u.set_path(path)
                                 elif choice == "Building":
                                     dest = self.find_nearest_building(C.PLAYER_TEAM, u.pos(), ("base", "barracks", "tank_factory"))
                                     gx, gy = m.to_grid(dest.pos())
                                     sx, sy = m.to_grid(u.pos())
-                                    path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), self.unit_locs, passable=lambda t: t!=C.T_WALL)
+                                    path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), self.unit_locs, passable=lambda t: t!=C.T_WALL and t!=C.T_WATER)
                                     if path:
                                         u.set_path(path)
                 # Re-arm timer
@@ -360,17 +375,21 @@ class Game:
 
     # ---- Drawing ----
     def draw(self, surf, font):
-        self.grid.draw(surf)
+        self.grid.draw(surf, self.camera_x, self.camera_y)
 
         self.menu.draw(surf, font)
 
         # Draw buildings
         for b in self.buildings:
-            b.draw(surf)
+            if b.pos_camera(self.camera_x, self.camera_y)[0] < 0 or b.pos_camera(self.camera_x, self.camera_y)[0] > C.SCREEN_WIDTH or b.pos_camera(self.camera_x, self.camera_y)[1] < 0 or b.pos_camera(self.camera_x, self.camera_y)[1] > C.HEIGHT:
+                continue
+            b.draw(surf, self.camera_x, self.camera_y)
 
         # Draw units
         for u in self.units:
-            u.draw(surf, font)
+            if u.pos_camera(self.camera_x, self.camera_y)[0] < 0 or u.pos_camera(self.camera_x, self.camera_y)[0] > C.SCREEN_WIDTH or u.pos_camera(self.camera_x, self.camera_y)[1] < 0 or u.pos_camera(self.camera_x, self.camera_y)[1] > C.HEIGHT:
+                continue
+            u.draw(surf, font, self.camera_x, self.camera_y)
 
         # selection rectangle
         if self.selection_rect:
@@ -401,14 +420,15 @@ class Game:
             pygame.draw.rect(surf, (200,200,200) if valid else (200,80,80), rect, 2)
 
         # UI
-        pygame.draw.rect(surf, (0,0,0), (0, C.HEIGHT-28, C.WIDTH, 28))
+        pygame.draw.rect(surf, (0,0,0), (0, C.HEIGHT, C.WIDTH, C.BOTTOM_MENU_HEIGHT))
         money_text = font.render(f"Money: {self.money[C.PLAYER_TEAM]}   Fuel: {self.fuel[C.PLAYER_TEAM]}   Gold: {self.gold[C.PLAYER_TEAM]}", True, (255,255,255))
-        surf.blit(money_text, (6, C.HEIGHT-24))
+        surf.blit(money_text, (6, C.HEIGHT+8))
 
         if self.help_on:
             self.draw_help(surf, font)
 
-        self.grid.draw_resources(surf, font, self.resource_mode)
+        if self.resource_mode:
+            self.grid.draw_resources(surf, font, self.camera_x, self.camera_y)
 
     def draw_help(self, surf, font):
         lines = [
