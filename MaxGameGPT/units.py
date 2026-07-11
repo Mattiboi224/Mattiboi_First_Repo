@@ -60,7 +60,7 @@ class Unit(Entity):
         self.local_labels = ['Move', 'Attack', 'Stop']
 
         if self.carry_max > 0:
-            self.local_labels.append('Transfer')
+            self.local_labels.append('X-fer')
 
 
 
@@ -171,16 +171,24 @@ class Unit(Entity):
                 rects = []
                 for i in range(len(self.local_labels)):   # or a fixed number of buttons
                     rect = pygame.Rect(
-                        screen_x + C.TILE + 10,
-                        screen_y - C.TILE + 10 + i * 15,
-                        10,
-                        10
+                        screen_x + C.TILE,
+                        screen_y - C.TILE + 5 + i * 20,
+                        C.TILE * 2,
+                        15
                     )
                     rects.append(rect)
 
-                local_buttons = list(zip(self.local_labels, rects))
+                # Mouse position
+                mx, my = pygame.mouse.get_pos()
 
-                for label, rect in local_buttons:
+                self.local_buttons = list(zip(self.local_labels, rects))
+
+                for label, rect in self.local_buttons:
+
+                    color = C.BTN_HOVER if rect.collidepoint(mx, my) else C.BTN_COLOR
+                    pygame.draw.rect(surf, color, rect, border_radius=8)
+
                     # Draw text
                     text = font.render(label, True, C.TEXT_COLOR)
-                    surf.blit(text, (rect.x, rect.y))
+                    surf.blit(text, (rect.x + 10, rect.y))
+

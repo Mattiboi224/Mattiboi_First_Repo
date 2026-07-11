@@ -46,7 +46,7 @@ class Menu:
 
             # Draw text
             text = font.render(label, True, C.TEXT_COLOR)
-            screen.blit(text, (rect.x + 20, rect.y + 15))
+            screen.blit(text, (rect.x + 25, rect.y + 15))
 
             # If it has a cost add it
             if label in C.UNIT_STATS:

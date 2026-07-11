@@ -230,6 +230,39 @@ def main():
                                 game.repair_mode = True
                                 game.sell_mode = False
 
+                    for label, rect in game.selected_units[0].local_buttons:
+                        if rect.collidepoint(event.pos):
+                            if label == "Move":
+                                for u in game.selected_units:
+                                    u.target = None
+                                    u.path = []
+                                    u.path_px = []
+                            elif label == "Attack":
+                                for u in game.selected_units:
+                                    u.target = None
+                                    u.path = []
+                                    u.path_px = []
+                            elif label == "Stop":
+                                for u in game.selected_units:
+                                    u.target = None
+                                    u.path = []
+                                    u.path_px = []
+                            elif label == "X-fer":
+                                for u in game.selected_units:
+                                    if isinstance(u, Unit) and u.carry > 0:
+                                        # Transfer resources to nearest base
+                                        nearest_base = None
+                                        min_dist = float('inf')
+                                        for b in game.buildings:
+                                            if b.team == C.PLAYER_TEAM and b.kind == "base":
+                                                dist = math.hypot(b.x - u.x, b.y - u.y)
+                                                if dist < min_dist:
+                                                    min_dist = dist
+                                                    nearest_base = b
+                                        if nearest_base:
+                                            nearest_base.resources += u.carry
+                                            u.carry = 0
+
                     if game.build_mode and game.build_kind == "barracks":
                         # attempt to place building
                         if game.ghost_valid and game.money[C.PLAYER_TEAM] >= C.COST_BARRACKS:
