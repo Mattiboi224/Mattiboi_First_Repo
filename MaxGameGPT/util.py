@@ -29,6 +29,25 @@ def is_occupied(tile_map, gx, gy):
                     else:
                         return True
 
+def locations_in_range(opp_range, unit):
+    unit_x, unit_y = unit.pos_grid()
+
+    opp_range = opp_range / C.TILE
+
+    all_data_points = []
+
+    for w in range(C.MAP_WIDTH):
+        for h in range(C.MAP_HEIGHT):
+            all_data_points.append((w,h))
+
+    inside_points = []
+
+    for (x,y) in all_data_points:
+        if (x - unit_x) ** 2 + (y - unit_y) ** 2 <= opp_range ** 2:
+            inside_points.append((x,y))
+
+    return inside_points
+
 def convert_image_to_team(image_used, team_number, unit_type):
     image = Image.open(image_used).convert("RGBA")
     pixels = list(image.getdata())
@@ -45,8 +64,16 @@ def convert_image_to_team(image_used, team_number, unit_type):
         old = C.TANK_FACTORY_OLD
     elif unit_type == "base":
         old = C.BASE_OLD
+    elif unit_type == "construction":
+        old = C.CONSTRUCTION_OLD
+    elif unit_type == "storage_unit":
+        old = C.STORAGE_UNIT_OLD
+    elif unit_type == "fuel_tank":
+        old = C.FUEL_TANK_OLD
+    elif unit_type == "gold_vault":
+        old = C.GOLD_VAULT_OLD    
 
-    new = C.TEAM_COLORS[team_number]  
+    new = C.TEAM_COLORS[team_number]
     bg_colour = (0, 0, 0, 255)    
 
     updated = [

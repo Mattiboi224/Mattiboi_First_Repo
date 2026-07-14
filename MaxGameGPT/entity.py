@@ -21,10 +21,14 @@ class Entity(pygame.sprite.Sprite):
         self.radius = radius
         self.hp = 1
         self.max_hp = 1
-        self.image = image
         self.dead = False
+
+        converted_image = m.convert_image_to_team(image, team, kind)
+        self.image = pygame.image.frombytes(converted_image.tobytes(), converted_image.size, converted_image.mode).convert_alpha()
         
-        if kind == "tank":
+        stats = C.BUILDING_STATS[kind]
+
+        if kind == "soldier":
             self.armour = C.SOLDIER_ARMOUR
         elif kind == "tank":
             self.armour = C.TANK_ARMOUR
@@ -39,9 +43,13 @@ class Entity(pygame.sprite.Sprite):
 
     def pos(self):
         return (self.x, self.y)
+    
+    def pos_grid(self):
+        self.grid_x, self.grid_y = m.to_grid(self.pos())
+        return (self.grid_x, self.grid_y)
 
     def take_damage(self, dmg):
-        self.hp -= dmg - self.armour
+        self.hp -= (dmg - self.armour)
         if self.hp <= 0:
             self.dead = True
 
@@ -56,7 +64,7 @@ class Entity(pygame.sprite.Sprite):
         if self.hp >= self.max_hp: return
         w = 24
         h = 4
-        x = self.x - camera_x - w//2
+        x = self.x - camera_x - w//2 + C.UNIT_MENU_WIDTH
         y = self.y - camera_y - self.radius - 8
         pct = m.clamp(self.hp / self.max_hp, 0, 1)
         pygame.draw.rect(surf, (0,0,0), (x-1, y-1, w+2, h+2))

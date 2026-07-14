@@ -7,8 +7,8 @@ class Menu:
     def __init__(self):
 
         # Menu buttons
-        self.buildings_labels = ["Base", "Barracks", "Tank Factory"]
-        self.unit_labels = ["Soldier", "Tank", "Ammo Truck"]
+        self.buildings_labels = [name for name, stats in C.UNIT_STATS.items() if stats["category"] == "building"]
+        self.unit_labels = [name for name, stats in C.UNIT_STATS.items() if stats["category"] == "unit"]
         self.helpful_labels = ["Sell", "Repair"]
         self.labels = self.buildings_labels + self.unit_labels + self.helpful_labels
 
@@ -29,11 +29,13 @@ class Menu:
         unit_options = ["Move", "Attack", "Stop"]
 
     # When select a unit, show the properties of that unit
-    def unit_properties_menu(self, game):
+    def unit_properties_menu(self, screen):
 
-        pass
+        pygame.draw.rect(screen, C.UNIT_MENU_BG, (0, 0, C.UNIT_MENU_WIDTH, C.HEIGHT))
+        
 
-    def left_side_menu(self, screen, font):
+
+    def right_side_menu(self, screen, font):
         pygame.draw.rect(screen, C.MENU_BG, (C.WIDTH - C.MENU_WIDTH, 0, C.MENU_WIDTH, C.HEIGHT))
 
         # Mouse position
@@ -54,4 +56,6 @@ class Menu:
                 screen.blit(text, (rect.x + C.MENU_WIDTH - 70, rect.y + 10))
     
     def draw(self, screen, font):
-        self.left_side_menu(screen, font)
+        self.right_side_menu(screen, font)
+
+        self.unit_properties_menu(screen)

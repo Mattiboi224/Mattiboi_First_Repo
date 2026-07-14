@@ -3,7 +3,6 @@
 # Make it turn based
     # Convert speed to tiles rather than pixels per second
     # Add shots in so 
-# Add Option Box to next to the unit
 # Proper Side Menu
     # Pause Save Load Exit
     # Stats
@@ -14,8 +13,7 @@
 # Create a light constructor unit
 # Create a screen for construction with unit stats
     # Note this pauses the screen
-# Transfer resources between unit and base
-    # Make losing ammo mean finding ammo trucks to resupply
+# Make losing ammo mean finding ammo trucks to resupply
 # Add Power Plant
 # Make random resource spawns instead of fixed
 # Change some buildings to 2x2 or 3x3
@@ -91,12 +89,12 @@ def main():
         buildings = [b for b in game.buildings
                     if b.team == C.PLAYER_TEAM and b.kind == building_kind]
 
-        if buildings and game.money[C.PLAYER_TEAM] >= cost:
+        if buildings and game.player_mat[C.PLAYER_TEAM].money >= cost:
             bb = buildings[0]
             bb.queue.append(unit_name)
             if len(bb.queue) == 1:
                 bb.queue_time = build_time
-            game.money[C.PLAYER_TEAM] -= cost
+            game.player_max[C.PLAYER_TEAM].money -= cost
 
     running = True
     while running:
@@ -116,6 +114,7 @@ def main():
                     else:
                         for u in game.selected_units: u.selected = False
                         game.selected_units.clear()
+                        print("Escape")
 
                 elif event.key == pygame.K_F1:
                     game.help_on = not game.help_on
@@ -133,19 +132,19 @@ def main():
 
                 elif event.key == pygame.K_b:
                     # enter build mode (Barracks)
-                    if game.money[C.PLAYER_TEAM] >= C.COST_BARRACKS:
+                    if game.player_mat[C.PLAYER_TEAM].money >= C.COST_BARRACKS:
                         game.build_mode = True
                         game.build_kind = "barracks"
 
                 elif event.key == pygame.K_c:
                     # enter build mode (Barracks)
-                    if game.money[C.PLAYER_TEAM] >= C.COST_BASE:
+                    if game.player_mat[C.PLAYER_TEAM].money >= C.COST_BASE:
                         game.build_mode = True
                         game.build_kind = "base"
 
                 elif event.key == pygame.K_w:
                     # enter build mode (Warfactory)
-                    if game.money[C.PLAYER_TEAM] >= C.COST_TANK_FACTORY:
+                    if game.player_mat[C.PLAYER_TEAM].money >= C.COST_TANK_FACTORY:
                         game.build_mode = True
                         game.build_kind = "tank_factory"
 
@@ -160,56 +159,24 @@ def main():
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:  # left
-                    
-                    # Sell the Building
-                    if game.building_at_point(event.pos) is not None and game.sell_mode:
-                        b_at_point = game.building_at_point(event.pos)
-                        
-                        if b_at_point.team == C.PLAYER_TEAM:
-                            b_at_point.sold = True
-                            b_at_point.Tile.occupied = False
-                            
-                            for name, stats in C.UNIT_STATS.items():
-                                if stats["kind"] == b_at_point.kind:
-                                    game.money[C.PLAYER_TEAM] += (stats["cost"] * C.SELL_PERCENTAGE)
 
-                        game.sell_mode = False
-                        game.ghost_valid = False
-
-                    # Repair the building
-                    if game.building_at_point(event.pos) is not None and game.repair_mode:
-                        b_at_point = game.building_at_point(event.pos)
-                        
-                        if b_at_point.team == C.PLAYER_TEAM:
-                            
-                            # If missing health
-                            if b_at_point.hp < b_at_point.max_hp and game.money[C.PLAYER_TEAM] > 0:
-                                hp_diff = b_at_point.max_hp - b_at_point.hp
-                                hp_diff = hp_diff // 2
-                                game.money[C.PLAYER_TEAM] -= hp_diff
-                                b_at_point.hp = b_at_point.max_hp
-                            
-                        game.repair_mode = False
-                        game.ghost_valid = False
-
-                    for label, rect in game.menu.buttons:
+                    for label, rect in game.menu.buttons:  
                         if rect.collidepoint(event.pos):
-                            
                             if label == "Barracks":
                                 # enter build mode (Barracks)
-                                if game.money[C.PLAYER_TEAM] >= C.COST_BARRACKS:
+                                if game.player_mat[C.PLAYER_TEAM].money >= C.COST_BARRACKS:
                                     game.build_mode = True
                                     game.build_kind = "barracks"
 
                             elif label == "Base":
                                 # enter build mode (Barracks)
-                                if game.money[C.PLAYER_TEAM] >= C.COST_BASE:
+                                if game.player_mat[C.PLAYER_TEAM].money >= C.COST_BASE:
                                     game.build_mode = True
                                     game.build_kind = "base"
 
                             elif label == "Tank Factory":
                                 # enter build mode (Warfactory)
-                                if game.money[C.PLAYER_TEAM] >= C.COST_TANK_FACTORY:
+                                if game.player_mat[C.PLAYER_TEAM].money >= C.COST_TANK_FACTORY:
                                     game.build_mode = True
                                     game.build_kind = "tank_factory"
 
@@ -230,66 +197,190 @@ def main():
                                 game.repair_mode = True
                                 game.sell_mode = False
 
-                    for label, rect in game.selected_units[0].local_buttons:
-                        if rect.collidepoint(event.pos):
-                            if label == "Move":
-                                for u in game.selected_units:
-                                    u.target = None
-                                    u.path = []
-                                    u.path_px = []
-                            elif label == "Attack":
-                                for u in game.selected_units:
-                                    u.target = None
-                                    u.path = []
-                                    u.path_px = []
-                            elif label == "Stop":
-                                for u in game.selected_units:
-                                    u.target = None
-                                    u.path = []
-                                    u.path_px = []
-                            elif label == "X-fer":
-                                for u in game.selected_units:
-                                    if isinstance(u, Unit) and u.carry > 0:
-                                        # Transfer resources to nearest base
-                                        nearest_base = None
-                                        min_dist = float('inf')
-                                        for b in game.buildings:
-                                            if b.team == C.PLAYER_TEAM and b.kind == "base":
-                                                dist = math.hypot(b.x - u.x, b.y - u.y)
-                                                if dist < min_dist:
-                                                    min_dist = dist
-                                                    nearest_base = b
-                                        if nearest_base:
-                                            nearest_base.resources += u.carry
-                                            u.carry = 0
+                    # Sell the Building
+                    if game.building_at_point(event.pos, team=C.PLAYER_TEAM) is not None and game.sell_mode:
+                        b_at_point = game.building_at_point(event.pos, team=C.PLAYER_TEAM)
+                        
+                        b_at_point.sold = True
+                        b_at_point.Tile.occupied = False
+                        
+                        for name, stats in C.UNIT_STATS.items():
+                            if stats["kind"] == b_at_point.kind:
+                                game.player_mat[C.PLAYER_TEAM].money += (stats["cost"] * C.SELL_PERCENTAGE)
 
-                    if game.build_mode and game.build_kind == "barracks":
+                        game.sell_mode = False
+                        game.ghost_valid = False
+
+                    # Repair the building
+                    elif game.building_at_point(event.pos, team=C.PLAYER_TEAM) is not None and game.repair_mode:
+                        b_at_point = game.building_at_point(event.pos, team=C.PLAYER_TEAM)
+                            
+                        # If missing health
+                        if b_at_point.hp < b_at_point.max_hp and game.player_mat[C.PLAYER_TEAM].money > 0:
+                            hp_diff = b_at_point.max_hp - b_at_point.hp
+                            hp_diff = hp_diff // 2
+                            game.player_mat[C.PLAYER_TEAM].money -= hp_diff
+                            b_at_point.hp = b_at_point.max_hp
+                            
+                        game.repair_mode = False
+                        game.ghost_valid = False
+
+                    elif game.move_mode:
+                        # Move selected units to clicked position
+                        tx, ty = UT.to_grid(event.pos)
+                        tx -= C.UNIT_MENU_WIDTH // C.TILE
+                        game.order_move_grid(game.selected_units, (tx, ty))
+                        game.move_mode = False
+
+                    elif game.attack_mode:
+                        enemy = game.unit_at_point(event.pos, team=None)
+                        if enemy is None:
+                            enemy = game.building_at_point(event.pos, team=None)
+                            print(enemy.kind)
+                            
+                        if enemy is not None and enemy.team != C.PLAYER_TEAM:
+
+                            dist = math.inf
+                            chosen_point = None
+
+                            for u in game.selected_units:
+                                u.target = enemy
+                                ava_locs = m.locations_in_range(u.range, enemy)
+
+                                for i in ava_locs:
+                                    # If Filled Skip
+                                    if i in game.unit_locs:
+                                        continue
+
+                                    dist_between = math.dist(i, u.pos_grid())
+
+                                    if dist_between < dist:
+                                        dist = dist_between
+                                        chosen_point = i
+
+                                game.order_move_grid(game.selected_units, chosen_point)
+
+                                game.attack_mode = False
+                        
+                        else:
+                            game.attack_mode = False
+
+                    elif game.transfer_mode:
+                        for u in game.selected_units:
+                            if isinstance(u, Unit) and u.carry > 0:
+
+                                if game.unit_at_point(event.pos, team=None) is not None:
+                                    target_unit = game.unit_at_point(event.pos, team=None)
+                                    if target_unit.team == C.PLAYER_TEAM and target_unit.kind == "ammo_truck":
+                                        # Transfer resources to the ammo truck
+                                        target_unit.carry = min(target_unit.carry_max, target_unit.carry + u.carry)
+                                        u.carry = 0
+                                        game.transfer_mode = False
+                                    elif target_unit.team == C.PLAYER_TEAM and target_unit.ammo < target_unit.max_ammo:
+                                        # Transfer resources to the unit
+                                        transfer_amount = min(u.carry, target_unit.max_ammo - target_unit.ammo)
+                                        target_unit.ammo += transfer_amount
+                                        u.carry -= transfer_amount
+                                        game.transfer_mode = False
+                                    else:
+                                        game.transfer_mode = False
+                                
+                                elif game.building_at_point(event.pos, team=None) is not None:
+                                    target_building = game.building_at_point(event.pos, team=None)
+                                    if target_building.team == C.PLAYER_TEAM and target_building.storage:
+                                        # Transfer resources to the building
+                                        #target_building.resources += u.carry
+                                        game.player_mat[C.PLAYER_TEAM].money += u.carry
+                                        u.carry = 0
+                                        game.transfer_mode = False
+                                    else:
+                                        game.transfer_mode = False
+                                
+                                else:
+                                    game.transfer_mode = False
+
+                                # Transfer resources to nearest base
+                                # nearest_base = None
+                                # min_dist = float('inf')
+                                # for b in game.buildings:
+                                #     if b.team == C.PLAYER_TEAM and b.kind == "base":
+                                #         dist = math.hypot(b.x - u.x, b.y - u.y)
+                                #         if dist < min_dist:
+                                #             min_dist = dist
+                                #             nearest_base = b
+                                # if nearest_base:
+                                #     nearest_base.resources += u.carry
+                                #     u.carry = 0
+                            if isinstance(u, Building) and u.storage and game.player_mat[C.PLAYER_TEAM].money > 0:
+                                # Transfer resources to nearest unit
+                                if game.unit_at_point(event.pos, team=None) is not None:
+                                    target_unit = game.unit_at_point(event.pos, team=None)
+                                    if target_unit.team == C.PLAYER_TEAM and target_unit.kind == "ammo_truck":
+                                        # Transfer resources to the ammo truck
+                                        target_unit.carry = min(target_unit.carry_max, target_unit.carry + game.player_mat[C.PLAYER_TEAM].money)
+                                        u.carry = 0
+                                        game.transfer_mode = False
+                                    else:
+                                        game.transfer_mode = False
+                                else:
+                                    game.transfer_mode = False
+
+                    elif game.selected_units and not game.build_mode and not game.sell_mode and not game.repair_mode:
+                        for label, rect in game.selected_units[0].local_buttons:
+                            if rect.collidepoint(event.pos):
+                                if label == "Move":
+                                    game.move_mode = True
+                                    break
+
+                                elif label == "Attack":
+                                    game.attack_mode = True
+                                    break
+
+                                elif label == "Stop":
+                                    for u in game.selected_units:
+                                        u.selected = False
+                                    game.selected_units.clear()
+                                    break
+
+                                elif label == "Build":
+                                    for u in game.selected_units:
+                                        u.target = None
+                                        u.path = []
+                                        u.path_px = []
+                                    print("Build")
+                                    break
+
+                                elif label == "X-fer":
+                                    game.transfer_mode = True
+                                    break
+                            
+                        else:
+                            game.select_start = event.pos
+                    
+                    elif game.build_mode and game.build_kind == "barracks":
                         # attempt to place building
-                        if game.ghost_valid and game.money[C.PLAYER_TEAM] >= C.COST_BARRACKS:
+                        if game.ghost_valid and game.player_mat[C.PLAYER_TEAM].money >= C.COST_BARRACKS:
                             px, py = game.ghost_pos
-                            image_to_use = m.convert_image_to_team(C.BARRACKS_IMAGE, C.PLAYER_TEAM, "barracks")
-                            game.spawn_building(C.PLAYER_TEAM, px + game.camera_x, py + game.camera_y, image_to_use, "barracks")
-                            game.money[C.PLAYER_TEAM] -= C.COST_BARRACKS
+                            game.spawn_building(C.PLAYER_TEAM, px, py, C.BARRACKS_IMAGE, "barracks")
+                            game.player_mat[C.PLAYER_TEAM].money -= C.COST_BARRACKS
                             game.build_mode = False
                             game.ghost_valid = False
 
                     elif game.build_mode and game.build_kind == "tank_factory":
                         # attempt to place building
-                        if game.ghost_valid and game.money[C.PLAYER_TEAM] >= C.COST_TANK_FACTORY:
+                        if game.ghost_valid and game.player_mat[C.PLAYER_TEAM].money >= C.COST_TANK_FACTORY:
                             px, py = game.ghost_pos
-                            image_to_use = m.convert_image_to_team(C.TANK_FACTORY_IMAGE, C.PLAYER_TEAM, "tank_factory")
-                            game.spawn_building(C.PLAYER_TEAM, px + game.camera_x, py + game.camera_y, image_to_use, "tank_factory")
-                            game.money[C.PLAYER_TEAM] -= C.COST_TANK_FACTORY
+                            game.spawn_building(C.PLAYER_TEAM, px, py, C.TANK_FACTORY_IMAGE, "tank_factory")
+                            game.player_mat[C.PLAYER_TEAM].money -= C.COST_TANK_FACTORY
                             game.build_mode = False
                             game.ghost_valid = False
 
                     elif game.build_mode and game.build_kind == "base":
                         # attempt to place building
-                        if game.ghost_valid and game.money[C.PLAYER_TEAM] >= C.COST_BASE:
+                        if game.ghost_valid and game.player_mat[C.PLAYER_TEAM].money >= C.COST_BASE:
                             px, py = game.ghost_pos
-                            image_to_use = m.convert_image_to_team(C.BASE_IMAGE, C.PLAYER_TEAM, "base")
-                            game.spawn_building(C.PLAYER_TEAM, px + game.camera_x, py + game.camera_y, image_to_use, "base")
-                            game.money[C.PLAYER_TEAM] -= C.COST_BASE
+                            game.spawn_building(C.PLAYER_TEAM, px, py, C.BASE_IMAGE, "base")
+                            game.player_mat[C.PLAYER_TEAM].money -= C.COST_BASE
                             game.build_mode = False
                             game.ghost_valid = False
 
@@ -310,6 +401,7 @@ def main():
                     if game.map_edit:
                         # right click sets grass
                         tx, ty = UT.to_grid(event.pos)
+                        
                         if UT.in_bounds(tx, ty):
                             game.grid.toggle_at(tx, ty, C.T_GRASS)
                     else:
@@ -321,7 +413,8 @@ def main():
                                 u.target = enemy
                         else:
                             tx, ty = UT.to_grid(event.pos)
-                            game.order_move(game.selected_units, event.pos)
+                            tx -= C.UNIT_MENU_WIDTH // C.TILE
+                            game.order_move_grid(game.selected_units, (tx, ty))
 
             elif event.type == pygame.MOUSEBUTTONUP:
                 if event.button == 1 and game.select_start:
@@ -335,10 +428,15 @@ def main():
                     #if rect.width < 5 and rect.height < 5:
                     # treat as click selection
                     u = game.unit_at_point(event.pos, team=C.PLAYER_TEAM)
+                    b = game.building_at_point(event.pos, team=C.PLAYER_TEAM)
                     if u:
                         u.selected = True
                         if u not in game.selected_units:
                             game.selected_units.append(u)
+                    elif b:
+                        b.selected = True
+                        if b not in game.selected_units:
+                            game.selected_units.append(b)
                     else:
                         # clicked empty space: clear selection (if not shift)
                         if not (pygame.key.get_mods() & pygame.KMOD_SHIFT):
@@ -359,22 +457,22 @@ def main():
                     game.select_start = None
 
 
-            elif event.type == pygame.MOUSEMOTION:
-                if game.selection_rect and game.select_start:
-                    x0, y0 = game.select_start
-                    x1, y1 = event.pos
-                    x = min(x0, x1)
-                    y = min(y0, y1)
-                    w = abs(x1 - x0)
-                    h = abs(y1 - y0)
-                    game.selection_rect = pygame.Rect(x, y, w, h)
+            # elif event.type == pygame.MOUSEMOTION:
+            #     if game.selection_rect and game.select_start:
+            #         x0, y0 = game.select_start
+            #         x1, y1 = event.pos
+            #         x = min(x0, x1)
+            #         y = min(y0, y1)
+            #         w = abs(x1 - x0)
+            #         h = abs(y1 - y0)
+            #         game.selection_rect = pygame.Rect(x, y, w, h)
 
         # Get pressed keys
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
             game.camera_x = max(game.camera_x - game.camera_speed, 0)
         if keys[pygame.K_RIGHT]:
-            game.camera_x = min(game.camera_x + game.camera_speed, game.grid.w * C.TILE - C.WIDTH + C.MENU_WIDTH)
+            game.camera_x = min(game.camera_x + game.camera_speed, C.MAP_WIDTH * C.TILE - C.SCREEN_WIDTH)
         if keys[pygame.K_UP]:
             game.camera_y = max(game.camera_y - game.camera_speed, 0)
         if keys[pygame.K_DOWN]:

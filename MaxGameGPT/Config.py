@@ -11,7 +11,7 @@ UNIT_MENU_HEIGHT = 128
 BOTTOM_MENU_HEIGHT = 32
 TILE = 32
 
-SCREEN_WIDTH = WIDTH - MENU_WIDTH# - UNIT_MENU_WIDTH
+SCREEN_WIDTH = WIDTH - MENU_WIDTH - UNIT_MENU_WIDTH
 SCREEN_HEIGHT = HEIGHT - BOTTOM_MENU_HEIGHT
 
 # Screen Grid Width and Height
@@ -30,6 +30,9 @@ MENU_BG = (50, 50, 50)
 BTN_COLOR = (80, 80, 80)
 BTN_HOVER = (120, 120, 120)
 TEXT_COLOR = (230, 230, 230)
+
+# Left Menu Settings
+UNIT_MENU_BG = (245, 236, 106)
 
 BTN_HEIGHT = 60
 PADDING = 20
@@ -55,6 +58,9 @@ COST_TANK = 150
 COST_TANK_FACTORY = 100
 COST_BASE = 100
 COST_AMMO_TRUCK = 100
+COST_STORAGE_UNIT = 50
+COST_FUEL_TANK = 50
+COST_GOLD_VAULT = 50
 
 # Build times (in seconds)
 BUILD_WORKER_TIME = 3.0
@@ -62,64 +68,102 @@ BUILD_SOLDIER_TIME = 5.0
 BUILD_TANK_TIME = 10.0
 BUILD_AMMO_TRUCK_TIME = 7.0
 
-# Unit stats
-SOLDIER_HP = 80
-SOLDIER_ATK = 20
-SOLDIER_RANGE = 2 * TILE
-SOLDIER_SPEED = 90  # px/s
-SOLDIER_AMMO = 10
-SOLDIER_ARMOUR = 2
-SOLDIER_SHOTS = 1
-
-TANK_HP = 150
-TANK_ATK = 30
-TANK_RANGE = 3 * TILE
-TANK_SPEED = 50  # px/s
-TANK_AMMO = 5
-TANK_ARMOUR = 5
-TANK_SHOTS = 2
-
-AMMO_TRUCK_HP = 100
-AMMO_TRUCK_ATK = 10
-AMMO_TRUCK_RANGE = 2 * TILE
-AMMO_TRUCK_SPEED = 30  # px/s
-AMMO_TRUCK_AMMO = 5
-AMMO_TRUCK_ARMOUR = 0
-AMMO_TRUCK_SHOTS = 1
-AMMO_TRUCK_CARGO = 50 
-
-
 UNIT_STATS = {
-    "Barracks": {"cost": COST_BARRACKS, "kind": "barracks"},
-    "Soldier":  {"cost": COST_SOLDIER,  "kind": "soldier"},
-    "Tank":     {"cost": COST_TANK,     "kind": "tank"},
-    "Ammo Truck": {"cost": COST_AMMO_TRUCK, "kind": "ammo_truck"},
-    "Base":     {"cost": COST_BASE,     "kind": "base"},
-    "Tank Factory":     {"cost": COST_TANK_FACTORY,     "kind": "tank_factory"},
+    "Soldier": {
+        "kind": "soldier",
+        "category": "unit",
+        "cost": COST_SOLDIER,
+        "hp": 80,
+        "atk": 20,
+        "range": 2 * TILE,
+        "speed": 90,   # px/s
+        "ammo": 10,
+        "armour": 2,
+        "shots": 1,
+    },
+    "Tank": {
+        "kind": "tank",
+        "category": "unit",
+        "cost": COST_TANK,
+        "hp": 150,
+        "atk": 30,
+        "range": 3 * TILE,
+        "speed": 50,   # px/s
+        "ammo": 5,
+        "armour": 5,
+        "shots": 2,
+    },
+    "Ammo Truck": {
+        "kind": "ammo_truck",
+        "category": "unit",
+        "cost": COST_AMMO_TRUCK,
+        "hp": 100,
+        "atk": 10,
+        "range": 2 * TILE,
+        "speed": 30,   # px/s
+        "ammo": 5,
+        "armour": 0,
+        "shots": 1,
+        "cargo": 50,
+    },
 }
 
 # Building stats
-BASE_HP = 500
-BASE_ARMOUR = 5
-
-BARRACKS_HP = 250
-BARRACKS_ARMOUR = 3
-
-TANK_FACTORY_HP = 300
-TANK_FACTORY_ARMOUR = 4
+BUILDING_STATS = {
+    "Base": {
+        "kind": "base",
+        "category": "building",
+        "cost": COST_BASE,
+        "hp": 500,
+        "armour": 5,
+        "build_time": 10.0,
+    },
+    "Barracks": {
+        "kind": "barracks",
+        "category": "building",
+        "cost": COST_BARRACKS,
+        "hp": 250,
+        "armour": 3,
+        "build_time": 5.0,
+    },
+    "Tank Factory": {
+        "kind": "tank_factory",
+        "category": "building",
+        "cost": COST_TANK_FACTORY,
+        "hp": 300,
+        "armour": 4,
+        "build_time": 6.0,
+    },
+    "Storage Unit": {
+        "kind": "storage_unit",
+        "category": "building",
+        "cost": COST_STORAGE_UNIT,
+        "hp": 100,
+        "armour": 2,
+        "build_time": 2.0,
+    },
+    "Fuel Tank": {
+        "kind": "fuel_tank",
+        "category": "building",
+        "cost": COST_FUEL_TANK,
+        "hp": 100,
+        "armour": 2,
+        "build_time": 2.0,
+    },
+    "Gold Vault": {
+        "kind": "gold_vault",
+        "category": "building",
+        "cost": COST_GOLD_VAULT,
+        "hp": 100,
+        "armour": 2,
+        "build_time": 2.0,
+    },
+}
 
 # Resource Supply Time
 MINERAL_SUPPLY_TIME = 3.0
-
-# Resource harvest
-HARVEST_PER_TRIP = 25
-GOLD_HARVEST_PER_TRIP = 1
-ORE_HARVEST_TIME = 3.0
-GEM_HARVEST_TIME = 2.0
-ORE_RESOURCE_HEALTH = 200
-GEM_RESOURCE_HEALTH = 400
-GOLD_HARVEST_TIME = 10.0
-GOLD_RESOURCE_HEALTH = 5
+FUEL_SUPPLY_TIME = 3.0
+GOLD_SUPPLY_TIME = 3.0
 
 # Tile types
 T_GRASS = 0
@@ -132,15 +176,18 @@ T_BLANK = 6
 T_WATER = 7
 
 # Image Location
-#pg.image.load('assets/tank.png').convert_alpha()
 BASE_IMAGE = 'assets/buildings/base.png'
 BARRACKS_IMAGE = 'assets/buildings/barracks.png'
-WORKER_IMAGE = 'assets/units/worker.png'
 SOLDIER_IMAGE = 'assets/units/soldier.png'
 TANK_FACTORY_IMAGE = 'assets/buildings/tank_factory.png'
 TANK_IMAGE = 'assets/units/tank.png'
 GOLD_MINER_IMAGE = 'assets/units/gold_miner.png'
 AMMO_TRUCK_IMAGE = 'assets/units/ammo_truck.png'
+CONSTRUCTION_IMAGE = 'assets/buildings/construction.png'
+STORAGE_UNIT_IMAGE = 'assets/buildings/storage_unit.png'
+FUEL_TANK_IMAGE = 'assets/buildings/fuel_tank.png'
+GOLD_VAULT_IMAGE = 'assets/buildings/gold_vault.png'
+
 
 # Game Map Location
 GAME_MAP = 'game_map.png'
@@ -180,18 +227,12 @@ TEAM_COLORS = {
 # Convert This Colour to Team Colour
 # Tanks
 TANK_OLD = (74, 98, 48)
-
-# Ammo Truck
 AMMO_TRUCK_OLD = (74, 104, 40)
-
-# Soldier
 SOLDIER_OLD = (52, 68, 32)
-
-# Base
 BASE_OLD = (98, 80, 52)
-
-# Barracks
 BARRACKS_OLD = (104, 114, 78)
-
-# Tank Factory
 TANK_FACTORY_OLD = (74, 84, 58)
+CONSTRUCTION_OLD = (239, 228, 176)
+STORAGE_UNIT_OLD = (40, 38, 32)
+FUEL_TANK_OLD = (30, 30, 28)
+GOLD_VAULT_OLD = (35, 33, 30)

@@ -11,37 +11,19 @@ class Unit(Entity):
     def __init__(self, team, x, y, image, kind="soldier"):
         super().__init__(team, x, y, image, kind, radius=12)
         self.kind = kind
-        if kind == "tank":
-            self.hp = self.max_hp = C.TANK_HP
-            self.atk = C.TANK_ATK
-            self.range = C.TANK_RANGE
-            self.speed = self.max_speed =C.TANK_SPEED
-            self.armour = C.TANK_ARMOUR
-            self.ammo = self.max_ammo = C.TANK_AMMO
-            self.shots = self.max_shots = C.TANK_SHOTS
-    
-        elif kind == "ammo_truck":
-            self.hp = self.max_hp = C.AMMO_TRUCK_HP
-            self.atk = C.AMMO_TRUCK_ATK
-            self.range = C.AMMO_TRUCK_RANGE
-            self.speed = self.max_speed = C.AMMO_TRUCK_SPEED
-            self.armour = C.AMMO_TRUCK_ARMOUR
-            self.ammo = self.max_ammo = C.AMMO_TRUCK_AMMO
-            self.shots = self.max_shots = C.AMMO_TRUCK_SHOTS
 
-        else:
-            self.hp = self.max_hp = C.SOLDIER_HP
-            self.atk = C.SOLDIER_ATK
-            self.range = C.SOLDIER_RANGE
-            self.speed = self.max_speed = C.SOLDIER_SPEED
-            self.armour = C.SOLDIER_ARMOUR
-            self.ammo = self.max_ammo = C.SOLDIER_AMMO
-            self.shots = self.max_shots = C.SOLDIER_SHOTS
+        stats = C.BUILDING_STATS[kind]
+        self.hp = self.max_hp = stats["hp"]
+        self.atk = stats["atk"]
+        self.range = stats["range"]
+        self.speed = self.max_speed = stats["speed"]
+        self.armour = stats["armour"]
+        self.ammo = self.max_ammo = stats["ammo"]
+        self.shots = self.max_shots = stats["shots"]
+        self.cargo_max = stats.get("cargo", 0)
 
-        if kind == "ammo_truck":
-            self.carry_max = C.AMMO_TRUCK_CARGO
-        else:
-            self.carry_max = 0
+        # Range feels better
+        self.range += 5
 
         self.path = []
         self.path_px = []
@@ -54,15 +36,12 @@ class Unit(Entity):
         self.harvest_timer = 0.0
         self.carry = 0
         self.old_res = None
-        self.image = pygame.image.frombytes(image.tobytes(), image.size, image.mode).convert_alpha()
         self.current_angle = 0
 
         self.local_labels = ['Move', 'Attack', 'Stop']
 
         if self.carry_max > 0:
             self.local_labels.append('X-fer')
-
-
 
         self.labels = [f'hp: {self.hp}/{self.max_hp}',f'ammo: {self.ammo}/{self.max_ammo}', f'shots: {self.shots}/{self.max_shots}', f'speed: {self.speed}/{self.max_speed}', f'carry: {self.carry}/{self.carry_max}']
 
@@ -130,7 +109,7 @@ class Unit(Entity):
     def draw(self, surf, font, camera_x, camera_y):
         
         # Calculate screen position
-        screen_x = self.x - camera_x
+        screen_x = self.x - camera_x + C.UNIT_MENU_WIDTH
         screen_y = self.y - camera_y
 
         rotated_image = pygame.transform.rotate(self.image, self.current_angle)
@@ -143,6 +122,11 @@ class Unit(Entity):
 
         
         if self.selected:
+
+            # Box Around Unit to show what's selected
+            rect = pygame.Rect(0,0,C.TILE,C.TILE)
+            rect.center = (screen_x, screen_y)
+            pygame.draw.rect(surf, (200,200,200), rect, 2)
 
             # Draw Box in top corner showing hp, speed, ammo, and carry/shots
             pygame.draw.rect(surf, C.MENU_BG, (0, 0, C.UNIT_MENU_WIDTH, C.UNIT_MENU_HEIGHT))
@@ -164,10 +148,11 @@ class Unit(Entity):
 
             # Don't draw the box if the unit is moving
             if len(self.path_px) == 0:
+
+                # Menu on the side
                 local_rect = pygame.Rect(screen_x + C.TILE, screen_y - C.TILE, C.TILE * 2, C.TILE * 2)
                 pygame.draw.rect(surf, C.MENU_BG, local_rect)
-            
-
+    
                 rects = []
                 for i in range(len(self.local_labels)):   # or a fixed number of buttons
                     rect = pygame.Rect(
