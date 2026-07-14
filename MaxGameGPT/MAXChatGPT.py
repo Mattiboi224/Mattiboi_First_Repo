@@ -385,7 +385,7 @@ def main():
                         # attempt to place building
                         if game.ghost_valid and game.player_mat[C.PLAYER_TEAM].money >= C.COST_BARRACKS:
                             px, py = game.ghost_pos
-                            game.spawn_building(C.PLAYER_TEAM, px, py, C.BARRACKS_IMAGE, "Barracks")
+                            game.spawn_building(C.PLAYER_TEAM, px, py, "Barracks")
                             game.player_mat[C.PLAYER_TEAM].money -= C.COST_BARRACKS
                             game.build_mode = False
                             game.ghost_valid = False
@@ -394,7 +394,7 @@ def main():
                         # attempt to place building
                         if game.ghost_valid and game.player_mat[C.PLAYER_TEAM].money >= C.COST_TANK_FACTORY:
                             px, py = game.ghost_pos
-                            game.spawn_building(C.PLAYER_TEAM, px, py, C.TANK_FACTORY_IMAGE, "Tank Factory")
+                            game.spawn_building(C.PLAYER_TEAM, px, py, "Tank Factory")
                             game.player_mat[C.PLAYER_TEAM].money -= C.COST_TANK_FACTORY
                             game.build_mode = False
                             game.ghost_valid = False
@@ -403,7 +403,7 @@ def main():
                         # attempt to place building
                         if game.ghost_valid and game.player_mat[C.PLAYER_TEAM].money >= C.COST_BASE:
                             px, py = game.ghost_pos
-                            game.spawn_building(C.PLAYER_TEAM, px, py, C.BASE_IMAGE, "Base")
+                            game.spawn_building(C.PLAYER_TEAM, px, py, "Base")
                             game.player_mat[C.PLAYER_TEAM].money -= C.COST_BASE
                             game.build_mode = False
                             game.ghost_valid = False
@@ -412,7 +412,7 @@ def main():
                         # attempt to place building
                         if game.ghost_valid and game.player_mat[C.PLAYER_TEAM].money >= C.COST_STORAGE_UNIT:
                             px, py = game.ghost_pos
-                            game.spawn_building(C.PLAYER_TEAM, px, py, C.STORAGE_UNIT_IMAGE, "Storage Unit")
+                            game.spawn_building(C.PLAYER_TEAM, px, py, "Storage Unit")
                             game.player_mat[C.PLAYER_TEAM].money -= C.COST_STORAGE_UNIT
                             game.build_mode = False
                             game.ghost_valid = False
@@ -421,7 +421,7 @@ def main():
                         # attempt to place building
                         if game.ghost_valid and game.player_mat[C.PLAYER_TEAM].money >= C.COST_FUEL_TANK:
                             px, py = game.ghost_pos
-                            game.spawn_building(C.PLAYER_TEAM, px, py, C.FUEL_TANK_IMAGE, "Fuel Tank")
+                            game.spawn_building(C.PLAYER_TEAM, px, py, "Fuel Tank")
                             game.player_mat[C.PLAYER_TEAM].money -= C.COST_FUEL_TANK
                             game.build_mode = False
                             game.ghost_valid = False
@@ -430,7 +430,7 @@ def main():
                         # attempt to place building
                         if game.ghost_valid and game.player_mat[C.PLAYER_TEAM].money >= C.COST_GOLD_VAULT:
                             px, py = game.ghost_pos
-                            game.spawn_building(C.PLAYER_TEAM, px, py, C.GOLD_VAULT_IMAGE, "Gold Vault")
+                            game.spawn_building(C.PLAYER_TEAM, px, py, "Gold Vault")
                             game.player_mat[C.PLAYER_TEAM].money -= C.COST_GOLD_VAULT
                             game.build_mode = False
                             game.ghost_valid = False

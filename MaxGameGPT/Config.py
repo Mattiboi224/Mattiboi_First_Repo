@@ -5,7 +5,6 @@ import PIL.Image as Image
 WIDTH, HEIGHT = 1024, 704
 MENU_WIDTH = 192
 
-
 UNIT_MENU_WIDTH = 128
 UNIT_MENU_HEIGHT = 128
 BOTTOM_MENU_HEIGHT = 32
@@ -23,7 +22,7 @@ MENU_TILE = MENU_WIDTH // TILE
 # Camera Settings
 CAMERA_SPEED = 5
 CAMERA_X, CAMERA_Y = 0, 0
-
+FPS = 60
 
 # Menu Settings
 MENU_BG = (50, 50, 50)
@@ -33,13 +32,10 @@ TEXT_COLOR = (230, 230, 230)
 
 # Left Menu Settings
 UNIT_MENU_BG = (245, 236, 106)
-
 BTN_HEIGHT = 60
 PADDING = 20
 
 UNIT_PROP_HEIGHT = 20
-
-FPS = 60
 
 PLAYER_TEAM = 0
 NUM_AI = 2             # number of AI opponents
@@ -62,6 +58,12 @@ COST_STORAGE_UNIT = 50
 COST_FUEL_TANK = 50
 COST_GOLD_VAULT = 50
 
+# Image Locations
+BASE_FOLDER = "assets"
+
+def entity_image_path(kind, category):
+    return f"{BASE_FOLDER}/{category}/{kind}.png"
+
 ENTITY_STATS = {
     # Unit Stats
     "Soldier": {
@@ -77,7 +79,8 @@ ENTITY_STATS = {
         "ammo": 10,
         "armour": 2,
         "shots": 1,
-        "build_time": 5.0
+        "build_time": 5.0,
+        "colour_to_be_converted": (52, 68, 32),
     },
     "Tank": {
         "Name": "Tank",
@@ -92,7 +95,8 @@ ENTITY_STATS = {
         "ammo": 5,
         "armour": 5,
         "shots": 2,
-        "build_time": 10.0
+        "build_time": 10.0,
+        "colour_to_be_converted": (74, 98, 48),
     },
     "Ammo Truck": {
         "Name": "Ammo Truck",
@@ -108,10 +112,17 @@ ENTITY_STATS = {
         "armour": 0,
         "shots": 1,
         "cargo": 50,
-        "build_time": 7.0
+        "build_time": 7.0,
+        "colour_to_be_converted": (74, 104, 40),
     },
     
     # Building stats
+    "Construction": {
+        "Name": "Construction",
+        "kind": "construction",
+        "category": "building",
+        "colour_to_be_converted": (239, 228, 176),
+    },
     "Base": {
         "Name": "Base",
         "kind": "base",
@@ -120,6 +131,9 @@ ENTITY_STATS = {
         "hp": 500,
         "armour": 5,
         "build_time": 10.0,
+        "colour_to_be_converted": (98, 80, 52),
+        "storage_amount": 500,
+        "resource_storage_type": "Minerals"
     },
     "Barracks": {
         "Name": "Barracks",
@@ -129,6 +143,7 @@ ENTITY_STATS = {
         "hp": 250,
         "armour": 3,
         "build_time": 5.0,
+        "colour_to_be_converted": (104, 114, 78),
     },
     "Tank Factory": {
         "Name": "Tank Factory",
@@ -138,6 +153,7 @@ ENTITY_STATS = {
         "hp": 300,
         "armour": 4,
         "build_time": 6.0,
+        "colour_to_be_converted": (74, 84, 58),
     },
     "Storage Unit": {
         "Name": "Storage Unit",
@@ -147,6 +163,9 @@ ENTITY_STATS = {
         "hp": 100,
         "armour": 2,
         "build_time": 2.0,
+        "colour_to_be_converted": (40, 38, 32),
+        "storage_amount": 50,
+        "resource_storage_type": "Minerals"
     },
     "Fuel Tank": {
         "Name": "Fuel Tank",
@@ -156,6 +175,9 @@ ENTITY_STATS = {
         "hp": 100,
         "armour": 2,
         "build_time": 2.0,
+        "colour_to_be_converted": (30, 30, 28),
+        "storage_amount": 50,
+        "resource_storage_type": "Fuel"
     },
     "Gold Vault": {
         "Name": "Gold Vault",
@@ -165,8 +187,14 @@ ENTITY_STATS = {
         "hp": 100,
         "armour": 2,
         "build_time": 2.0,
+        "colour_to_be_converted": (35, 33, 30),
+        "storage_amount": 50,
+        "resource_storage_type": "Gold"
     },
 }
+
+for name, stats in ENTITY_STATS.items():
+    stats["image"] = entity_image_path(stats["kind"], stats["category"])
 
 # Resource Supply Time
 MINERAL_SUPPLY_TIME = 3.0
@@ -182,20 +210,6 @@ T_FUEL = 4
 T_GOLD = 5
 T_BLANK = 6
 T_WATER = 7
-
-# Image Location
-BASE_IMAGE = 'assets/buildings/base.png'
-BARRACKS_IMAGE = 'assets/buildings/barracks.png'
-SOLDIER_IMAGE = 'assets/units/soldier.png'
-TANK_FACTORY_IMAGE = 'assets/buildings/tank_factory.png'
-TANK_IMAGE = 'assets/units/tank.png'
-GOLD_MINER_IMAGE = 'assets/units/gold_miner.png'
-AMMO_TRUCK_IMAGE = 'assets/units/ammo_truck.png'
-CONSTRUCTION_IMAGE = 'assets/buildings/construction.png'
-STORAGE_UNIT_IMAGE = 'assets/buildings/storage_unit.png'
-FUEL_TANK_IMAGE = 'assets/buildings/fuel_tank.png'
-GOLD_VAULT_IMAGE = 'assets/buildings/gold_vault.png'
-
 
 # Game Map Location
 GAME_MAP = 'game_map.png'
@@ -231,16 +245,3 @@ TEAM_COLORS = {
     5: (255, 120, 200),  # pink
     6: (0, 0, 0)        # black
 }
-
-# Convert This Colour to Team Colour
-# Tanks
-TANK_OLD = (74, 98, 48)
-AMMO_TRUCK_OLD = (74, 104, 40)
-SOLDIER_OLD = (52, 68, 32)
-BASE_OLD = (98, 80, 52)
-BARRACKS_OLD = (104, 114, 78)
-TANK_FACTORY_OLD = (74, 84, 58)
-CONSTRUCTION_OLD = (239, 228, 176)
-STORAGE_UNIT_OLD = (40, 38, 32)
-FUEL_TANK_OLD = (30, 30, 28)
-GOLD_VAULT_OLD = (35, 33, 30)

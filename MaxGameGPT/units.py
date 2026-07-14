@@ -8,8 +8,8 @@ import util as m
 # pyright: ignore[reportMissingImports]
 
 class Unit(Entity):
-    def __init__(self, team, x, y, image, name="Soldier"):
-        super().__init__(team, x, y, image, name, radius=12)
+    def __init__(self, team, x, y, name="Soldier"):
+        super().__init__(team, x, y, name, radius=12)
 
 
         stats = C.ENTITY_STATS[name]
@@ -18,7 +18,7 @@ class Unit(Entity):
         self.speed = self.max_speed = stats["speed"]
         self.ammo = self.max_ammo = stats["ammo"]
         self.shots = self.max_shots = stats["shots"]
-        self.cargo_max = stats.get("cargo", 0)
+        self.carry_max = stats.get("cargo", 0)
 
         # Range feels better
         self.range += 5

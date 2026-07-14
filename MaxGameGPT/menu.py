@@ -8,6 +8,7 @@ class Menu:
 
         # Menu buttons
         self.buildings_labels = [name for name, stats in C.ENTITY_STATS.items() if stats["category"] == "building"]
+        self.buildings_labels.remove("Construction")
         self.unit_labels = [name for name, stats in C.ENTITY_STATS.items() if stats["category"] == "unit"]
         self.helpful_labels = ["Sell", "Repair"]
         self.labels = self.buildings_labels + self.unit_labels + self.helpful_labels

@@ -12,7 +12,7 @@ def gen_id():
     return i
 
 class Entity(pygame.sprite.Sprite):
-    def __init__(self, team, x, y, image, name, radius=12):
+    def __init__(self, team, x, y, name, radius=12):
 
         
         self.id = gen_id()
@@ -27,13 +27,14 @@ class Entity(pygame.sprite.Sprite):
         self.hp = self.max_hp = stats["hp"]
         self.armour = stats["armour"]
         self.kind = stats["kind"]
+        self.image = stats["image"]
 
 
         self.dead = False
 
         
 
-        converted_image = m.convert_image_to_team(image, self.team, self.kind)
+        converted_image = m.convert_image_to_team(self.team, self.name)
         self.image = pygame.image.frombytes(converted_image.tobytes(), converted_image.size, converted_image.mode).convert_alpha()
         
         

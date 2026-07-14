@@ -6,10 +6,12 @@ import math
 import util as m
 
 class Building(Entity):
-    def __init__(self, team, x, y, image, name="base", no_queue=False):
-        super().__init__(team, x, y, image, name, radius=16)
+    def __init__(self, team, x, y, name="base", no_queue=False):
+        super().__init__(team, x, y, name, radius=16)
 
         self.building = True
+
+        self.no_queue = no_queue
 
         stats = C.ENTITY_STATS[name]
         self.build_time = stats["build_time"]
@@ -18,7 +20,7 @@ class Building(Entity):
             self.building = False
             self.build_time = 0.0
 
-        build_image_convert = m.convert_image_to_team(C.CONSTRUCTION_IMAGE, team, 'construction')
+        build_image_convert = m.convert_image_to_team(team, 'Construction')
         self.build_image = pygame.image.frombytes(build_image_convert.tobytes(), build_image_convert.size, build_image_convert.mode).convert_alpha()
 
         self.queue = []     # production queue of ("worker" or "soldier")
@@ -51,6 +53,8 @@ class Building(Entity):
 
         if self.kind in ("base", "storage_unit", "fuel_tank", "gold_vault"):
             self.storage = True
+            self.storage_amount = 0
+            self.resource_storage_type = stats["resource_storage_type"]
         else:
             self.storage = False
 
@@ -81,14 +85,21 @@ class Building(Entity):
         if self.repair_mode:
             if self.hp < self.max_hp:
                 self.hp += 1
+    
+    @property
+    def provides_storage(self):
+        return self.storage_amount
 
     def update(self, dt, game):
 
         if self.building:
             self.build_time -= dt
+            if self.storage:
+                self.storage_amount = 0
             if self.build_time <= 0:
                 self.curr_image = self.image
                 self.building = False
+            
 
         # process production queue
         if not self.building:
@@ -114,27 +125,11 @@ class Building(Entity):
                             continue
                         spawn_point = False
 
-                    # if unit_type == "worker":
-                    #     image_to_use = C.WORKER_IMAGE
-                    if unit_type == "soldier":
-                        image = C.SOLDIER_IMAGE
-                    elif unit_type == "tank":
-                        image = C.TANK_IMAGE
-                    elif unit_type == "ammo_truck":
-                        image = C.AMMO_TRUCK_IMAGE
-
                     tx, ty = m.tile_center(gx, gy)
-                    game.spawn_unit(self.team, tx, ty, image, unit_type)
+                    game.spawn_unit(self.team, tx, ty, unit_type)
                     # reset timer if more remain
                     if self.queue:
-                        if self.queue[0] == 'soldier':
-                            self.queue_time = C.BUILD_SOLDIER_TIME
-                        elif self.queue[0] == "tank":
-                            self.queue_time = C.BUILD_TANK_TIME
-                        elif self.queue[0] == "ammo_truck":
-                            self.queue_time = C.BUILD_AMMO_TRUCK_TIME
-                        else:
-                            self.queue_time = C.BUILD_WORKER_TIME
+                        self.queue_time = C.ENTITY_STATS[self.queue[0]]["build_time"]
         
             if self.supply:
                 self.resupply_time -= dt
@@ -156,6 +151,16 @@ class Building(Entity):
                         if self.Tile.resource_amount + game.player_mat[self.team].money <= game.player_mat[self.team].storage_gold:
                             game.player_mat[self.team].gold += self.Tile.resource_amount
                             self.resupply_time = C.GOLD_SUPPLY_TIME
+
+            count_1 = 0
+            if self.storage and self.storage_amount == 0 and count_1 == 0:
+                self.storage_amount = C.ENTITY_STATS[self.name]["storage_amount"]
+                count_1 = 1
+
+            count_2 = 0
+            if self.storage and self.no_queue and count_2 == 0:
+                self.storage_amount = C.ENTITY_STATS[self.name]["storage_amount"]
+                count_2 = 1
 
 
     def draw(self, surf, font, camera_x, camera_y):

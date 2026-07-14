@@ -41,12 +41,12 @@ class Game:
 
         # Player base
         tx, ty = spawns[0]
-        self.player_base = self.spawn_building(C.PLAYER_TEAM, *m.tile_center(tx, ty), C.BASE_IMAGE, "Base", no_queue=True)
+        self.player_base = self.spawn_building(C.PLAYER_TEAM, *m.tile_center(tx, ty), "Base", no_queue=True)
 
         # AI bases
         for i, team in enumerate(C.AI_TEAMS, start=1):
             tx, ty = spawns[i % len(spawns)]
-            self.spawn_building(team, *m.tile_center(tx, ty), C.BASE_IMAGE, "Base", no_queue=True)
+            self.spawn_building(team, *m.tile_center(tx, ty), "Base", no_queue=True)
 
         # Selection
         self.select_start = None
@@ -75,16 +75,16 @@ class Game:
         self.ai_timers = {team: 0.0 for team in C.AI_TEAMS}
 
     # ---- Spawning ----
-    def spawn_unit(self, team, x, y, image, kind):
-        u = Unit(team, x, y, image, kind)
+    def spawn_unit(self, team, x, y, name):
+        u = Unit(team, x, y, name)
         self.units.append(u)
         self.total_units.append(u)  ## Used in End Game Stats
         self.player_mat[team].units.append(u)
         self.player_mat[team].total_units.append(u)
         return u
 
-    def spawn_building(self, team, x, y, image, kind,no_queue=False):
-        b = Building(team, x, y, image, kind, no_queue)
+    def spawn_building(self, team, x, y, name, no_queue=False):
+        b = Building(team, x, y, name, no_queue)
         b.assign_tile(self.tile_map)
         self.buildings.append(b)
         self.total_buildings.append(b)  ## Used in End Game Stats
@@ -203,6 +203,20 @@ class Game:
                 else:
                     h.occupied = False
             
+    def recalculate_storage_capacity(self, team):
+        for i in self.player_mat:
+            if i.team != team: continue
+            
+            i.storage_money = sum(
+                b.storage_amount for b in self.buildings if b.team == team and b.storage and not b.dead and not b.sold and b.resource_storage_type == "Minerals"
+            )
+            i.storage_fuel = sum(
+                b.storage_amount for b in self.buildings if b.team == team and b.storage and not b.dead and not b.sold and b.resource_storage_type == "Fuel"
+            )
+            i.storage_gold = sum(
+                b.storage_amount for b in self.buildings if b.team == team and b.storage and not b.dead and not b.sold and b.resource_storage_type == "Gold"
+            )
+
 
     # ---- Commands ----
     def order_move(self, units, dest_px):
@@ -236,6 +250,9 @@ class Game:
         for b in self.buildings:
             if not b.dead and not b.sold:
                 b.update(dt, self)
+
+        for i in self.player_mat:
+            self.recalculate_storage_capacity(i.team)
 
         # AI
         self.update_ai(dt)
@@ -281,7 +298,7 @@ class Game:
                             if m.is_occupied(self.tile_map, tx, ty): continue
                             if self.grid.tiles[ty][tx] == C.T_GRASS:
                                 px, py = m.tile_center(tx, ty)
-                                self.spawn_building(team, px, py, C.BARRACKS_IMAGE, "Barracks")
+                                self.spawn_building(team, px, py, "Barracks")
                                 self.player_mat[team].money -= C.COST_BARRACKS
                                 break
                 # 30% chance to build a tank factory near base if enough money
@@ -298,7 +315,7 @@ class Game:
                             if m.is_occupied(self.tile_map, tx, ty): continue
                             if self.grid.tiles[ty][tx] == C.T_GRASS:
                                 px, py = m.tile_center(tx, ty)
-                                self.spawn_building(team, px, py, C.TANK_FACTORY_IMAGE, "Tank Factory")
+                                self.spawn_building(team, px, py, "Tank Factory")
                                 self.player_mat[team].money -= C.COST_TANK_FACTORY
                                 break
 
@@ -306,8 +323,8 @@ class Game:
                     # queue a soldier somewhere (base or any barracks)
                     target_build = random.choice([b for b in self.buildings if b.team==team and b.kind=="barracks"])
                     if self.player_mat[team].money >= C.COST_SOLDIER and random.random() < 0.3:
-                        target_build.queue.append("soldier")
-                        target_build.queue_time = C.BUILD_SOLDIER_TIME if len(target_build.queue)==1 else target_build.queue_time
+                        target_build.queue.append("Soldier")
+                        target_build.queue_time = C.ENTITY_STATS["Soldier"]["build_time"] if len(target_build.queue)==1 else target_build.queue_time
                         self.player_mat[team].money -= C.COST_SOLDIER
                         break
 
@@ -348,8 +365,8 @@ class Game:
                     # queue a soldier somewhere (base or any barracks)
                     target_build = random.choice([b for b in self.buildings if b.team==team and b.kind=="tank_factory"])
                     if self.player_mat[team].money >= C.COST_TANK:
-                        target_build.queue.append("tank")
-                        target_build.queue_time = C.BUILD_TANK_TIME if len(target_build.queue)==1 else target_build.queue_time
+                        target_build.queue.append("Tank")
+                        target_build.queue_time = C.ENTITY_STATS["Tank"]["build_time"] if len(target_build.queue)==1 else target_build.queue_time
                         self.player_mat[team].money -= C.COST_TANK
                         break
 

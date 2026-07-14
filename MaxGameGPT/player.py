@@ -13,7 +13,7 @@ class Player():
 
         self.colour = C.TEAM_COLORS[team]
 
-        self.storage_money = 500
+        self.storage_money = 0
         self.storage_fuel = 0
         self.storage_gold = 0
 
@@ -21,3 +21,5 @@ class Player():
         self.buildings = []
         self.total_buildings = []
         self.total_units = []
+            
+

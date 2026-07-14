@@ -48,33 +48,17 @@ def locations_in_range(opp_range, unit):
 
     return inside_points
 
-def convert_image_to_team(image_used, team_number, unit_type):
+def convert_image_to_team(team_number, unit_type):
+
+    stats = C.ENTITY_STATS[unit_type]
+    image_used = stats["image"]
     image = Image.open(image_used).convert("RGBA")
     pixels = list(image.getdata())
 
-    if unit_type == "soldier":
-        old = C.SOLDIER_OLD
-    elif unit_type == "tank":
-        old = C.TANK_OLD
-    elif unit_type == "ammo_truck":
-        old = C.AMMO_TRUCK_OLD
-    elif unit_type == "barracks":
-        old = C.BARRACKS_OLD
-    elif unit_type == "tank_factory":
-        old = C.TANK_FACTORY_OLD
-    elif unit_type == "base":
-        old = C.BASE_OLD
-    elif unit_type == "construction":
-        old = C.CONSTRUCTION_OLD
-    elif unit_type == "storage_unit":
-        old = C.STORAGE_UNIT_OLD
-    elif unit_type == "fuel_tank":
-        old = C.FUEL_TANK_OLD
-    elif unit_type == "gold_vault":
-        old = C.GOLD_VAULT_OLD    
+    old = stats["colour_to_be_converted"]
 
     new = C.TEAM_COLORS[team_number]
-    bg_colour = (0, 0, 0, 255)    
+    bg_colour = (0, 0, 0, 255)
 
     updated = [
         (0, 0, 0, 0) if p == bg_colour                 # transparent if background
@@ -84,8 +68,9 @@ def convert_image_to_team(image_used, team_number, unit_type):
     ]
 
     out = Image.new("RGBA", image.size)
-    out.putdata(updated)                    # Fix 2: write the updated pixels into out
+    out.putdata(updated)                    
     return out
+
 
 # ------------------ PATHFINDING ------------------
 def astar(grid, start, goal, occupied_tiles=set(), passable=lambda t: t != C.T_WALL and t != C.T_WATER):
