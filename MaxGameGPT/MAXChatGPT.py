@@ -84,7 +84,13 @@ def main():
 
     game = Game()
 
-    def queue_unit(game, building_kind, unit_name, cost, build_time):
+    def queue_unit(game, kind):
+        stats = C.ENTITY_STATS[kind]
+        cost = stats["cost"]
+        building_kind = stats["building_unit"]
+        unit_name = stats["Name"]
+        build_time = stats["build_time"]
+
         # find owned buildings of the correct type
         buildings = [b for b in game.buildings
                     if b.team == C.PLAYER_TEAM and b.kind == building_kind]
@@ -149,13 +155,13 @@ def main():
                         game.build_kind = "tank_factory"
 
                 elif event.key == pygame.K_s:
-                    queue_unit(game, "barracks", "soldier", C.COST_SOLDIER, C.BUILD_SOLDIER_TIME)
+                    queue_unit(game, "Soldier")
 
                 elif event.key == pygame.K_t:
-                    queue_unit(game, "tank_factory", "tank", C.COST_TANK, C.BUILD_TANK_TIME)
+                    queue_unit(game, "Tank")
 
                 elif event.key == pygame.K_a:
-                    queue_unit(game, "tank_factory", "ammo_truck", C.COST_AMMO_TRUCK, C.BUILD_AMMO_TRUCK_TIME)
+                    queue_unit(game, "Ammo Truck")
 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:  # left
@@ -180,14 +186,32 @@ def main():
                                     game.build_mode = True
                                     game.build_kind = "tank_factory"
 
+                            elif label == "Storage Unit":
+                                # enter build mode (Warfactory)
+                                if game.player_mat[C.PLAYER_TEAM].money >= C.COST_STORAGE_UNIT:
+                                    game.build_mode = True
+                                    game.build_kind = "storage_unit"
+
+                            elif label == "Fuel Tank":
+                                # enter build mode (Warfactory)
+                                if game.player_mat[C.PLAYER_TEAM].money >= C.COST_FUEL_TANK:
+                                    game.build_mode = True
+                                    game.build_kind = "fuel_tank"
+
+                            elif label == "Gold Vault":
+                                # enter build mode (Warfactory)
+                                if game.player_mat[C.PLAYER_TEAM].money >= C.COST_GOLD_VAULT:
+                                    game.build_mode = True
+                                    game.build_kind = "gold_vault"
+
                             elif label == "Soldier":
-                                queue_unit(game, "barracks", "soldier", C.COST_SOLDIER, C.BUILD_SOLDIER_TIME)
+                                queue_unit(game, "Soldier")
 
                             elif label == "Tank":
-                                queue_unit(game, "tank_factory", "tank", C.COST_TANK, C.BUILD_TANK_TIME)
+                                queue_unit(game, "Tank")
 
                             elif label == "Ammo Truck":
-                                queue_unit(game, "tank_factory", "ammo_truck", C.COST_AMMO_TRUCK, C.BUILD_AMMO_TRUCK_TIME)
+                                queue_unit(game, "Ammo Truck")
 
                             elif label == "Sell":
                                 game.sell_mode = True
@@ -204,7 +228,7 @@ def main():
                         b_at_point.sold = True
                         b_at_point.Tile.occupied = False
                         
-                        for name, stats in C.UNIT_STATS.items():
+                        for name, stats in C.ENTITY_STATS.items():
                             if stats["kind"] == b_at_point.kind:
                                 game.player_mat[C.PLAYER_TEAM].money += (stats["cost"] * C.SELL_PERCENTAGE)
 
@@ -361,7 +385,7 @@ def main():
                         # attempt to place building
                         if game.ghost_valid and game.player_mat[C.PLAYER_TEAM].money >= C.COST_BARRACKS:
                             px, py = game.ghost_pos
-                            game.spawn_building(C.PLAYER_TEAM, px, py, C.BARRACKS_IMAGE, "barracks")
+                            game.spawn_building(C.PLAYER_TEAM, px, py, C.BARRACKS_IMAGE, "Barracks")
                             game.player_mat[C.PLAYER_TEAM].money -= C.COST_BARRACKS
                             game.build_mode = False
                             game.ghost_valid = False
@@ -370,7 +394,7 @@ def main():
                         # attempt to place building
                         if game.ghost_valid and game.player_mat[C.PLAYER_TEAM].money >= C.COST_TANK_FACTORY:
                             px, py = game.ghost_pos
-                            game.spawn_building(C.PLAYER_TEAM, px, py, C.TANK_FACTORY_IMAGE, "tank_factory")
+                            game.spawn_building(C.PLAYER_TEAM, px, py, C.TANK_FACTORY_IMAGE, "Tank Factory")
                             game.player_mat[C.PLAYER_TEAM].money -= C.COST_TANK_FACTORY
                             game.build_mode = False
                             game.ghost_valid = False
@@ -379,10 +403,38 @@ def main():
                         # attempt to place building
                         if game.ghost_valid and game.player_mat[C.PLAYER_TEAM].money >= C.COST_BASE:
                             px, py = game.ghost_pos
-                            game.spawn_building(C.PLAYER_TEAM, px, py, C.BASE_IMAGE, "base")
+                            game.spawn_building(C.PLAYER_TEAM, px, py, C.BASE_IMAGE, "Base")
                             game.player_mat[C.PLAYER_TEAM].money -= C.COST_BASE
                             game.build_mode = False
                             game.ghost_valid = False
+
+                    elif game.build_mode and game.build_kind == "storage_unit":
+                        # attempt to place building
+                        if game.ghost_valid and game.player_mat[C.PLAYER_TEAM].money >= C.COST_STORAGE_UNIT:
+                            px, py = game.ghost_pos
+                            game.spawn_building(C.PLAYER_TEAM, px, py, C.STORAGE_UNIT_IMAGE, "Storage Unit")
+                            game.player_mat[C.PLAYER_TEAM].money -= C.COST_STORAGE_UNIT
+                            game.build_mode = False
+                            game.ghost_valid = False
+
+                    elif game.build_mode and game.build_kind == "fuel_tank":
+                        # attempt to place building
+                        if game.ghost_valid and game.player_mat[C.PLAYER_TEAM].money >= C.COST_FUEL_TANK:
+                            px, py = game.ghost_pos
+                            game.spawn_building(C.PLAYER_TEAM, px, py, C.FUEL_TANK_IMAGE, "Fuel Tank")
+                            game.player_mat[C.PLAYER_TEAM].money -= C.COST_FUEL_TANK
+                            game.build_mode = False
+                            game.ghost_valid = False
+
+                    elif game.build_mode and game.build_kind == "gold_vault":
+                        # attempt to place building
+                        if game.ghost_valid and game.player_mat[C.PLAYER_TEAM].money >= C.COST_GOLD_VAULT:
+                            px, py = game.ghost_pos
+                            game.spawn_building(C.PLAYER_TEAM, px, py, C.GOLD_VAULT_IMAGE, "Gold Vault")
+                            game.player_mat[C.PLAYER_TEAM].money -= C.COST_GOLD_VAULT
+                            game.build_mode = False
+                            game.ghost_valid = False
+
 
                     elif game.map_edit:
                         tx, ty = UT.to_grid(event.pos)

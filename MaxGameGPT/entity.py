@@ -12,34 +12,33 @@ def gen_id():
     return i
 
 class Entity(pygame.sprite.Sprite):
-    def __init__(self, team, x, y, image, kind, radius=12):
+    def __init__(self, team, x, y, image, name, radius=12):
+
+        
         self.id = gen_id()
         self.team = team
         self.x = x
         self.y = y
-        self.kind = kind
+        self.name = name
         self.radius = radius
-        self.hp = 1
-        self.max_hp = 1
+
+        stats = C.ENTITY_STATS[name]
+
+        self.hp = self.max_hp = stats["hp"]
+        self.armour = stats["armour"]
+        self.kind = stats["kind"]
+
+
         self.dead = False
 
-        converted_image = m.convert_image_to_team(image, team, kind)
+        
+
+        converted_image = m.convert_image_to_team(image, self.team, self.kind)
         self.image = pygame.image.frombytes(converted_image.tobytes(), converted_image.size, converted_image.mode).convert_alpha()
         
-        stats = C.BUILDING_STATS[kind]
+        
 
-        if kind == "soldier":
-            self.armour = C.SOLDIER_ARMOUR
-        elif kind == "tank":
-            self.armour = C.TANK_ARMOUR
-        elif kind == "ammo_truck":
-            self.armour = C.AMMO_TRUCK_ARMOUR
-        elif kind == "base":
-            self.armour = C.BASE_ARMOUR
-        elif kind == "barracks":
-            self.armour = C.BARRACKS_ARMOUR
-        elif kind == "tank_factory":
-            self.armour = C.TANK_FACTORY_ARMOUR
+        
 
     def pos(self):
         return (self.x, self.y)

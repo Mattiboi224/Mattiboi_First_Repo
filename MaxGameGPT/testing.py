@@ -1,6 +1,4 @@
-inside_points =  [(11, 18), (12, 17), (12, 18), (12, 19), (13, 16), (13, 17), (13, 18), (13, 19), (13, 20), (14, 17), (14, 18), (14, 19), (15, 18)]
-game_locs =  [(3, 15), (2, 18), (2, 2), (13, 18), (4, 2), (0, 0), (15, 20), (14, 21), (2, 16)]
 
-for i in inside_points:
-    if i in game_locs:
-        print(i)
+import Config as C
+
+print(C.ENTITY_STATS["Base"]["cost"])

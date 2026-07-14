@@ -6,15 +6,12 @@ import math
 import util as m
 
 class Building(Entity):
-    def __init__(self, team, x, y, image, kind="base", no_queue=False):
-        super().__init__(team, x, y, image, kind, radius=16)
-        self.kind = kind
+    def __init__(self, team, x, y, image, name="base", no_queue=False):
+        super().__init__(team, x, y, image, name, radius=16)
 
         self.building = True
 
-        stats = C.BUILDING_STATS[kind]
-        self.hp = self.max_hp = stats["hp"]
-        self.armour = stats["armour"]
+        stats = C.ENTITY_STATS[name]
         self.build_time = stats["build_time"]
 
         if no_queue:
@@ -38,26 +35,26 @@ class Building(Entity):
         self.selected = False
 
 
-        if kind == "small_power_plant":
+        if self.kind == "small_power_plant":
             self.power_used = 10
-        elif kind == "barracks":
+        elif self.kind == "barracks":
             self.power_used = -1
-        elif kind == "tank_factory":
+        elif self.kind == "tank_factory":
             self.power_used = -2
         else:
             self.power_used = 0
 
-        if kind in ('small_power_plant'):
+        if self.kind in ('small_power_plant'):
             self.power_on = True
         else:
             self.power_on = False
 
-        if kind in ("base", "storage_unit", "fuel_tank", "gold_vault"):
+        if self.kind in ("base", "storage_unit", "fuel_tank", "gold_vault"):
             self.storage = True
         else:
             self.storage = False
 
-        if kind == "base":
+        if self.kind == "base":
             self.supply = True
         else:
             self.supply = False

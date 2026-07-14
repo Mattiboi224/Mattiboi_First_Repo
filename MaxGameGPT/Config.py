@@ -62,16 +62,13 @@ COST_STORAGE_UNIT = 50
 COST_FUEL_TANK = 50
 COST_GOLD_VAULT = 50
 
-# Build times (in seconds)
-BUILD_WORKER_TIME = 3.0
-BUILD_SOLDIER_TIME = 5.0
-BUILD_TANK_TIME = 10.0
-BUILD_AMMO_TRUCK_TIME = 7.0
-
-UNIT_STATS = {
+ENTITY_STATS = {
+    # Unit Stats
     "Soldier": {
+        "Name": "Soldier",
         "kind": "soldier",
         "category": "unit",
+        "building_unit": "barracks",
         "cost": COST_SOLDIER,
         "hp": 80,
         "atk": 20,
@@ -80,10 +77,13 @@ UNIT_STATS = {
         "ammo": 10,
         "armour": 2,
         "shots": 1,
+        "build_time": 5.0
     },
     "Tank": {
+        "Name": "Tank",
         "kind": "tank",
         "category": "unit",
+        "building_unit": "tank_factory",
         "cost": COST_TANK,
         "hp": 150,
         "atk": 30,
@@ -92,10 +92,13 @@ UNIT_STATS = {
         "ammo": 5,
         "armour": 5,
         "shots": 2,
+        "build_time": 10.0
     },
     "Ammo Truck": {
+        "Name": "Ammo Truck",
         "kind": "ammo_truck",
         "category": "unit",
+        "building_unit": "tank_factory",
         "cost": COST_AMMO_TRUCK,
         "hp": 100,
         "atk": 10,
@@ -105,12 +108,12 @@ UNIT_STATS = {
         "armour": 0,
         "shots": 1,
         "cargo": 50,
+        "build_time": 7.0
     },
-}
-
-# Building stats
-BUILDING_STATS = {
+    
+    # Building stats
     "Base": {
+        "Name": "Base",
         "kind": "base",
         "category": "building",
         "cost": COST_BASE,
@@ -119,6 +122,7 @@ BUILDING_STATS = {
         "build_time": 10.0,
     },
     "Barracks": {
+        "Name": "Barracks",
         "kind": "barracks",
         "category": "building",
         "cost": COST_BARRACKS,
@@ -127,6 +131,7 @@ BUILDING_STATS = {
         "build_time": 5.0,
     },
     "Tank Factory": {
+        "Name": "Tank Factory",
         "kind": "tank_factory",
         "category": "building",
         "cost": COST_TANK_FACTORY,
@@ -135,6 +140,7 @@ BUILDING_STATS = {
         "build_time": 6.0,
     },
     "Storage Unit": {
+        "Name": "Storage Unit",
         "kind": "storage_unit",
         "category": "building",
         "cost": COST_STORAGE_UNIT,
@@ -143,6 +149,7 @@ BUILDING_STATS = {
         "build_time": 2.0,
     },
     "Fuel Tank": {
+        "Name": "Fuel Tank",
         "kind": "fuel_tank",
         "category": "building",
         "cost": COST_FUEL_TANK,
@@ -151,6 +158,7 @@ BUILDING_STATS = {
         "build_time": 2.0,
     },
     "Gold Vault": {
+        "Name": "Gold Vault",
         "kind": "gold_vault",
         "category": "building",
         "cost": COST_GOLD_VAULT,

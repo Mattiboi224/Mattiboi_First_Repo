@@ -7,10 +7,14 @@ class Menu:
     def __init__(self):
 
         # Menu buttons
-        self.buildings_labels = [name for name, stats in C.UNIT_STATS.items() if stats["category"] == "building"]
-        self.unit_labels = [name for name, stats in C.UNIT_STATS.items() if stats["category"] == "unit"]
+        self.buildings_labels = [name for name, stats in C.ENTITY_STATS.items() if stats["category"] == "building"]
+        self.unit_labels = [name for name, stats in C.ENTITY_STATS.items() if stats["category"] == "unit"]
         self.helpful_labels = ["Sell", "Repair"]
         self.labels = self.buildings_labels + self.unit_labels + self.helpful_labels
+
+        BTN_HEIGHT = ((C.HEIGHT - 20)// len(self.labels)) - C.PADDING
+
+        #Button height = (Height / no_of_buttons) - padding
 
         self.buttons = []
     
@@ -18,9 +22,9 @@ class Menu:
         for i, label in enumerate(self.labels):
             rect = pygame.Rect(
                 C.WIDTH - C.MENU_WIDTH + 20,
-                50 + i * (C.BTN_HEIGHT + C.PADDING),
+                20 + (BTN_HEIGHT + C.PADDING) * i,
                 C.MENU_WIDTH - 40,
-                C.BTN_HEIGHT
+                BTN_HEIGHT
             )
             self.buttons.append((label, rect))
 
@@ -51,8 +55,8 @@ class Menu:
             screen.blit(text, (rect.x + 25, rect.y + 15))
 
             # If it has a cost add it
-            if label in C.UNIT_STATS:
-                text = font.render(str(C.UNIT_STATS[label]["cost"]), True, C.TEXT_COLOR)
+            if label in C.ENTITY_STATS:
+                text = font.render(str(C.ENTITY_STATS[label]["cost"]), True, C.TEXT_COLOR)
                 screen.blit(text, (rect.x + C.MENU_WIDTH - 70, rect.y + 10))
     
     def draw(self, screen, font):

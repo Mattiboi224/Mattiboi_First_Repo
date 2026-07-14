@@ -8,16 +8,14 @@ import util as m
 # pyright: ignore[reportMissingImports]
 
 class Unit(Entity):
-    def __init__(self, team, x, y, image, kind="soldier"):
-        super().__init__(team, x, y, image, kind, radius=12)
-        self.kind = kind
+    def __init__(self, team, x, y, image, name="Soldier"):
+        super().__init__(team, x, y, image, name, radius=12)
 
-        stats = C.BUILDING_STATS[kind]
-        self.hp = self.max_hp = stats["hp"]
+
+        stats = C.ENTITY_STATS[name]
         self.atk = stats["atk"]
         self.range = stats["range"]
         self.speed = self.max_speed = stats["speed"]
-        self.armour = stats["armour"]
         self.ammo = self.max_ammo = stats["ammo"]
         self.shots = self.max_shots = stats["shots"]
         self.cargo_max = stats.get("cargo", 0)

@@ -41,12 +41,12 @@ class Game:
 
         # Player base
         tx, ty = spawns[0]
-        self.player_base = self.spawn_building(C.PLAYER_TEAM, *m.tile_center(tx, ty), C.BASE_IMAGE, "base", no_queue=True)
+        self.player_base = self.spawn_building(C.PLAYER_TEAM, *m.tile_center(tx, ty), C.BASE_IMAGE, "Base", no_queue=True)
 
         # AI bases
         for i, team in enumerate(C.AI_TEAMS, start=1):
             tx, ty = spawns[i % len(spawns)]
-            self.spawn_building(team, *m.tile_center(tx, ty), C.BASE_IMAGE, "base", no_queue=True)
+            self.spawn_building(team, *m.tile_center(tx, ty), C.BASE_IMAGE, "Base", no_queue=True)
 
         # Selection
         self.select_start = None
@@ -281,7 +281,7 @@ class Game:
                             if m.is_occupied(self.tile_map, tx, ty): continue
                             if self.grid.tiles[ty][tx] == C.T_GRASS:
                                 px, py = m.tile_center(tx, ty)
-                                self.spawn_building(team, px, py, C.BARRACKS_IMAGE, "barracks")
+                                self.spawn_building(team, px, py, C.BARRACKS_IMAGE, "Barracks")
                                 self.player_mat[team].money -= C.COST_BARRACKS
                                 break
                 # 30% chance to build a tank factory near base if enough money
@@ -298,7 +298,7 @@ class Game:
                             if m.is_occupied(self.tile_map, tx, ty): continue
                             if self.grid.tiles[ty][tx] == C.T_GRASS:
                                 px, py = m.tile_center(tx, ty)
-                                self.spawn_building(team, px, py, C.TANK_FACTORY_IMAGE, "tank_factory")
+                                self.spawn_building(team, px, py, C.TANK_FACTORY_IMAGE, "Tank Factory")
                                 self.player_mat[team].money -= C.COST_TANK_FACTORY
                                 break
 
