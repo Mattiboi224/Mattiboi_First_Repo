@@ -2,7 +2,9 @@ import Config as C
 from PIL import Image
 from collections import Counter
 
-image = Image.open(C.GOLD_VAULT_IMAGE).convert("RGB")
+image_to_open = C.ENTITY_STATS["Power Plant"]["image"]
+
+image = Image.open(image_to_open).convert("RGB")
 pixels = list(image.getdata())
 
 #print(pixels)
@@ -21,7 +23,7 @@ for item, count in sorted(counts.items(), key=lambda x: x[1], reverse=True):
 # (60, 62, 55): 10
 
 
-old = (35, 33, 30)
+old = (200, 170, 40)
 
 new = C.TEAM_COLORS[1]      # red
 

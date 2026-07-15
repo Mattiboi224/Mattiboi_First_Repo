@@ -15,6 +15,8 @@ class Building(Entity):
 
         stats = C.ENTITY_STATS[name]
         self.build_time = stats["build_time"]
+        self.power_used = stats.get("power_used", 0)
+        self.power_given = stats.get("power_given", 0)
 
         if no_queue:
             self.building = False
@@ -35,16 +37,6 @@ class Building(Entity):
             self.curr_image = self.image
 
         self.selected = False
-
-
-        if self.kind == "small_power_plant":
-            self.power_used = 10
-        elif self.kind == "barracks":
-            self.power_used = -1
-        elif self.kind == "tank_factory":
-            self.power_used = -2
-        else:
-            self.power_used = 0
 
         if self.kind in ('small_power_plant'):
             self.power_on = True

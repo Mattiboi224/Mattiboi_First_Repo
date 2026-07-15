@@ -22,4 +22,5 @@ class Player():
         self.total_buildings = []
         self.total_units = []
             
-
+        self.total_power = 0
+        self.power_used = 0

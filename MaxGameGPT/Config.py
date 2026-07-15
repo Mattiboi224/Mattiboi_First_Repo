@@ -57,6 +57,8 @@ COST_AMMO_TRUCK = 100
 COST_STORAGE_UNIT = 50
 COST_FUEL_TANK = 50
 COST_GOLD_VAULT = 50
+COST_CONSTRUCTOR = 10
+COST_POWER_PLANT = 10
 
 # Image Locations
 BASE_FOLDER = "assets"
@@ -64,13 +66,61 @@ BASE_FOLDER = "assets"
 def entity_image_path(kind, category):
     return f"{BASE_FOLDER}/{category}/{kind}.png"
 
+#https://www.maxr.org/docs.php?id=17
+
+# Current Entities
+#'Soldier', 'Tank', 'Ammo Truck', 'Construction', 'Base', 'Barracks', 'Tank Factory', 'Storage Unit', 'Fuel Tank', 'Gold Vault'
+
+# Missing Entities 
+# Infanty Units # 23
+# Infiltrator
+
+# Ground Supply Units # 24
+# Armoured Personnel Carrier, Bulldoser, Constructor, Mine Layer, Engineer, Repair Unit, Scanner, Surveyor, Gold Truck, Fuel Truck
+
+# Ground Warfare Units # 25
+# Assault Gun, Rocket Launcher, Missile Crawler, Mobile Anti Aircraft, Scout
+
+# Sea Warfare Units # 26
+# Corvette, Escort, Gunboat, Missile Cruiser, Submarine
+
+# Air Warfare Units # 27
+# Ground Attack Plane, Fighter
+
+# Sea Supply Units # 28
+# Cargo Ship, Sea Mine Layer, Sea Transport
+
+# Air Supply Units # 29
+# Air Transport, AWAC
+
+# Connecting Structures # 32
+# Water Platform, Concrete Block, Bridge, Connector, Road
+
+# Mines # 33
+# Land Mine, Sea Mine
+
+# Defensive Buildings # 34
+# Radar, Anti Aircraft, Gun Turret, Artillery, Missile Launcher
+
+# Factory Buildings # 35
+# Light Vehicle Plant, Air Units Plant, Shipyard
+
+# Supply Buildings # 36
+# Power Generator, Power Station
+
+# Depots # 37
+# Landing Pad, Barracks, Depot, Hanger, Dock
+
+# Research and Colonisation Buildings # 38
+# Habitat, Research Centre, Gold Refinery
+
 ENTITY_STATS = {
     # Unit Stats
     "Soldier": {
         "Name": "Soldier",
         "kind": "soldier",
         "category": "unit",
-        "building_unit": "barracks",
+        "builds_from": "barracks",
         "cost": COST_SOLDIER,
         "hp": 80,
         "atk": 20,
@@ -81,12 +131,13 @@ ENTITY_STATS = {
         "shots": 1,
         "build_time": 5.0,
         "colour_to_be_converted": (52, 68, 32),
+        "attacking_unit": True,
     },
     "Tank": {
         "Name": "Tank",
         "kind": "tank",
         "category": "unit",
-        "building_unit": "tank_factory",
+        "builds_from": "tank_factory",
         "cost": COST_TANK,
         "hp": 150,
         "atk": 30,
@@ -97,12 +148,13 @@ ENTITY_STATS = {
         "shots": 2,
         "build_time": 10.0,
         "colour_to_be_converted": (74, 98, 48),
+        "attacking_unit": True,
     },
     "Ammo Truck": {
         "Name": "Ammo Truck",
         "kind": "ammo_truck",
         "category": "unit",
-        "building_unit": "tank_factory",
+        "builds_from": "tank_factory",
         "cost": COST_AMMO_TRUCK,
         "hp": 100,
         "atk": 10,
@@ -114,8 +166,24 @@ ENTITY_STATS = {
         "cargo": 50,
         "build_time": 7.0,
         "colour_to_be_converted": (74, 104, 40),
+        "transfer_unit": True,
     },
-    
+    "Constructor": {
+        "Name": "Constructor",
+        "kind": "constructor",
+        "category": "unit",
+        "builds_from": "tank_factory",
+        "cost": COST_CONSTRUCTOR,
+        "hp": 100,
+        "speed": 30,   # px/s
+        "armour": 0,
+        "cargo": 50,
+        "build_time": 7.0,
+        "colour_to_be_converted": (200, 170, 40),
+        "building_unit": True,
+        "transfer_unit": True,
+    },
+
     # Building stats
     "Construction": {
         "Name": "Construction",
@@ -133,7 +201,8 @@ ENTITY_STATS = {
         "build_time": 10.0,
         "colour_to_be_converted": (98, 80, 52),
         "storage_amount": 500,
-        "resource_storage_type": "Minerals"
+        "resource_storage_type": "Minerals",
+        "power_given": 1,
     },
     "Barracks": {
         "Name": "Barracks",
@@ -144,6 +213,7 @@ ENTITY_STATS = {
         "armour": 3,
         "build_time": 5.0,
         "colour_to_be_converted": (104, 114, 78),
+        "power_used": 1,
     },
     "Tank Factory": {
         "Name": "Tank Factory",
@@ -154,6 +224,7 @@ ENTITY_STATS = {
         "armour": 4,
         "build_time": 6.0,
         "colour_to_be_converted": (74, 84, 58),
+        "power_used": 2,
     },
     "Storage Unit": {
         "Name": "Storage Unit",
@@ -165,7 +236,8 @@ ENTITY_STATS = {
         "build_time": 2.0,
         "colour_to_be_converted": (40, 38, 32),
         "storage_amount": 50,
-        "resource_storage_type": "Minerals"
+        "resource_storage_type": "Minerals",
+        
     },
     "Fuel Tank": {
         "Name": "Fuel Tank",
@@ -177,7 +249,7 @@ ENTITY_STATS = {
         "build_time": 2.0,
         "colour_to_be_converted": (30, 30, 28),
         "storage_amount": 50,
-        "resource_storage_type": "Fuel"
+        "resource_storage_type": "Fuel",
     },
     "Gold Vault": {
         "Name": "Gold Vault",
@@ -189,7 +261,18 @@ ENTITY_STATS = {
         "build_time": 2.0,
         "colour_to_be_converted": (35, 33, 30),
         "storage_amount": 50,
-        "resource_storage_type": "Gold"
+        "resource_storage_type": "Gold",
+    },
+    "Power Plant": {
+        "Name": "Power Plant",
+        "kind": "power_plant",
+        "category": "building",
+        "cost": COST_POWER_PLANT,
+        "hp": 100,
+        "armour": 2,
+        "build_time": 3.0,
+        "colour_to_be_converted": (200, 170, 40),
+        "power_given": 10,
     },
 }
 

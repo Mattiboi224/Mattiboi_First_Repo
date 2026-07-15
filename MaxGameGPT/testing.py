@@ -1,4 +1,6 @@
 
 import Config as C
 
-print(C.ENTITY_STATS["Construction"])
+building_unit = [name for name, stats in C.ENTITY_STATS.items() if stats["category"] == "building"]
+
+print(tuple(building_unit))

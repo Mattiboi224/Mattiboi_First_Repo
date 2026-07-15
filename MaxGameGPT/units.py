@@ -11,17 +11,27 @@ class Unit(Entity):
     def __init__(self, team, x, y, name="Soldier"):
         super().__init__(team, x, y, name, radius=12)
 
-
         stats = C.ENTITY_STATS[name]
-        self.atk = stats["atk"]
-        self.range = stats["range"]
+        self.attacking_unit = stats.get("attacking_unit", False)
+        self.building_unit = stats.get("building_unit", False)
+        self.transfer_unit = stats.get("transfer_unit", False)
         self.speed = self.max_speed = stats["speed"]
-        self.ammo = self.max_ammo = stats["ammo"]
-        self.shots = self.max_shots = stats["shots"]
+
+        self.labels = [f'hp: {self.hp}/{self.max_hp}', f'speed: {self.speed}/{self.max_speed}']
+
+        if self.attacking_unit:
+            self.atk = stats["atk"]
+            self.range = stats["range"]
+            # Range feels better
+            self.range += 5
+            self.ammo = self.max_ammo = stats["ammo"]
+            self.shots = self.max_shots = stats["shots"]
+            self.labels.append(f'ammo: {self.ammo}/{self.max_ammo}')
+            self.labels.append(f'shots: {self.shots}/{self.max_shots}')
+
         self.carry_max = stats.get("cargo", 0)
 
-        # Range feels better
-        self.range += 5
+
 
         self.path = []
         self.path_px = []
@@ -36,12 +46,20 @@ class Unit(Entity):
         self.old_res = None
         self.current_angle = 0
 
-        self.local_labels = ['Move', 'Attack', 'Stop']
+        self.local_labels = ['Move', 'Stop']
 
-        if self.carry_max > 0:
+        if self.attacking_unit:
+            self.local_labels.append('Attack')
+
+        if self.transfer_unit > 0:
             self.local_labels.append('X-fer')
+            self.labels.append(f'carry: {self.carry}/{self.carry_max}')
+        
+        if self.building_unit:
+            self.local_labels.append('Build')
 
-        self.labels = [f'hp: {self.hp}/{self.max_hp}',f'ammo: {self.ammo}/{self.max_ammo}', f'shots: {self.shots}/{self.max_shots}', f'speed: {self.speed}/{self.max_speed}', f'carry: {self.carry}/{self.carry_max}']
+        
+        
 
         self.rects = []
         for i in range(len(self.labels)):   # or a fixed number of buttons
@@ -86,7 +104,7 @@ class Unit(Entity):
 
 
         # Auto-target enemies in range
-        if not self.harvesting:
+        if not self.harvesting and self.attacking_unit:
             enemy = game.find_nearest_enemy(self.team, self.pos(), within=self.range)
             if enemy:
                 self.try_attack(enemy, dt)
@@ -128,11 +146,6 @@ class Unit(Entity):
 
             # Draw Box in top corner showing hp, speed, ammo, and carry/shots
             pygame.draw.rect(surf, C.MENU_BG, (0, 0, C.UNIT_MENU_WIDTH, C.UNIT_MENU_HEIGHT))
-
-            if self.carry_max > 0:
-                self.labels = [f'hp: {self.hp}/{self.max_hp}',f'ammo: {self.ammo}/{self.max_ammo}', f'shots: {self.shots}/{self.max_shots}', f'speed: {self.speed}/{self.max_speed}', f'carry: {self.carry}/{self.carry_max}']
-            else:
-                self.labels = [f'hp: {self.hp}/{self.max_hp}',f'ammo: {self.ammo}/{self.max_ammo}', f'shots: {self.shots}/{self.max_shots}', f'speed: {self.speed}/{self.max_speed}', '']
             
             buttons = list(zip(self.labels, self.rects))
 

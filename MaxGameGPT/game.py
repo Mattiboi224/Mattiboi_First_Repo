@@ -122,24 +122,27 @@ class Game:
         
         return best
 
-    def find_nearest_building(self, team, pos, b_type):
+    def find_nearest_building(self, team, pos):
+        b_type = [name for name, stats in C.ENTITY_STATS.items() if stats["category"] == "building"]
+        b_type.remove("Construction")
+        b_type = tuple(b_type)
         best = None
         bd = 1e9
         for b in self.buildings:
             if b.team != team or b.dead or b.sold: continue
-            if b.kind in b_type:
+            if b.name in b_type:
                 d = m.dist(pos, b.pos())
                 if d < bd:
                     bd = d; best = b
-        
         return best
 
-    def find_nearest_unit(self, team, pos, u_type):
+    def find_nearest_unit(self, team, pos):
+        u_type = tuple([name for name, stats in C.ENTITY_STATS.items() if stats["category"] == "unit"])
         best = None
         bd = 1e9
         for u in self.units:
             if u.team != team or u.dead: continue
-            if u.kind in u_type:
+            if u.name in u_type:
                 d = m.dist(pos, u.pos())
                 if d < bd:
                     bd = d; best = u
@@ -217,6 +220,27 @@ class Game:
                 b.storage_amount for b in self.buildings if b.team == team and b.storage and not b.dead and not b.sold and b.resource_storage_type == "Gold"
             )
 
+    def recalculate_power_capacity(self, team):
+        for i in self.player_mat:
+            if i.team != team: continue
+            
+            i.power_usage = sum(
+                b.power_used for b in self.buildings if b.team == team and not b.dead and not b.sold
+            )
+
+            i.total_power = sum(
+                b.power_given for b in self.buildings if b.team == team and not b.dead and not b.sold
+            )
+
+            if team == 0:
+                print(i.power_usage)
+
+            # for b in self.buildings:
+            #     if b.dead or b.sold: continue
+            #     if b.team != 0: continue
+            #     print(b.power_used)
+
+
 
     # ---- Commands ----
     def order_move(self, units, dest_px):
@@ -253,6 +277,7 @@ class Game:
 
         for i in self.player_mat:
             self.recalculate_storage_capacity(i.team)
+            self.recalculate_power_capacity(i.team)
 
         # AI
         self.update_ai(dt)
@@ -348,14 +373,14 @@ class Game:
                                     choice = "Building"
 
                                 if choice == "Unit":
-                                    dest = self.find_nearest_unit(C.PLAYER_TEAM, u.pos(), ("soldier", "tank", "ammo_truck"))
+                                    dest = self.find_nearest_unit(C.PLAYER_TEAM, u.pos())
                                     gx, gy = m.to_grid(dest.pos())
                                     sx, sy = m.to_grid(u.pos())
                                     path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), self.unit_locs, passable=lambda t: t!=C.T_WALL or C.T_WATER)
                                     if path:
                                         u.set_path(path)
                                 elif choice == "Building":
-                                    dest = self.find_nearest_building(C.PLAYER_TEAM, u.pos(), ("base", "barracks", "tank_factory"))
+                                    dest = self.find_nearest_building(C.PLAYER_TEAM, u.pos())
                                     gx, gy = m.to_grid(dest.pos())
                                     sx, sy = m.to_grid(u.pos())
                                     path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), self.unit_locs, passable=lambda t: t!=C.T_WALL or C.T_WATER)
@@ -390,14 +415,14 @@ class Game:
                                     choice = "Building"
 
                                 if choice == "Unit":
-                                    dest = self.find_nearest_unit(C.PLAYER_TEAM, u.pos(), ("soldier", "tank"))
+                                    dest = self.find_nearest_unit(C.PLAYER_TEAM, u.pos())
                                     gx, gy = m.to_grid(dest.pos())
                                     sx, sy = m.to_grid(u.pos())
                                     path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), self.unit_locs, passable=lambda t: t!=C.T_WALL and t!=C.T_WATER)
                                     if path:
                                         u.set_path(path)
                                 elif choice == "Building":
-                                    dest = self.find_nearest_building(C.PLAYER_TEAM, u.pos(), ("base", "barracks", "tank_factory"))
+                                    dest = self.find_nearest_building(C.PLAYER_TEAM, u.pos())
                                     gx, gy = m.to_grid(dest.pos())
                                     sx, sy = m.to_grid(u.pos())
                                     path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), self.unit_locs, passable=lambda t: t!=C.T_WALL and t!=C.T_WATER)
@@ -415,8 +440,6 @@ class Game:
         # Draw buildings
         for b in self.buildings:
 
-            #if b.team == 0 and b.kind == 'barracks':
-            #    print(b.x)
             if b.pos_camera(self.camera_x, self.camera_y)[0] < 0 or b.pos_camera(self.camera_x, self.camera_y)[0] > C.SCREEN_WIDTH or b.pos_camera(self.camera_x, self.camera_y)[1] < 0 or b.pos_camera(self.camera_x, self.camera_y)[1] > C.HEIGHT:
                 continue
             b.draw(surf, font, self.camera_x, self.camera_y)
@@ -452,7 +475,10 @@ class Game:
 
         # UI
         pygame.draw.rect(surf, (0,0,0), (0, C.HEIGHT, C.WIDTH, C.BOTTOM_MENU_HEIGHT))
-        money_text = font.render(f"Money: {self.player_mat[C.PLAYER_TEAM].money}/{self.player_mat[C.PLAYER_TEAM].storage_money}  Fuel: {self.player_mat[C.PLAYER_TEAM].fuel}/{self.player_mat[C.PLAYER_TEAM].storage_fuel}   Gold: {self.player_mat[C.PLAYER_TEAM].gold}/{self.player_mat[C.PLAYER_TEAM].storage_gold}", True, (255,255,255))
+        money_text = font.render(f"Money: {self.player_mat[C.PLAYER_TEAM].money}/{self.player_mat[C.PLAYER_TEAM].storage_money}  "
+                                 f"Fuel: {self.player_mat[C.PLAYER_TEAM].fuel}/{self.player_mat[C.PLAYER_TEAM].storage_fuel}   "
+                                 f"Gold: {self.player_mat[C.PLAYER_TEAM].gold}/{self.player_mat[C.PLAYER_TEAM].storage_gold}   "
+                                 f"Power: {self.player_mat[C.PLAYER_TEAM].power_used}/{self.player_mat[C.PLAYER_TEAM].total_power}", True, (255,255,255))
         surf.blit(money_text, (6, C.HEIGHT+8))
 
         mx, my = pygame.mouse.get_pos()
