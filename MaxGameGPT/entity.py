@@ -1,4 +1,4 @@
-import Config
+from dataclasses import dataclass, asdict, fields
 import pygame
 import util as m
 import Config as C
@@ -11,35 +11,53 @@ def gen_id():
     NEXT_ID += 1
     return i
 
+@dataclass(eq=False)  # eq=False: keep default identity comparison, don't let
+                       # dataclass generate __eq__/__hash__ from pygame Surfaces/Rects
 class Entity(pygame.sprite.Sprite):
-    def __init__(self, team, x, y, name, radius=12):
+    team: int
+    x: float
+    y: float
+    name: str
 
+ 
+    def __post_init__(self):
+
+        pygame.sprite.Sprite.__init__(self)
         
         self.id = gen_id()
-        self.team = team
-        self.x = x
-        self.y = y
-        self.name = name
-        self.radius = radius
 
-        stats = C.ENTITY_STATS[name]
+        stats = C.ENTITY_STATS[self.name]
 
         self.hp = self.max_hp = stats["hp"]
         self.armour = stats["armour"]
         self.kind = stats["kind"]
         self.image = stats["image"]
-
+        self.radius = stats["radius"]
 
         self.dead = False
 
-        
-
         converted_image = m.convert_image_to_team(self.team, self.name)
         self.image = pygame.image.frombytes(converted_image.tobytes(), converted_image.size, converted_image.mode).convert_alpha()
-        
-        
 
-        
+    def to_dict(self):
+        return asdict(self)
+
+    @classmethod
+    def from_dict(cls, d):
+        # Split fields into init-accepted vs init=False
+        init_fields = {f.name for f in fields(cls) if f.init}
+        non_init_fields = [f.name for f in fields(cls) if not f.init]
+
+        # Build the object using only what __init__ accepts
+        filtered = {k: v for k, v in d.items() if k in init_fields}
+        obj = cls(**filtered)
+
+        # Restore whatever __post_init__ would've computed, using saved values instead
+        for name in non_init_fields:
+            if name in d:
+                setattr(obj, name, d[name])
+
+        return obj
 
     def pos(self):
         return (self.x, self.y)

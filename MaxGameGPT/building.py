@@ -4,44 +4,51 @@ import Config as C
 import random
 import math
 import util as m
+from dataclasses import dataclass, field
 
+@dataclass(eq=False)  # eq=False: keep default identity comparison, don't
+                       # let dataclass generate __eq__ from pygame Surfaces/Rects
 class Building(Entity):
-    def __init__(self, team, x, y, name="base", no_queue=False):
-        super().__init__(team, x, y, name, radius=16)
+    name: str = "base"
+
+    no_queue: bool = False
+
+    # --- Runtime-only fields ---
+    queue: list = field(default_factory=list, init=False)
+    queue_time: float = field(default=0.0, init=False)
+    sold: bool = field(default=False, init=False)
+    count: int = field(default=0, init=False)
+    selected: bool = field(default=False, init=False)
+
+    def __post_init__(self):
+        
+        super().__post_init__()
 
         self.building = True
 
-        self.no_queue = no_queue
-
-        stats = C.ENTITY_STATS[name]
+        stats = C.ENTITY_STATS[self.name]
         self.build_time = stats["build_time"]
         self.power_used = stats.get("power_used", 0)
         self.power_given = stats.get("power_given", 0)
+        self.power_required = stats.get("power_required", False)
+        self.depletion_time = stats.get("depletion_time", 0)
+        self.power_supply = stats.get("power_supply", False)
+        self.resource_used = stats.get("resource_used", 0)
 
-        if no_queue:
+        if self.no_queue:
             self.building = False
             self.build_time = 0.0
 
-        build_image_convert = m.convert_image_to_team(team, 'Construction')
+
+        build_image_convert = m.convert_image_to_team(self.team, 'Construction')
         self.build_image = pygame.image.frombytes(build_image_convert.tobytes(), build_image_convert.size, build_image_convert.mode).convert_alpha()
 
-        self.queue = []     # production queue of ("worker" or "soldier")
-        self.queue_time = 0.0
-        self.sold = False
         self.resupply_time = C.MINERAL_SUPPLY_TIME
-        self.count = 0
 
         if self.building:
             self.curr_image = self.build_image
         else:
             self.curr_image = self.image
-
-        self.selected = False
-
-        if self.kind in ('small_power_plant'):
-            self.power_on = True
-        else:
-            self.power_on = False
 
         if self.kind in ("base", "storage_unit", "fuel_tank", "gold_vault"):
             self.storage = True
@@ -77,7 +84,7 @@ class Building(Entity):
         if self.repair_mode:
             if self.hp < self.max_hp:
                 self.hp += 1
-    
+
     @property
     def provides_storage(self):
         return self.storage_amount
@@ -85,16 +92,31 @@ class Building(Entity):
     def update(self, dt, game):
 
         if self.building:
+            self.power_given = 0
             self.build_time -= dt
             if self.storage:
                 self.storage_amount = 0
             if self.build_time <= 0:
                 self.curr_image = self.image
                 self.building = False
-            
+        
+        # Use Fuel to keep power running
+        if not self.building and self.power_supply:
+            self.depletion_time -= dt
+            if self.depletion_time < 0:
+                
+                # If you have enough everything is good
+                if game.player_mat[self.team].fuel > self.resource_used:
+                    game.player_mat[self.team].fuel -= self.resource_used
+                    self.depletion_time = C.ENTITY_STATS[self.name]["depletion_time"]
+                    self.power_given = C.ENTITY_STATS[self.name]["power_given"]
+
+                else:
+                    self.power_given = 0
 
         # process production queue
-        if not self.building:
+        # When not constructing the building and when power isn't required or if power is required and it's online
+        if not self.building and (not self.power_required or (self.power_required and game.player_mat[self.team].power_balance >= 0)):
             if self.queue:
                 self.queue_time -= dt
                 if self.queue_time <= 0:

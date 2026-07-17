@@ -4,25 +4,19 @@
     # Convert speed to tiles rather than pixels per second
     # Add shots in so 
 # Proper Side Menu
-    # Pause Save Load Exit
     # Stats
     # Mini Map
     # Buttons: Range, Scan
 # Remove the option box on the right hand side
-# Create a heavy constructor unit
 # Create a light constructor unit
 # Create a screen for construction with unit stats
     # Note this pauses the screen
 # Make losing ammo mean finding ammo trucks to resupply
-# Add Power Plant
-# Make random resource spawns instead of fixed
 # Change some buildings to 2x2 or 3x3
-# Add resource storage to buildings 
 # Add base defence turrets
 # Upgrade AI
 # Add more units
 # Add Radar/Fog of war
-# Add locator piece on side bar to tell which tile I'm on
 # Add starting units
 # Add Amphib units
 # Create Buildings you can pass through/under
@@ -165,6 +159,26 @@ def main():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:  # left
 
+                    for label, rect in game.menu.options_buttons:
+                        if not rect.collidepoint(event.pos):
+                            continue
+
+                        if rect.collidepoint(event.pos):
+
+                            if label == 'Pause':
+                                pass
+
+                            elif label == 'Save':
+                                game.save_game("save_game01.json")
+                                print("Gave Saved")
+
+                            elif label == 'Load':
+                                game.load_game("save_game01.json")
+                                print("Game Loaded")
+
+                            elif label == 'Exit':
+                                running = False
+
                     for label, rect in game.menu.buttons: 
                         if not rect.collidepoint(event.pos):
                             continue 
@@ -188,8 +202,8 @@ def main():
                                         game.build_mode = True
                                         game.build_name = stats["Name"]
 
-                                    elif stats["category"]:
-                                        queue_unit(game, label)
+                                elif stats["category"] == "unit":
+                                    queue_unit(game, label)
 
 
                     # Sell the Building

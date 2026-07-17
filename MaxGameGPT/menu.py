@@ -29,9 +29,22 @@ class Menu:
             )
             self.buttons.append((label, rect))
 
-    # Options for the Units
-    def unit_options(self):
-        unit_options = ["Move", "Attack", "Stop"]
+        
+        self.options_labels = ["Pause", "Save", "Load", "Exit"]
+        self.options_buttons = []
+        OPTION_BUTTON_WIDTH = 30
+        PADDING = 2
+
+        # Create options rects
+        for i, label in enumerate(self.options_labels):
+            rect = pygame.Rect(
+                0 + i * (OPTION_BUTTON_WIDTH + PADDING),
+                5,
+                OPTION_BUTTON_WIDTH,
+                20
+            )
+            self.options_buttons.append((label, rect))
+
 
     # When select a unit, show the properties of that unit
     def unit_properties_menu(self, screen):
@@ -39,6 +52,25 @@ class Menu:
         pygame.draw.rect(screen, C.UNIT_MENU_BG, (0, 0, C.UNIT_MENU_WIDTH, C.HEIGHT))
         
 
+    def options_buttons_menu(self, screen):
+
+        pygame.draw.rect(screen, C.MENU_BG, (0, 0, C.UNIT_MENU_WIDTH, C.OPTIONS_MENU_HEIGHT))
+
+        font = pygame.font.SysFont(None, 14)
+
+        # Mouse position
+        mx, my = pygame.mouse.get_pos()
+
+        for label, rect in self.options_buttons:
+            # Hover effect
+            color = C.BTN_HOVER if rect.collidepoint(mx, my) else (100, 100, 100)
+            pygame.draw.rect(screen, color, rect, border_radius=3)
+
+            # Draw text
+            text = font.render(label, True, C.TEXT_COLOR)
+            text_rect = text.get_rect(center=rect.center)
+            screen.blit(text, text_rect)
+       
 
     def right_side_menu(self, screen, font):
         pygame.draw.rect(screen, C.MENU_BG, (C.WIDTH - C.MENU_WIDTH, 0, C.MENU_WIDTH, C.HEIGHT))
@@ -64,3 +96,5 @@ class Menu:
         self.right_side_menu(screen, font)
 
         self.unit_properties_menu(screen)
+
+        self.options_buttons_menu(screen)

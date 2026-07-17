@@ -1,26 +1,30 @@
 import Config as C
+from dataclasses import dataclass, field, asdict
+from typing import ClassVar
 
+@dataclass
 class Tiles:
 
-    count = 0
+    count: ClassVar = 0
+    x_cord: int
+    y_cord: int
+    land_type: int
+    resource_type: str
+    resource_amount: int
+    occupied: bool = field(default=False, init=False)
 
-    def __init__ (self, x_cord, y_cord, land_type, resource_type, resource_amount):
-        self.x_cord = x_cord
-        self.y_cord = y_cord
-        self.land_type = land_type
+    def __post_init__ (self):
         Tiles.count += 1
-        self.occupied = False
-        self.resource_amount = resource_amount
         
-        if land_type == C.T_GRASS: ## Grass
+        if self.land_type == C.T_GRASS: ## Grass
             self.land_movable = 1
             self.water_movable = 0
 
-        elif land_type == C.T_WALL: ## Wall
+        elif self.land_type == C.T_WALL: ## Wall
             self.land_movable = 0
             self.water_movable = 0
 
-        elif land_type == C.T_WATER: ## Water
+        elif self.land_type == C.T_WATER: ## Water
             self.land_movable = 0
             self.water_movable = 1
 
@@ -28,13 +32,13 @@ class Tiles:
             self.land_movable = 0
             self.water_movable = 0
 
-        if resource_type == C.T_RESOURCE:
+        if self.resource_type == C.T_RESOURCE:
             self.resource_type = 'Minerals'
 
-        elif resource_type == C.T_FUEL:
+        elif self.resource_type == C.T_FUEL:
             self.resource_type = 'Fuel'
 
-        elif resource_type == C.T_GOLD:
+        elif self.resource_type == C.T_GOLD:
             self.resource_type = 'Gold'
 
         else:
@@ -42,3 +46,12 @@ class Tiles:
         
     def pos(self):
         return (self.x_cord, self.y_cord)
+    
+    def to_dict(self):
+        return asdict(self)
+
+    @classmethod
+    def from_dict(cls, d):
+        obj = cls(**d)
+        obj.occupied = d.get("occupied", False)
+        return cls(**d)

@@ -1,0 +1,8119 @@
+{
+  "player": [
+    {
+      "team": 0,
+      "human": true,
+      "storage_money": 500,
+      "storage_fuel": 0,
+      "storage_gold": 0,
+      "units": [
+        {
+          "team": 0,
+          "x": 556.4288436986534,
+          "y": 400.0000000001349,
+          "name": "Soldier",
+          "path": [
+            [
+              4,
+              15
+            ],
+            [
+              5,
+              14
+            ],
+            [
+              6,
+              13
+            ],
+            [
+              7,
+              12
+            ],
+            [
+              8,
+              12
+            ],
+            [
+              9,
+              12
+            ],
+            [
+              10,
+              12
+            ],
+            [
+              11,
+              12
+            ],
+            [
+              12,
+              12
+            ],
+            [
+              13,
+              12
+            ],
+            [
+              14,
+              12
+            ],
+            [
+              15,
+              12
+            ],
+            [
+              16,
+              12
+            ],
+            [
+              17,
+              12
+            ]
+          ],
+          "path_px": [],
+          "target": null,
+          "attack_cooldown": 0.0,
+          "selected": false,
+          "harvesting": false,
+          "harvest_timer": 0.0,
+          "carry": 0,
+          "old_res": null,
+          "current_angle": 2.164171645586431e-09
+        },
+        {
+          "team": 0,
+          "x": 112.0174253872443,
+          "y": 179.06300343657014,
+          "name": "Soldier",
+          "path": [
+            [
+              4,
+              16
+            ],
+            [
+              4,
+              15
+            ],
+            [
+              4,
+              14
+            ],
+            [
+              4,
+              13
+            ],
+            [
+              4,
+              12
+            ],
+            [
+              5,
+              11
+            ],
+            [
+              5,
+              10
+            ],
+            [
+              5,
+              9
+            ],
+            [
+              4,
+              8
+            ],
+            [
+              3,
+              7
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              3,
+              5
+            ]
+          ],
+          "path_px": [],
+          "target": null,
+          "attack_cooldown": 0.0,
+          "selected": true,
+          "harvesting": false,
+          "harvest_timer": 0.0,
+          "carry": 0,
+          "old_res": null,
+          "current_angle": 90.32595143799898
+        }
+      ],
+      "buildings": [
+        {
+          "team": 0,
+          "x": 80,
+          "y": 592,
+          "name": "Base",
+          "no_queue": true,
+          "queue": [],
+          "queue_time": 0.0,
+          "sold": false,
+          "count": 0,
+          "selected": false
+        },
+        {
+          "team": 0,
+          "x": 80,
+          "y": 528,
+          "name": "Barracks",
+          "no_queue": false,
+          "queue": [],
+          "queue_time": -0.009000000000002992,
+          "sold": false,
+          "count": 0,
+          "selected": false
+        }
+      ],
+      "total_buildings": [
+        {
+          "team": 0,
+          "x": 80,
+          "y": 592,
+          "name": "Base",
+          "no_queue": true,
+          "queue": [],
+          "queue_time": 0.0,
+          "sold": false,
+          "count": 0,
+          "selected": false
+        },
+        {
+          "team": 0,
+          "x": 80,
+          "y": 528,
+          "name": "Barracks",
+          "no_queue": false,
+          "queue": [],
+          "queue_time": -0.009000000000002992,
+          "sold": false,
+          "count": 0,
+          "selected": false
+        }
+      ],
+      "total_units": [
+        {
+          "team": 0,
+          "x": 556.4288436986534,
+          "y": 400.0000000001349,
+          "name": "Soldier",
+          "path": [
+            [
+              4,
+              15
+            ],
+            [
+              5,
+              14
+            ],
+            [
+              6,
+              13
+            ],
+            [
+              7,
+              12
+            ],
+            [
+              8,
+              12
+            ],
+            [
+              9,
+              12
+            ],
+            [
+              10,
+              12
+            ],
+            [
+              11,
+              12
+            ],
+            [
+              12,
+              12
+            ],
+            [
+              13,
+              12
+            ],
+            [
+              14,
+              12
+            ],
+            [
+              15,
+              12
+            ],
+            [
+              16,
+              12
+            ],
+            [
+              17,
+              12
+            ]
+          ],
+          "path_px": [],
+          "target": null,
+          "attack_cooldown": 0.0,
+          "selected": false,
+          "harvesting": false,
+          "harvest_timer": 0.0,
+          "carry": 0,
+          "old_res": null,
+          "current_angle": 2.164171645586431e-09
+        },
+        {
+          "team": 0,
+          "x": 112.0174253872443,
+          "y": 179.06300343657014,
+          "name": "Soldier",
+          "path": [
+            [
+              4,
+              16
+            ],
+            [
+              4,
+              15
+            ],
+            [
+              4,
+              14
+            ],
+            [
+              4,
+              13
+            ],
+            [
+              4,
+              12
+            ],
+            [
+              5,
+              11
+            ],
+            [
+              5,
+              10
+            ],
+            [
+              5,
+              9
+            ],
+            [
+              4,
+              8
+            ],
+            [
+              3,
+              7
+            ],
+            [
+              3,
+              6
+            ],
+            [
+              3,
+              5
+            ]
+          ],
+          "path_px": [],
+          "target": null,
+          "attack_cooldown": 0.0,
+          "selected": true,
+          "harvesting": false,
+          "harvest_timer": 0.0,
+          "carry": 0,
+          "old_res": null,
+          "current_angle": 90.32595143799898
+        }
+      ],
+      "total_power": 1,
+      "power_usage": 1
+    },
+    {
+      "team": 1,
+      "human": false,
+      "storage_money": 500,
+      "storage_fuel": 0,
+      "storage_gold": 0,
+      "units": [],
+      "buildings": [
+        {
+          "team": 1,
+          "x": 432,
+          "y": 80,
+          "name": "Base",
+          "no_queue": true,
+          "queue": [],
+          "queue_time": 0.0,
+          "sold": false,
+          "count": 0,
+          "selected": false
+        },
+        {
+          "team": 1,
+          "x": 432,
+          "y": 176,
+          "name": "Barracks",
+          "no_queue": false,
+          "queue": [],
+          "queue_time": 0.0,
+          "sold": false,
+          "count": 0,
+          "selected": false
+        },
+        {
+          "team": 1,
+          "x": 336,
+          "y": 80,
+          "name": "Tank Factory",
+          "no_queue": false,
+          "queue": [],
+          "queue_time": 0.0,
+          "sold": false,
+          "count": 0,
+          "selected": false
+        },
+        {
+          "team": 1,
+          "x": 496,
+          "y": 144,
+          "name": "Barracks",
+          "no_queue": false,
+          "queue": [],
+          "queue_time": 0.0,
+          "sold": false,
+          "count": 0,
+          "selected": false
+        }
+      ],
+      "total_buildings": [
+        {
+          "team": 1,
+          "x": 432,
+          "y": 80,
+          "name": "Base",
+          "no_queue": true,
+          "queue": [],
+          "queue_time": 0.0,
+          "sold": false,
+          "count": 0,
+          "selected": false
+        },
+        {
+          "team": 1,
+          "x": 432,
+          "y": 176,
+          "name": "Barracks",
+          "no_queue": false,
+          "queue": [],
+          "queue_time": 0.0,
+          "sold": false,
+          "count": 0,
+          "selected": false
+        },
+        {
+          "team": 1,
+          "x": 336,
+          "y": 80,
+          "name": "Tank Factory",
+          "no_queue": false,
+          "queue": [],
+          "queue_time": 0.0,
+          "sold": false,
+          "count": 0,
+          "selected": false
+        },
+        {
+          "team": 1,
+          "x": 496,
+          "y": 144,
+          "name": "Barracks",
+          "no_queue": false,
+          "queue": [],
+          "queue_time": 0.0,
+          "sold": false,
+          "count": 0,
+          "selected": false
+        }
+      ],
+      "total_units": [],
+      "total_power": 1,
+      "power_usage": 4
+    },
+    {
+      "team": 2,
+      "human": false,
+      "storage_money": 500,
+      "storage_fuel": 0,
+      "storage_gold": 0,
+      "units": [],
+      "buildings": [
+        {
+          "team": 2,
+          "x": 784,
+          "y": 80,
+          "name": "Base",
+          "no_queue": true,
+          "queue": [],
+          "queue_time": 0.0,
+          "sold": false,
+          "count": 0,
+          "selected": false
+        },
+        {
+          "team": 2,
+          "x": 816,
+          "y": 144,
+          "name": "Barracks",
+          "no_queue": false,
+          "queue": [],
+          "queue_time": 0.0,
+          "sold": false,
+          "count": 0,
+          "selected": false
+        },
+        {
+          "team": 2,
+          "x": 816,
+          "y": 176,
+          "name": "Tank Factory",
+          "no_queue": false,
+          "queue": [],
+          "queue_time": 0.0,
+          "sold": false,
+          "count": 0,
+          "selected": false
+        },
+        {
+          "team": 2,
+          "x": 688,
+          "y": 176,
+          "name": "Barracks",
+          "no_queue": false,
+          "queue": [],
+          "queue_time": 0.0,
+          "sold": false,
+          "count": 0,
+          "selected": false
+        }
+      ],
+      "total_buildings": [
+        {
+          "team": 2,
+          "x": 784,
+          "y": 80,
+          "name": "Base",
+          "no_queue": true,
+          "queue": [],
+          "queue_time": 0.0,
+          "sold": false,
+          "count": 0,
+          "selected": false
+        },
+        {
+          "team": 2,
+          "x": 816,
+          "y": 144,
+          "name": "Barracks",
+          "no_queue": false,
+          "queue": [],
+          "queue_time": 0.0,
+          "sold": false,
+          "count": 0,
+          "selected": false
+        },
+        {
+          "team": 2,
+          "x": 816,
+          "y": 176,
+          "name": "Tank Factory",
+          "no_queue": false,
+          "queue": [],
+          "queue_time": 0.0,
+          "sold": false,
+          "count": 0,
+          "selected": false
+        },
+        {
+          "team": 2,
+          "x": 688,
+          "y": 176,
+          "name": "Barracks",
+          "no_queue": false,
+          "queue": [],
+          "queue_time": 0.0,
+          "sold": false,
+          "count": 0,
+          "selected": false
+        }
+      ],
+      "total_units": [],
+      "total_power": 1,
+      "power_usage": 4
+    }
+  ],
+  "units": [
+    {
+      "team": 0,
+      "x": 556.4288436986534,
+      "y": 400.0000000001349,
+      "name": "Soldier",
+      "path": [
+        [
+          4,
+          15
+        ],
+        [
+          5,
+          14
+        ],
+        [
+          6,
+          13
+        ],
+        [
+          7,
+          12
+        ],
+        [
+          8,
+          12
+        ],
+        [
+          9,
+          12
+        ],
+        [
+          10,
+          12
+        ],
+        [
+          11,
+          12
+        ],
+        [
+          12,
+          12
+        ],
+        [
+          13,
+          12
+        ],
+        [
+          14,
+          12
+        ],
+        [
+          15,
+          12
+        ],
+        [
+          16,
+          12
+        ],
+        [
+          17,
+          12
+        ]
+      ],
+      "path_px": [],
+      "target": null,
+      "attack_cooldown": 0.0,
+      "selected": false,
+      "harvesting": false,
+      "harvest_timer": 0.0,
+      "carry": 0,
+      "old_res": null,
+      "current_angle": 2.164171645586431e-09
+    },
+    {
+      "team": 0,
+      "x": 112.0174253872443,
+      "y": 179.06300343657014,
+      "name": "Soldier",
+      "path": [
+        [
+          4,
+          16
+        ],
+        [
+          4,
+          15
+        ],
+        [
+          4,
+          14
+        ],
+        [
+          4,
+          13
+        ],
+        [
+          4,
+          12
+        ],
+        [
+          5,
+          11
+        ],
+        [
+          5,
+          10
+        ],
+        [
+          5,
+          9
+        ],
+        [
+          4,
+          8
+        ],
+        [
+          3,
+          7
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          3,
+          5
+        ]
+      ],
+      "path_px": [],
+      "target": null,
+      "attack_cooldown": 0.0,
+      "selected": true,
+      "harvesting": false,
+      "harvest_timer": 0.0,
+      "carry": 0,
+      "old_res": null,
+      "current_angle": 90.32595143799898
+    }
+  ],
+  "buildings": [
+    {
+      "team": 0,
+      "x": 80,
+      "y": 592,
+      "name": "Base",
+      "no_queue": true,
+      "queue": [],
+      "queue_time": 0.0,
+      "sold": false,
+      "count": 0,
+      "selected": false
+    },
+    {
+      "team": 1,
+      "x": 432,
+      "y": 80,
+      "name": "Base",
+      "no_queue": true,
+      "queue": [],
+      "queue_time": 0.0,
+      "sold": false,
+      "count": 0,
+      "selected": false
+    },
+    {
+      "team": 2,
+      "x": 784,
+      "y": 80,
+      "name": "Base",
+      "no_queue": true,
+      "queue": [],
+      "queue_time": 0.0,
+      "sold": false,
+      "count": 0,
+      "selected": false
+    },
+    {
+      "team": 1,
+      "x": 432,
+      "y": 176,
+      "name": "Barracks",
+      "no_queue": false,
+      "queue": [],
+      "queue_time": 0.0,
+      "sold": false,
+      "count": 0,
+      "selected": false
+    },
+    {
+      "team": 1,
+      "x": 336,
+      "y": 80,
+      "name": "Tank Factory",
+      "no_queue": false,
+      "queue": [],
+      "queue_time": 0.0,
+      "sold": false,
+      "count": 0,
+      "selected": false
+    },
+    {
+      "team": 2,
+      "x": 816,
+      "y": 144,
+      "name": "Barracks",
+      "no_queue": false,
+      "queue": [],
+      "queue_time": 0.0,
+      "sold": false,
+      "count": 0,
+      "selected": false
+    },
+    {
+      "team": 2,
+      "x": 816,
+      "y": 176,
+      "name": "Tank Factory",
+      "no_queue": false,
+      "queue": [],
+      "queue_time": 0.0,
+      "sold": false,
+      "count": 0,
+      "selected": false
+    },
+    {
+      "team": 0,
+      "x": 80,
+      "y": 528,
+      "name": "Barracks",
+      "no_queue": false,
+      "queue": [],
+      "queue_time": -0.009000000000002992,
+      "sold": false,
+      "count": 0,
+      "selected": false
+    },
+    {
+      "team": 1,
+      "x": 496,
+      "y": 144,
+      "name": "Barracks",
+      "no_queue": false,
+      "queue": [],
+      "queue_time": 0.0,
+      "sold": false,
+      "count": 0,
+      "selected": false
+    },
+    {
+      "team": 2,
+      "x": 688,
+      "y": 176,
+      "name": "Barracks",
+      "no_queue": false,
+      "queue": [],
+      "queue_time": 0.0,
+      "sold": false,
+      "count": 0,
+      "selected": false
+    }
+  ],
+  "gridmap": {
+    "w": 28,
+    "h": 26,
+    "tiles": [
+      {
+        "x_cord": 0,
+        "y_cord": 0,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 0,
+        "y": 0
+      },
+      {
+        "x_cord": 0,
+        "y_cord": 1,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 1,
+        "y": 0
+      },
+      {
+        "x_cord": 0,
+        "y_cord": 2,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 2,
+        "y": 0
+      },
+      {
+        "x_cord": 0,
+        "y_cord": 3,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 3,
+        "y": 0
+      },
+      {
+        "x_cord": 0,
+        "y_cord": 4,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 4,
+        "y": 0
+      },
+      {
+        "x_cord": 0,
+        "y_cord": 5,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 5,
+        "y": 0
+      },
+      {
+        "x_cord": 0,
+        "y_cord": 6,
+        "land_type": 7,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 6,
+        "y": 0
+      },
+      {
+        "x_cord": 0,
+        "y_cord": 7,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 7,
+        "y": 0
+      },
+      {
+        "x_cord": 0,
+        "y_cord": 8,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 8,
+        "y": 0
+      },
+      {
+        "x_cord": 0,
+        "y_cord": 9,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 9,
+        "y": 0
+      },
+      {
+        "x_cord": 0,
+        "y_cord": 10,
+        "land_type": 7,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 10,
+        "y": 0
+      },
+      {
+        "x_cord": 0,
+        "y_cord": 11,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 11,
+        "y": 0
+      },
+      {
+        "x_cord": 0,
+        "y_cord": 12,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 12,
+        "y": 0
+      },
+      {
+        "x_cord": 0,
+        "y_cord": 13,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 13,
+        "y": 0
+      },
+      {
+        "x_cord": 0,
+        "y_cord": 14,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 14,
+        "y": 0
+      },
+      {
+        "x_cord": 0,
+        "y_cord": 15,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 15,
+        "y": 0
+      },
+      {
+        "x_cord": 0,
+        "y_cord": 16,
+        "land_type": 0,
+        "resource_type": "Gold",
+        "resource_amount": 4,
+        "occupied": false,
+        "x": 16,
+        "y": 0
+      },
+      {
+        "x_cord": 0,
+        "y_cord": 17,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 17,
+        "y": 0
+      },
+      {
+        "x_cord": 0,
+        "y_cord": 18,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 18,
+        "y": 0
+      },
+      {
+        "x_cord": 0,
+        "y_cord": 19,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 19,
+        "y": 0
+      },
+      {
+        "x_cord": 0,
+        "y_cord": 20,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 20,
+        "y": 0
+      },
+      {
+        "x_cord": 0,
+        "y_cord": 21,
+        "land_type": 0,
+        "resource_type": "Minerals",
+        "resource_amount": 3,
+        "occupied": false,
+        "x": 21,
+        "y": 0
+      },
+      {
+        "x_cord": 0,
+        "y_cord": 22,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 22,
+        "y": 0
+      },
+      {
+        "x_cord": 0,
+        "y_cord": 23,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 23,
+        "y": 0
+      },
+      {
+        "x_cord": 0,
+        "y_cord": 24,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 24,
+        "y": 0
+      },
+      {
+        "x_cord": 0,
+        "y_cord": 25,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 25,
+        "y": 0
+      },
+      {
+        "x_cord": 1,
+        "y_cord": 0,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 0,
+        "y": 1
+      },
+      {
+        "x_cord": 1,
+        "y_cord": 1,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 1,
+        "y": 1
+      },
+      {
+        "x_cord": 1,
+        "y_cord": 2,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 2,
+        "y": 1
+      },
+      {
+        "x_cord": 1,
+        "y_cord": 3,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 3,
+        "y": 1
+      },
+      {
+        "x_cord": 1,
+        "y_cord": 4,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 4,
+        "y": 1
+      },
+      {
+        "x_cord": 1,
+        "y_cord": 5,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 5,
+        "y": 1
+      },
+      {
+        "x_cord": 1,
+        "y_cord": 6,
+        "land_type": 0,
+        "resource_type": "Minerals",
+        "resource_amount": 7,
+        "occupied": false,
+        "x": 6,
+        "y": 1
+      },
+      {
+        "x_cord": 1,
+        "y_cord": 7,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 7,
+        "y": 1
+      },
+      {
+        "x_cord": 1,
+        "y_cord": 8,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 8,
+        "y": 1
+      },
+      {
+        "x_cord": 1,
+        "y_cord": 9,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 9,
+        "y": 1
+      },
+      {
+        "x_cord": 1,
+        "y_cord": 10,
+        "land_type": 7,
+        "resource_type": "Gold",
+        "resource_amount": 3,
+        "occupied": false,
+        "x": 10,
+        "y": 1
+      },
+      {
+        "x_cord": 1,
+        "y_cord": 11,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 11,
+        "y": 1
+      },
+      {
+        "x_cord": 1,
+        "y_cord": 12,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 12,
+        "y": 1
+      },
+      {
+        "x_cord": 1,
+        "y_cord": 13,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 13,
+        "y": 1
+      },
+      {
+        "x_cord": 1,
+        "y_cord": 14,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 14,
+        "y": 1
+      },
+      {
+        "x_cord": 1,
+        "y_cord": 15,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 15,
+        "y": 1
+      },
+      {
+        "x_cord": 1,
+        "y_cord": 16,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 16,
+        "y": 1
+      },
+      {
+        "x_cord": 1,
+        "y_cord": 17,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 17,
+        "y": 1
+      },
+      {
+        "x_cord": 1,
+        "y_cord": 18,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 18,
+        "y": 1
+      },
+      {
+        "x_cord": 1,
+        "y_cord": 19,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 19,
+        "y": 1
+      },
+      {
+        "x_cord": 1,
+        "y_cord": 20,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 20,
+        "y": 1
+      },
+      {
+        "x_cord": 1,
+        "y_cord": 21,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 21,
+        "y": 1
+      },
+      {
+        "x_cord": 1,
+        "y_cord": 22,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 22,
+        "y": 1
+      },
+      {
+        "x_cord": 1,
+        "y_cord": 23,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 23,
+        "y": 1
+      },
+      {
+        "x_cord": 1,
+        "y_cord": 24,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 24,
+        "y": 1
+      },
+      {
+        "x_cord": 1,
+        "y_cord": 25,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 25,
+        "y": 1
+      },
+      {
+        "x_cord": 2,
+        "y_cord": 0,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 0,
+        "y": 2
+      },
+      {
+        "x_cord": 2,
+        "y_cord": 1,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 1,
+        "y": 2
+      },
+      {
+        "x_cord": 2,
+        "y_cord": 2,
+        "land_type": 0,
+        "resource_type": "Minerals",
+        "resource_amount": 15,
+        "occupied": false,
+        "x": 2,
+        "y": 2
+      },
+      {
+        "x_cord": 2,
+        "y_cord": 3,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 3,
+        "y": 2
+      },
+      {
+        "x_cord": 2,
+        "y_cord": 4,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 4,
+        "y": 2
+      },
+      {
+        "x_cord": 2,
+        "y_cord": 5,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 5,
+        "y": 2
+      },
+      {
+        "x_cord": 2,
+        "y_cord": 6,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 6,
+        "y": 2
+      },
+      {
+        "x_cord": 2,
+        "y_cord": 7,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 7,
+        "y": 2
+      },
+      {
+        "x_cord": 2,
+        "y_cord": 8,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 8,
+        "y": 2
+      },
+      {
+        "x_cord": 2,
+        "y_cord": 9,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 9,
+        "y": 2
+      },
+      {
+        "x_cord": 2,
+        "y_cord": 10,
+        "land_type": 7,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 10,
+        "y": 2
+      },
+      {
+        "x_cord": 2,
+        "y_cord": 11,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 11,
+        "y": 2
+      },
+      {
+        "x_cord": 2,
+        "y_cord": 12,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 12,
+        "y": 2
+      },
+      {
+        "x_cord": 2,
+        "y_cord": 13,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 13,
+        "y": 2
+      },
+      {
+        "x_cord": 2,
+        "y_cord": 14,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 14,
+        "y": 2
+      },
+      {
+        "x_cord": 2,
+        "y_cord": 15,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 15,
+        "y": 2
+      },
+      {
+        "x_cord": 2,
+        "y_cord": 16,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": true,
+        "x": 16,
+        "y": 2
+      },
+      {
+        "x_cord": 2,
+        "y_cord": 17,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 17,
+        "y": 2
+      },
+      {
+        "x_cord": 2,
+        "y_cord": 18,
+        "land_type": 0,
+        "resource_type": "Minerals",
+        "resource_amount": 15,
+        "occupied": true,
+        "x": 18,
+        "y": 2
+      },
+      {
+        "x_cord": 2,
+        "y_cord": 19,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 19,
+        "y": 2
+      },
+      {
+        "x_cord": 2,
+        "y_cord": 20,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 20,
+        "y": 2
+      },
+      {
+        "x_cord": 2,
+        "y_cord": 21,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 21,
+        "y": 2
+      },
+      {
+        "x_cord": 2,
+        "y_cord": 22,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 22,
+        "y": 2
+      },
+      {
+        "x_cord": 2,
+        "y_cord": 23,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 23,
+        "y": 2
+      },
+      {
+        "x_cord": 2,
+        "y_cord": 24,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 24,
+        "y": 2
+      },
+      {
+        "x_cord": 2,
+        "y_cord": 25,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 25,
+        "y": 2
+      },
+      {
+        "x_cord": 3,
+        "y_cord": 0,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 0,
+        "y": 3
+      },
+      {
+        "x_cord": 3,
+        "y_cord": 1,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 1,
+        "y": 3
+      },
+      {
+        "x_cord": 3,
+        "y_cord": 2,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 2,
+        "y": 3
+      },
+      {
+        "x_cord": 3,
+        "y_cord": 3,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 3,
+        "y": 3
+      },
+      {
+        "x_cord": 3,
+        "y_cord": 4,
+        "land_type": 0,
+        "resource_type": "Minerals",
+        "resource_amount": 10,
+        "occupied": false,
+        "x": 4,
+        "y": 3
+      },
+      {
+        "x_cord": 3,
+        "y_cord": 5,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": true,
+        "x": 5,
+        "y": 3
+      },
+      {
+        "x_cord": 3,
+        "y_cord": 6,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 6,
+        "y": 3
+      },
+      {
+        "x_cord": 3,
+        "y_cord": 7,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 7,
+        "y": 3
+      },
+      {
+        "x_cord": 3,
+        "y_cord": 8,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 8,
+        "y": 3
+      },
+      {
+        "x_cord": 3,
+        "y_cord": 9,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 9,
+        "y": 3
+      },
+      {
+        "x_cord": 3,
+        "y_cord": 10,
+        "land_type": 7,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 10,
+        "y": 3
+      },
+      {
+        "x_cord": 3,
+        "y_cord": 11,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 11,
+        "y": 3
+      },
+      {
+        "x_cord": 3,
+        "y_cord": 12,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 12,
+        "y": 3
+      },
+      {
+        "x_cord": 3,
+        "y_cord": 13,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 13,
+        "y": 3
+      },
+      {
+        "x_cord": 3,
+        "y_cord": 14,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 14,
+        "y": 3
+      },
+      {
+        "x_cord": 3,
+        "y_cord": 15,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 15,
+        "y": 3
+      },
+      {
+        "x_cord": 3,
+        "y_cord": 16,
+        "land_type": 0,
+        "resource_type": "Fuel",
+        "resource_amount": 11,
+        "occupied": false,
+        "x": 16,
+        "y": 3
+      },
+      {
+        "x_cord": 3,
+        "y_cord": 17,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 17,
+        "y": 3
+      },
+      {
+        "x_cord": 3,
+        "y_cord": 18,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 18,
+        "y": 3
+      },
+      {
+        "x_cord": 3,
+        "y_cord": 19,
+        "land_type": 0,
+        "resource_type": "Minerals",
+        "resource_amount": 5,
+        "occupied": false,
+        "x": 19,
+        "y": 3
+      },
+      {
+        "x_cord": 3,
+        "y_cord": 20,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 20,
+        "y": 3
+      },
+      {
+        "x_cord": 3,
+        "y_cord": 21,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 21,
+        "y": 3
+      },
+      {
+        "x_cord": 3,
+        "y_cord": 22,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 22,
+        "y": 3
+      },
+      {
+        "x_cord": 3,
+        "y_cord": 23,
+        "land_type": 0,
+        "resource_type": "Fuel",
+        "resource_amount": 3,
+        "occupied": false,
+        "x": 23,
+        "y": 3
+      },
+      {
+        "x_cord": 3,
+        "y_cord": 24,
+        "land_type": 0,
+        "resource_type": "Gold",
+        "resource_amount": 1,
+        "occupied": false,
+        "x": 24,
+        "y": 3
+      },
+      {
+        "x_cord": 3,
+        "y_cord": 25,
+        "land_type": 7,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 25,
+        "y": 3
+      },
+      {
+        "x_cord": 4,
+        "y_cord": 0,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 0,
+        "y": 4
+      },
+      {
+        "x_cord": 4,
+        "y_cord": 1,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 1,
+        "y": 4
+      },
+      {
+        "x_cord": 4,
+        "y_cord": 2,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 2,
+        "y": 4
+      },
+      {
+        "x_cord": 4,
+        "y_cord": 3,
+        "land_type": 0,
+        "resource_type": "Fuel",
+        "resource_amount": 1,
+        "occupied": false,
+        "x": 3,
+        "y": 4
+      },
+      {
+        "x_cord": 4,
+        "y_cord": 4,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 4,
+        "y": 4
+      },
+      {
+        "x_cord": 4,
+        "y_cord": 5,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 5,
+        "y": 4
+      },
+      {
+        "x_cord": 4,
+        "y_cord": 6,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 6,
+        "y": 4
+      },
+      {
+        "x_cord": 4,
+        "y_cord": 7,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 7,
+        "y": 4
+      },
+      {
+        "x_cord": 4,
+        "y_cord": 8,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 8,
+        "y": 4
+      },
+      {
+        "x_cord": 4,
+        "y_cord": 9,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 9,
+        "y": 4
+      },
+      {
+        "x_cord": 4,
+        "y_cord": 10,
+        "land_type": 7,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 10,
+        "y": 4
+      },
+      {
+        "x_cord": 4,
+        "y_cord": 11,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 11,
+        "y": 4
+      },
+      {
+        "x_cord": 4,
+        "y_cord": 12,
+        "land_type": 0,
+        "resource_type": "Minerals",
+        "resource_amount": 2,
+        "occupied": false,
+        "x": 12,
+        "y": 4
+      },
+      {
+        "x_cord": 4,
+        "y_cord": 13,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 13,
+        "y": 4
+      },
+      {
+        "x_cord": 4,
+        "y_cord": 14,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 14,
+        "y": 4
+      },
+      {
+        "x_cord": 4,
+        "y_cord": 15,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 15,
+        "y": 4
+      },
+      {
+        "x_cord": 4,
+        "y_cord": 16,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 16,
+        "y": 4
+      },
+      {
+        "x_cord": 4,
+        "y_cord": 17,
+        "land_type": 0,
+        "resource_type": "Fuel",
+        "resource_amount": 6,
+        "occupied": false,
+        "x": 17,
+        "y": 4
+      },
+      {
+        "x_cord": 4,
+        "y_cord": 18,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 18,
+        "y": 4
+      },
+      {
+        "x_cord": 4,
+        "y_cord": 19,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 19,
+        "y": 4
+      },
+      {
+        "x_cord": 4,
+        "y_cord": 20,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 20,
+        "y": 4
+      },
+      {
+        "x_cord": 4,
+        "y_cord": 21,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 21,
+        "y": 4
+      },
+      {
+        "x_cord": 4,
+        "y_cord": 22,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 22,
+        "y": 4
+      },
+      {
+        "x_cord": 4,
+        "y_cord": 23,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 23,
+        "y": 4
+      },
+      {
+        "x_cord": 4,
+        "y_cord": 24,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 24,
+        "y": 4
+      },
+      {
+        "x_cord": 4,
+        "y_cord": 25,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 25,
+        "y": 4
+      },
+      {
+        "x_cord": 5,
+        "y_cord": 0,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 0,
+        "y": 5
+      },
+      {
+        "x_cord": 5,
+        "y_cord": 1,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 1,
+        "y": 5
+      },
+      {
+        "x_cord": 5,
+        "y_cord": 2,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 2,
+        "y": 5
+      },
+      {
+        "x_cord": 5,
+        "y_cord": 3,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 3,
+        "y": 5
+      },
+      {
+        "x_cord": 5,
+        "y_cord": 4,
+        "land_type": 1,
+        "resource_type": "Fuel",
+        "resource_amount": 6,
+        "occupied": false,
+        "x": 4,
+        "y": 5
+      },
+      {
+        "x_cord": 5,
+        "y_cord": 5,
+        "land_type": 1,
+        "resource_type": "Fuel",
+        "resource_amount": 9,
+        "occupied": false,
+        "x": 5,
+        "y": 5
+      },
+      {
+        "x_cord": 5,
+        "y_cord": 6,
+        "land_type": 0,
+        "resource_type": "Fuel",
+        "resource_amount": 9,
+        "occupied": false,
+        "x": 6,
+        "y": 5
+      },
+      {
+        "x_cord": 5,
+        "y_cord": 7,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 7,
+        "y": 5
+      },
+      {
+        "x_cord": 5,
+        "y_cord": 8,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 8,
+        "y": 5
+      },
+      {
+        "x_cord": 5,
+        "y_cord": 9,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 9,
+        "y": 5
+      },
+      {
+        "x_cord": 5,
+        "y_cord": 10,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 10,
+        "y": 5
+      },
+      {
+        "x_cord": 5,
+        "y_cord": 11,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 11,
+        "y": 5
+      },
+      {
+        "x_cord": 5,
+        "y_cord": 12,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 12,
+        "y": 5
+      },
+      {
+        "x_cord": 5,
+        "y_cord": 13,
+        "land_type": 0,
+        "resource_type": "Gold",
+        "resource_amount": 1,
+        "occupied": false,
+        "x": 13,
+        "y": 5
+      },
+      {
+        "x_cord": 5,
+        "y_cord": 14,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 14,
+        "y": 5
+      },
+      {
+        "x_cord": 5,
+        "y_cord": 15,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 15,
+        "y": 5
+      },
+      {
+        "x_cord": 5,
+        "y_cord": 16,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 16,
+        "y": 5
+      },
+      {
+        "x_cord": 5,
+        "y_cord": 17,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 17,
+        "y": 5
+      },
+      {
+        "x_cord": 5,
+        "y_cord": 18,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 18,
+        "y": 5
+      },
+      {
+        "x_cord": 5,
+        "y_cord": 19,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 19,
+        "y": 5
+      },
+      {
+        "x_cord": 5,
+        "y_cord": 20,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 20,
+        "y": 5
+      },
+      {
+        "x_cord": 5,
+        "y_cord": 21,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 21,
+        "y": 5
+      },
+      {
+        "x_cord": 5,
+        "y_cord": 22,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 22,
+        "y": 5
+      },
+      {
+        "x_cord": 5,
+        "y_cord": 23,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 23,
+        "y": 5
+      },
+      {
+        "x_cord": 5,
+        "y_cord": 24,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 24,
+        "y": 5
+      },
+      {
+        "x_cord": 5,
+        "y_cord": 25,
+        "land_type": 0,
+        "resource_type": "Gold",
+        "resource_amount": 4,
+        "occupied": false,
+        "x": 25,
+        "y": 5
+      },
+      {
+        "x_cord": 6,
+        "y_cord": 0,
+        "land_type": 7,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 0,
+        "y": 6
+      },
+      {
+        "x_cord": 6,
+        "y_cord": 1,
+        "land_type": 7,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 1,
+        "y": 6
+      },
+      {
+        "x_cord": 6,
+        "y_cord": 2,
+        "land_type": 7,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 2,
+        "y": 6
+      },
+      {
+        "x_cord": 6,
+        "y_cord": 3,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 3,
+        "y": 6
+      },
+      {
+        "x_cord": 6,
+        "y_cord": 4,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 4,
+        "y": 6
+      },
+      {
+        "x_cord": 6,
+        "y_cord": 5,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 5,
+        "y": 6
+      },
+      {
+        "x_cord": 6,
+        "y_cord": 6,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 6,
+        "y": 6
+      },
+      {
+        "x_cord": 6,
+        "y_cord": 7,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 7,
+        "y": 6
+      },
+      {
+        "x_cord": 6,
+        "y_cord": 8,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 8,
+        "y": 6
+      },
+      {
+        "x_cord": 6,
+        "y_cord": 9,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 9,
+        "y": 6
+      },
+      {
+        "x_cord": 6,
+        "y_cord": 10,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 10,
+        "y": 6
+      },
+      {
+        "x_cord": 6,
+        "y_cord": 11,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 11,
+        "y": 6
+      },
+      {
+        "x_cord": 6,
+        "y_cord": 12,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 12,
+        "y": 6
+      },
+      {
+        "x_cord": 6,
+        "y_cord": 13,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 13,
+        "y": 6
+      },
+      {
+        "x_cord": 6,
+        "y_cord": 14,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 14,
+        "y": 6
+      },
+      {
+        "x_cord": 6,
+        "y_cord": 15,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 15,
+        "y": 6
+      },
+      {
+        "x_cord": 6,
+        "y_cord": 16,
+        "land_type": 0,
+        "resource_type": "Fuel",
+        "resource_amount": 7,
+        "occupied": false,
+        "x": 16,
+        "y": 6
+      },
+      {
+        "x_cord": 6,
+        "y_cord": 17,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 17,
+        "y": 6
+      },
+      {
+        "x_cord": 6,
+        "y_cord": 18,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 18,
+        "y": 6
+      },
+      {
+        "x_cord": 6,
+        "y_cord": 19,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 19,
+        "y": 6
+      },
+      {
+        "x_cord": 6,
+        "y_cord": 20,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 20,
+        "y": 6
+      },
+      {
+        "x_cord": 6,
+        "y_cord": 21,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 21,
+        "y": 6
+      },
+      {
+        "x_cord": 6,
+        "y_cord": 22,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 22,
+        "y": 6
+      },
+      {
+        "x_cord": 6,
+        "y_cord": 23,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 23,
+        "y": 6
+      },
+      {
+        "x_cord": 6,
+        "y_cord": 24,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 24,
+        "y": 6
+      },
+      {
+        "x_cord": 6,
+        "y_cord": 25,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 25,
+        "y": 6
+      },
+      {
+        "x_cord": 7,
+        "y_cord": 0,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 0,
+        "y": 7
+      },
+      {
+        "x_cord": 7,
+        "y_cord": 1,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 1,
+        "y": 7
+      },
+      {
+        "x_cord": 7,
+        "y_cord": 2,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 2,
+        "y": 7
+      },
+      {
+        "x_cord": 7,
+        "y_cord": 3,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 3,
+        "y": 7
+      },
+      {
+        "x_cord": 7,
+        "y_cord": 4,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 4,
+        "y": 7
+      },
+      {
+        "x_cord": 7,
+        "y_cord": 5,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 5,
+        "y": 7
+      },
+      {
+        "x_cord": 7,
+        "y_cord": 6,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 6,
+        "y": 7
+      },
+      {
+        "x_cord": 7,
+        "y_cord": 7,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 7,
+        "y": 7
+      },
+      {
+        "x_cord": 7,
+        "y_cord": 8,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 8,
+        "y": 7
+      },
+      {
+        "x_cord": 7,
+        "y_cord": 9,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 9,
+        "y": 7
+      },
+      {
+        "x_cord": 7,
+        "y_cord": 10,
+        "land_type": 0,
+        "resource_type": "Minerals",
+        "resource_amount": 10,
+        "occupied": false,
+        "x": 10,
+        "y": 7
+      },
+      {
+        "x_cord": 7,
+        "y_cord": 11,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 11,
+        "y": 7
+      },
+      {
+        "x_cord": 7,
+        "y_cord": 12,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 12,
+        "y": 7
+      },
+      {
+        "x_cord": 7,
+        "y_cord": 13,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 13,
+        "y": 7
+      },
+      {
+        "x_cord": 7,
+        "y_cord": 14,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 14,
+        "y": 7
+      },
+      {
+        "x_cord": 7,
+        "y_cord": 15,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 15,
+        "y": 7
+      },
+      {
+        "x_cord": 7,
+        "y_cord": 16,
+        "land_type": 1,
+        "resource_type": "Gold",
+        "resource_amount": 3,
+        "occupied": false,
+        "x": 16,
+        "y": 7
+      },
+      {
+        "x_cord": 7,
+        "y_cord": 17,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 17,
+        "y": 7
+      },
+      {
+        "x_cord": 7,
+        "y_cord": 18,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 18,
+        "y": 7
+      },
+      {
+        "x_cord": 7,
+        "y_cord": 19,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 19,
+        "y": 7
+      },
+      {
+        "x_cord": 7,
+        "y_cord": 20,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 20,
+        "y": 7
+      },
+      {
+        "x_cord": 7,
+        "y_cord": 21,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 21,
+        "y": 7
+      },
+      {
+        "x_cord": 7,
+        "y_cord": 22,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 22,
+        "y": 7
+      },
+      {
+        "x_cord": 7,
+        "y_cord": 23,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 23,
+        "y": 7
+      },
+      {
+        "x_cord": 7,
+        "y_cord": 24,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 24,
+        "y": 7
+      },
+      {
+        "x_cord": 7,
+        "y_cord": 25,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 25,
+        "y": 7
+      },
+      {
+        "x_cord": 8,
+        "y_cord": 0,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 0,
+        "y": 8
+      },
+      {
+        "x_cord": 8,
+        "y_cord": 1,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 1,
+        "y": 8
+      },
+      {
+        "x_cord": 8,
+        "y_cord": 2,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 2,
+        "y": 8
+      },
+      {
+        "x_cord": 8,
+        "y_cord": 3,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 3,
+        "y": 8
+      },
+      {
+        "x_cord": 8,
+        "y_cord": 4,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 4,
+        "y": 8
+      },
+      {
+        "x_cord": 8,
+        "y_cord": 5,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 5,
+        "y": 8
+      },
+      {
+        "x_cord": 8,
+        "y_cord": 6,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 6,
+        "y": 8
+      },
+      {
+        "x_cord": 8,
+        "y_cord": 7,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 7,
+        "y": 8
+      },
+      {
+        "x_cord": 8,
+        "y_cord": 8,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 8,
+        "y": 8
+      },
+      {
+        "x_cord": 8,
+        "y_cord": 9,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 9,
+        "y": 8
+      },
+      {
+        "x_cord": 8,
+        "y_cord": 10,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 10,
+        "y": 8
+      },
+      {
+        "x_cord": 8,
+        "y_cord": 11,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 11,
+        "y": 8
+      },
+      {
+        "x_cord": 8,
+        "y_cord": 12,
+        "land_type": 0,
+        "resource_type": "Gold",
+        "resource_amount": 4,
+        "occupied": false,
+        "x": 12,
+        "y": 8
+      },
+      {
+        "x_cord": 8,
+        "y_cord": 13,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 13,
+        "y": 8
+      },
+      {
+        "x_cord": 8,
+        "y_cord": 14,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 14,
+        "y": 8
+      },
+      {
+        "x_cord": 8,
+        "y_cord": 15,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 15,
+        "y": 8
+      },
+      {
+        "x_cord": 8,
+        "y_cord": 16,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 16,
+        "y": 8
+      },
+      {
+        "x_cord": 8,
+        "y_cord": 17,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 17,
+        "y": 8
+      },
+      {
+        "x_cord": 8,
+        "y_cord": 18,
+        "land_type": 7,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 18,
+        "y": 8
+      },
+      {
+        "x_cord": 8,
+        "y_cord": 19,
+        "land_type": 7,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 19,
+        "y": 8
+      },
+      {
+        "x_cord": 8,
+        "y_cord": 20,
+        "land_type": 7,
+        "resource_type": "Fuel",
+        "resource_amount": 3,
+        "occupied": false,
+        "x": 20,
+        "y": 8
+      },
+      {
+        "x_cord": 8,
+        "y_cord": 21,
+        "land_type": 7,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 21,
+        "y": 8
+      },
+      {
+        "x_cord": 8,
+        "y_cord": 22,
+        "land_type": 7,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 22,
+        "y": 8
+      },
+      {
+        "x_cord": 8,
+        "y_cord": 23,
+        "land_type": 7,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 23,
+        "y": 8
+      },
+      {
+        "x_cord": 8,
+        "y_cord": 24,
+        "land_type": 7,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 24,
+        "y": 8
+      },
+      {
+        "x_cord": 8,
+        "y_cord": 25,
+        "land_type": 7,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 25,
+        "y": 8
+      },
+      {
+        "x_cord": 9,
+        "y_cord": 0,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 0,
+        "y": 9
+      },
+      {
+        "x_cord": 9,
+        "y_cord": 1,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 1,
+        "y": 9
+      },
+      {
+        "x_cord": 9,
+        "y_cord": 2,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 2,
+        "y": 9
+      },
+      {
+        "x_cord": 9,
+        "y_cord": 3,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 3,
+        "y": 9
+      },
+      {
+        "x_cord": 9,
+        "y_cord": 4,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 4,
+        "y": 9
+      },
+      {
+        "x_cord": 9,
+        "y_cord": 5,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 5,
+        "y": 9
+      },
+      {
+        "x_cord": 9,
+        "y_cord": 6,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 6,
+        "y": 9
+      },
+      {
+        "x_cord": 9,
+        "y_cord": 7,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 7,
+        "y": 9
+      },
+      {
+        "x_cord": 9,
+        "y_cord": 8,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 8,
+        "y": 9
+      },
+      {
+        "x_cord": 9,
+        "y_cord": 9,
+        "land_type": 0,
+        "resource_type": "Minerals",
+        "resource_amount": 9,
+        "occupied": false,
+        "x": 9,
+        "y": 9
+      },
+      {
+        "x_cord": 9,
+        "y_cord": 10,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 10,
+        "y": 9
+      },
+      {
+        "x_cord": 9,
+        "y_cord": 11,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 11,
+        "y": 9
+      },
+      {
+        "x_cord": 9,
+        "y_cord": 12,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 12,
+        "y": 9
+      },
+      {
+        "x_cord": 9,
+        "y_cord": 13,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 13,
+        "y": 9
+      },
+      {
+        "x_cord": 9,
+        "y_cord": 14,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 14,
+        "y": 9
+      },
+      {
+        "x_cord": 9,
+        "y_cord": 15,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 15,
+        "y": 9
+      },
+      {
+        "x_cord": 9,
+        "y_cord": 16,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 16,
+        "y": 9
+      },
+      {
+        "x_cord": 9,
+        "y_cord": 17,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 17,
+        "y": 9
+      },
+      {
+        "x_cord": 9,
+        "y_cord": 18,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 18,
+        "y": 9
+      },
+      {
+        "x_cord": 9,
+        "y_cord": 19,
+        "land_type": 0,
+        "resource_type": "Minerals",
+        "resource_amount": 1,
+        "occupied": false,
+        "x": 19,
+        "y": 9
+      },
+      {
+        "x_cord": 9,
+        "y_cord": 20,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 20,
+        "y": 9
+      },
+      {
+        "x_cord": 9,
+        "y_cord": 21,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 21,
+        "y": 9
+      },
+      {
+        "x_cord": 9,
+        "y_cord": 22,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 22,
+        "y": 9
+      },
+      {
+        "x_cord": 9,
+        "y_cord": 23,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 23,
+        "y": 9
+      },
+      {
+        "x_cord": 9,
+        "y_cord": 24,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 24,
+        "y": 9
+      },
+      {
+        "x_cord": 9,
+        "y_cord": 25,
+        "land_type": 0,
+        "resource_type": "Minerals",
+        "resource_amount": 4,
+        "occupied": false,
+        "x": 25,
+        "y": 9
+      },
+      {
+        "x_cord": 10,
+        "y_cord": 0,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 0,
+        "y": 10
+      },
+      {
+        "x_cord": 10,
+        "y_cord": 1,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 1,
+        "y": 10
+      },
+      {
+        "x_cord": 10,
+        "y_cord": 2,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": true,
+        "x": 2,
+        "y": 10
+      },
+      {
+        "x_cord": 10,
+        "y_cord": 3,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 3,
+        "y": 10
+      },
+      {
+        "x_cord": 10,
+        "y_cord": 4,
+        "land_type": 0,
+        "resource_type": "Gold",
+        "resource_amount": 4,
+        "occupied": false,
+        "x": 4,
+        "y": 10
+      },
+      {
+        "x_cord": 10,
+        "y_cord": 5,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 5,
+        "y": 10
+      },
+      {
+        "x_cord": 10,
+        "y_cord": 6,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 6,
+        "y": 10
+      },
+      {
+        "x_cord": 10,
+        "y_cord": 7,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 7,
+        "y": 10
+      },
+      {
+        "x_cord": 10,
+        "y_cord": 8,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 8,
+        "y": 10
+      },
+      {
+        "x_cord": 10,
+        "y_cord": 9,
+        "land_type": 0,
+        "resource_type": "Fuel",
+        "resource_amount": 7,
+        "occupied": false,
+        "x": 9,
+        "y": 10
+      },
+      {
+        "x_cord": 10,
+        "y_cord": 10,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 10,
+        "y": 10
+      },
+      {
+        "x_cord": 10,
+        "y_cord": 11,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 11,
+        "y": 10
+      },
+      {
+        "x_cord": 10,
+        "y_cord": 12,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 12,
+        "y": 10
+      },
+      {
+        "x_cord": 10,
+        "y_cord": 13,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 13,
+        "y": 10
+      },
+      {
+        "x_cord": 10,
+        "y_cord": 14,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 14,
+        "y": 10
+      },
+      {
+        "x_cord": 10,
+        "y_cord": 15,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 15,
+        "y": 10
+      },
+      {
+        "x_cord": 10,
+        "y_cord": 16,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 16,
+        "y": 10
+      },
+      {
+        "x_cord": 10,
+        "y_cord": 17,
+        "land_type": 0,
+        "resource_type": "Fuel",
+        "resource_amount": 7,
+        "occupied": false,
+        "x": 17,
+        "y": 10
+      },
+      {
+        "x_cord": 10,
+        "y_cord": 18,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 18,
+        "y": 10
+      },
+      {
+        "x_cord": 10,
+        "y_cord": 19,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 19,
+        "y": 10
+      },
+      {
+        "x_cord": 10,
+        "y_cord": 20,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 20,
+        "y": 10
+      },
+      {
+        "x_cord": 10,
+        "y_cord": 21,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 21,
+        "y": 10
+      },
+      {
+        "x_cord": 10,
+        "y_cord": 22,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 22,
+        "y": 10
+      },
+      {
+        "x_cord": 10,
+        "y_cord": 23,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 23,
+        "y": 10
+      },
+      {
+        "x_cord": 10,
+        "y_cord": 24,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 24,
+        "y": 10
+      },
+      {
+        "x_cord": 10,
+        "y_cord": 25,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 25,
+        "y": 10
+      },
+      {
+        "x_cord": 11,
+        "y_cord": 0,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 0,
+        "y": 11
+      },
+      {
+        "x_cord": 11,
+        "y_cord": 1,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 1,
+        "y": 11
+      },
+      {
+        "x_cord": 11,
+        "y_cord": 2,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 2,
+        "y": 11
+      },
+      {
+        "x_cord": 11,
+        "y_cord": 3,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 3,
+        "y": 11
+      },
+      {
+        "x_cord": 11,
+        "y_cord": 4,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 4,
+        "y": 11
+      },
+      {
+        "x_cord": 11,
+        "y_cord": 5,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 5,
+        "y": 11
+      },
+      {
+        "x_cord": 11,
+        "y_cord": 6,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 6,
+        "y": 11
+      },
+      {
+        "x_cord": 11,
+        "y_cord": 7,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 7,
+        "y": 11
+      },
+      {
+        "x_cord": 11,
+        "y_cord": 8,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 8,
+        "y": 11
+      },
+      {
+        "x_cord": 11,
+        "y_cord": 9,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 9,
+        "y": 11
+      },
+      {
+        "x_cord": 11,
+        "y_cord": 10,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 10,
+        "y": 11
+      },
+      {
+        "x_cord": 11,
+        "y_cord": 11,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 11,
+        "y": 11
+      },
+      {
+        "x_cord": 11,
+        "y_cord": 12,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 12,
+        "y": 11
+      },
+      {
+        "x_cord": 11,
+        "y_cord": 13,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 13,
+        "y": 11
+      },
+      {
+        "x_cord": 11,
+        "y_cord": 14,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 14,
+        "y": 11
+      },
+      {
+        "x_cord": 11,
+        "y_cord": 15,
+        "land_type": 0,
+        "resource_type": "Minerals",
+        "resource_amount": 8,
+        "occupied": false,
+        "x": 15,
+        "y": 11
+      },
+      {
+        "x_cord": 11,
+        "y_cord": 16,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 16,
+        "y": 11
+      },
+      {
+        "x_cord": 11,
+        "y_cord": 17,
+        "land_type": 0,
+        "resource_type": "Fuel",
+        "resource_amount": 11,
+        "occupied": false,
+        "x": 17,
+        "y": 11
+      },
+      {
+        "x_cord": 11,
+        "y_cord": 18,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 18,
+        "y": 11
+      },
+      {
+        "x_cord": 11,
+        "y_cord": 19,
+        "land_type": 0,
+        "resource_type": "Gold",
+        "resource_amount": 4,
+        "occupied": false,
+        "x": 19,
+        "y": 11
+      },
+      {
+        "x_cord": 11,
+        "y_cord": 20,
+        "land_type": 0,
+        "resource_type": "Minerals",
+        "resource_amount": 12,
+        "occupied": false,
+        "x": 20,
+        "y": 11
+      },
+      {
+        "x_cord": 11,
+        "y_cord": 21,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 21,
+        "y": 11
+      },
+      {
+        "x_cord": 11,
+        "y_cord": 22,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 22,
+        "y": 11
+      },
+      {
+        "x_cord": 11,
+        "y_cord": 23,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 23,
+        "y": 11
+      },
+      {
+        "x_cord": 11,
+        "y_cord": 24,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 24,
+        "y": 11
+      },
+      {
+        "x_cord": 11,
+        "y_cord": 25,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 25,
+        "y": 11
+      },
+      {
+        "x_cord": 12,
+        "y_cord": 0,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 0,
+        "y": 12
+      },
+      {
+        "x_cord": 12,
+        "y_cord": 1,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 1,
+        "y": 12
+      },
+      {
+        "x_cord": 12,
+        "y_cord": 2,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 2,
+        "y": 12
+      },
+      {
+        "x_cord": 12,
+        "y_cord": 3,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 3,
+        "y": 12
+      },
+      {
+        "x_cord": 12,
+        "y_cord": 4,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 4,
+        "y": 12
+      },
+      {
+        "x_cord": 12,
+        "y_cord": 5,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 5,
+        "y": 12
+      },
+      {
+        "x_cord": 12,
+        "y_cord": 6,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 6,
+        "y": 12
+      },
+      {
+        "x_cord": 12,
+        "y_cord": 7,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 7,
+        "y": 12
+      },
+      {
+        "x_cord": 12,
+        "y_cord": 8,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 8,
+        "y": 12
+      },
+      {
+        "x_cord": 12,
+        "y_cord": 9,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 9,
+        "y": 12
+      },
+      {
+        "x_cord": 12,
+        "y_cord": 10,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 10,
+        "y": 12
+      },
+      {
+        "x_cord": 12,
+        "y_cord": 11,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 11,
+        "y": 12
+      },
+      {
+        "x_cord": 12,
+        "y_cord": 12,
+        "land_type": 0,
+        "resource_type": "Fuel",
+        "resource_amount": 2,
+        "occupied": false,
+        "x": 12,
+        "y": 12
+      },
+      {
+        "x_cord": 12,
+        "y_cord": 13,
+        "land_type": 0,
+        "resource_type": "Fuel",
+        "resource_amount": 8,
+        "occupied": false,
+        "x": 13,
+        "y": 12
+      },
+      {
+        "x_cord": 12,
+        "y_cord": 14,
+        "land_type": 0,
+        "resource_type": "Fuel",
+        "resource_amount": 6,
+        "occupied": false,
+        "x": 14,
+        "y": 12
+      },
+      {
+        "x_cord": 12,
+        "y_cord": 15,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 15,
+        "y": 12
+      },
+      {
+        "x_cord": 12,
+        "y_cord": 16,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 16,
+        "y": 12
+      },
+      {
+        "x_cord": 12,
+        "y_cord": 17,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 17,
+        "y": 12
+      },
+      {
+        "x_cord": 12,
+        "y_cord": 18,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 18,
+        "y": 12
+      },
+      {
+        "x_cord": 12,
+        "y_cord": 19,
+        "land_type": 0,
+        "resource_type": "Fuel",
+        "resource_amount": 12,
+        "occupied": false,
+        "x": 19,
+        "y": 12
+      },
+      {
+        "x_cord": 12,
+        "y_cord": 20,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 20,
+        "y": 12
+      },
+      {
+        "x_cord": 12,
+        "y_cord": 21,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 21,
+        "y": 12
+      },
+      {
+        "x_cord": 12,
+        "y_cord": 22,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 22,
+        "y": 12
+      },
+      {
+        "x_cord": 12,
+        "y_cord": 23,
+        "land_type": 0,
+        "resource_type": "Minerals",
+        "resource_amount": 9,
+        "occupied": false,
+        "x": 23,
+        "y": 12
+      },
+      {
+        "x_cord": 12,
+        "y_cord": 24,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 24,
+        "y": 12
+      },
+      {
+        "x_cord": 12,
+        "y_cord": 25,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 25,
+        "y": 12
+      },
+      {
+        "x_cord": 13,
+        "y_cord": 0,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 0,
+        "y": 13
+      },
+      {
+        "x_cord": 13,
+        "y_cord": 1,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 1,
+        "y": 13
+      },
+      {
+        "x_cord": 13,
+        "y_cord": 2,
+        "land_type": 0,
+        "resource_type": "Minerals",
+        "resource_amount": 15,
+        "occupied": true,
+        "x": 2,
+        "y": 13
+      },
+      {
+        "x_cord": 13,
+        "y_cord": 3,
+        "land_type": 0,
+        "resource_type": "Fuel",
+        "resource_amount": 8,
+        "occupied": false,
+        "x": 3,
+        "y": 13
+      },
+      {
+        "x_cord": 13,
+        "y_cord": 4,
+        "land_type": 0,
+        "resource_type": "Gold",
+        "resource_amount": 3,
+        "occupied": false,
+        "x": 4,
+        "y": 13
+      },
+      {
+        "x_cord": 13,
+        "y_cord": 5,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": true,
+        "x": 5,
+        "y": 13
+      },
+      {
+        "x_cord": 13,
+        "y_cord": 6,
+        "land_type": 0,
+        "resource_type": "Fuel",
+        "resource_amount": 12,
+        "occupied": false,
+        "x": 6,
+        "y": 13
+      },
+      {
+        "x_cord": 13,
+        "y_cord": 7,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 7,
+        "y": 13
+      },
+      {
+        "x_cord": 13,
+        "y_cord": 8,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 8,
+        "y": 13
+      },
+      {
+        "x_cord": 13,
+        "y_cord": 9,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 9,
+        "y": 13
+      },
+      {
+        "x_cord": 13,
+        "y_cord": 10,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 10,
+        "y": 13
+      },
+      {
+        "x_cord": 13,
+        "y_cord": 11,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 11,
+        "y": 13
+      },
+      {
+        "x_cord": 13,
+        "y_cord": 12,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 12,
+        "y": 13
+      },
+      {
+        "x_cord": 13,
+        "y_cord": 13,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 13,
+        "y": 13
+      },
+      {
+        "x_cord": 13,
+        "y_cord": 14,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 14,
+        "y": 13
+      },
+      {
+        "x_cord": 13,
+        "y_cord": 15,
+        "land_type": 0,
+        "resource_type": "Fuel",
+        "resource_amount": 4,
+        "occupied": false,
+        "x": 15,
+        "y": 13
+      },
+      {
+        "x_cord": 13,
+        "y_cord": 16,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 16,
+        "y": 13
+      },
+      {
+        "x_cord": 13,
+        "y_cord": 17,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 17,
+        "y": 13
+      },
+      {
+        "x_cord": 13,
+        "y_cord": 18,
+        "land_type": 0,
+        "resource_type": "Minerals",
+        "resource_amount": 15,
+        "occupied": false,
+        "x": 18,
+        "y": 13
+      },
+      {
+        "x_cord": 13,
+        "y_cord": 19,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 19,
+        "y": 13
+      },
+      {
+        "x_cord": 13,
+        "y_cord": 20,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 20,
+        "y": 13
+      },
+      {
+        "x_cord": 13,
+        "y_cord": 21,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 21,
+        "y": 13
+      },
+      {
+        "x_cord": 13,
+        "y_cord": 22,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 22,
+        "y": 13
+      },
+      {
+        "x_cord": 13,
+        "y_cord": 23,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 23,
+        "y": 13
+      },
+      {
+        "x_cord": 13,
+        "y_cord": 24,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 24,
+        "y": 13
+      },
+      {
+        "x_cord": 13,
+        "y_cord": 25,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 25,
+        "y": 13
+      },
+      {
+        "x_cord": 14,
+        "y_cord": 0,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 0,
+        "y": 14
+      },
+      {
+        "x_cord": 14,
+        "y_cord": 1,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 1,
+        "y": 14
+      },
+      {
+        "x_cord": 14,
+        "y_cord": 2,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 2,
+        "y": 14
+      },
+      {
+        "x_cord": 14,
+        "y_cord": 3,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 3,
+        "y": 14
+      },
+      {
+        "x_cord": 14,
+        "y_cord": 4,
+        "land_type": 0,
+        "resource_type": "Minerals",
+        "resource_amount": 2,
+        "occupied": false,
+        "x": 4,
+        "y": 14
+      },
+      {
+        "x_cord": 14,
+        "y_cord": 5,
+        "land_type": 0,
+        "resource_type": "Fuel",
+        "resource_amount": 6,
+        "occupied": false,
+        "x": 5,
+        "y": 14
+      },
+      {
+        "x_cord": 14,
+        "y_cord": 6,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 6,
+        "y": 14
+      },
+      {
+        "x_cord": 14,
+        "y_cord": 7,
+        "land_type": 0,
+        "resource_type": "Gold",
+        "resource_amount": 2,
+        "occupied": false,
+        "x": 7,
+        "y": 14
+      },
+      {
+        "x_cord": 14,
+        "y_cord": 8,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 8,
+        "y": 14
+      },
+      {
+        "x_cord": 14,
+        "y_cord": 9,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 9,
+        "y": 14
+      },
+      {
+        "x_cord": 14,
+        "y_cord": 10,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 10,
+        "y": 14
+      },
+      {
+        "x_cord": 14,
+        "y_cord": 11,
+        "land_type": 1,
+        "resource_type": "Gold",
+        "resource_amount": 2,
+        "occupied": false,
+        "x": 11,
+        "y": 14
+      },
+      {
+        "x_cord": 14,
+        "y_cord": 12,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 12,
+        "y": 14
+      },
+      {
+        "x_cord": 14,
+        "y_cord": 13,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 13,
+        "y": 14
+      },
+      {
+        "x_cord": 14,
+        "y_cord": 14,
+        "land_type": 0,
+        "resource_type": "Fuel",
+        "resource_amount": 8,
+        "occupied": false,
+        "x": 14,
+        "y": 14
+      },
+      {
+        "x_cord": 14,
+        "y_cord": 15,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 15,
+        "y": 14
+      },
+      {
+        "x_cord": 14,
+        "y_cord": 16,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 16,
+        "y": 14
+      },
+      {
+        "x_cord": 14,
+        "y_cord": 17,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 17,
+        "y": 14
+      },
+      {
+        "x_cord": 14,
+        "y_cord": 18,
+        "land_type": 0,
+        "resource_type": "Fuel",
+        "resource_amount": 2,
+        "occupied": false,
+        "x": 18,
+        "y": 14
+      },
+      {
+        "x_cord": 14,
+        "y_cord": 19,
+        "land_type": 0,
+        "resource_type": "Fuel",
+        "resource_amount": 12,
+        "occupied": false,
+        "x": 19,
+        "y": 14
+      },
+      {
+        "x_cord": 14,
+        "y_cord": 20,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 20,
+        "y": 14
+      },
+      {
+        "x_cord": 14,
+        "y_cord": 21,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 21,
+        "y": 14
+      },
+      {
+        "x_cord": 14,
+        "y_cord": 22,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 22,
+        "y": 14
+      },
+      {
+        "x_cord": 14,
+        "y_cord": 23,
+        "land_type": 0,
+        "resource_type": "Fuel",
+        "resource_amount": 11,
+        "occupied": false,
+        "x": 23,
+        "y": 14
+      },
+      {
+        "x_cord": 14,
+        "y_cord": 24,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 24,
+        "y": 14
+      },
+      {
+        "x_cord": 14,
+        "y_cord": 25,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 25,
+        "y": 14
+      },
+      {
+        "x_cord": 15,
+        "y_cord": 0,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 0,
+        "y": 15
+      },
+      {
+        "x_cord": 15,
+        "y_cord": 1,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 1,
+        "y": 15
+      },
+      {
+        "x_cord": 15,
+        "y_cord": 2,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 2,
+        "y": 15
+      },
+      {
+        "x_cord": 15,
+        "y_cord": 3,
+        "land_type": 0,
+        "resource_type": "Fuel",
+        "resource_amount": 1,
+        "occupied": false,
+        "x": 3,
+        "y": 15
+      },
+      {
+        "x_cord": 15,
+        "y_cord": 4,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": true,
+        "x": 4,
+        "y": 15
+      },
+      {
+        "x_cord": 15,
+        "y_cord": 5,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 5,
+        "y": 15
+      },
+      {
+        "x_cord": 15,
+        "y_cord": 6,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 6,
+        "y": 15
+      },
+      {
+        "x_cord": 15,
+        "y_cord": 7,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 7,
+        "y": 15
+      },
+      {
+        "x_cord": 15,
+        "y_cord": 8,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 8,
+        "y": 15
+      },
+      {
+        "x_cord": 15,
+        "y_cord": 9,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 9,
+        "y": 15
+      },
+      {
+        "x_cord": 15,
+        "y_cord": 10,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 10,
+        "y": 15
+      },
+      {
+        "x_cord": 15,
+        "y_cord": 11,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 11,
+        "y": 15
+      },
+      {
+        "x_cord": 15,
+        "y_cord": 12,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 12,
+        "y": 15
+      },
+      {
+        "x_cord": 15,
+        "y_cord": 13,
+        "land_type": 0,
+        "resource_type": "Minerals",
+        "resource_amount": 11,
+        "occupied": false,
+        "x": 13,
+        "y": 15
+      },
+      {
+        "x_cord": 15,
+        "y_cord": 14,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 14,
+        "y": 15
+      },
+      {
+        "x_cord": 15,
+        "y_cord": 15,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 15,
+        "y": 15
+      },
+      {
+        "x_cord": 15,
+        "y_cord": 16,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 16,
+        "y": 15
+      },
+      {
+        "x_cord": 15,
+        "y_cord": 17,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 17,
+        "y": 15
+      },
+      {
+        "x_cord": 15,
+        "y_cord": 18,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 18,
+        "y": 15
+      },
+      {
+        "x_cord": 15,
+        "y_cord": 19,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 19,
+        "y": 15
+      },
+      {
+        "x_cord": 15,
+        "y_cord": 20,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 20,
+        "y": 15
+      },
+      {
+        "x_cord": 15,
+        "y_cord": 21,
+        "land_type": 0,
+        "resource_type": "Fuel",
+        "resource_amount": 10,
+        "occupied": false,
+        "x": 21,
+        "y": 15
+      },
+      {
+        "x_cord": 15,
+        "y_cord": 22,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 22,
+        "y": 15
+      },
+      {
+        "x_cord": 15,
+        "y_cord": 23,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 23,
+        "y": 15
+      },
+      {
+        "x_cord": 15,
+        "y_cord": 24,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 24,
+        "y": 15
+      },
+      {
+        "x_cord": 15,
+        "y_cord": 25,
+        "land_type": 0,
+        "resource_type": "Gold",
+        "resource_amount": 1,
+        "occupied": false,
+        "x": 25,
+        "y": 15
+      },
+      {
+        "x_cord": 16,
+        "y_cord": 0,
+        "land_type": 7,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 0,
+        "y": 16
+      },
+      {
+        "x_cord": 16,
+        "y_cord": 1,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 1,
+        "y": 16
+      },
+      {
+        "x_cord": 16,
+        "y_cord": 2,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 2,
+        "y": 16
+      },
+      {
+        "x_cord": 16,
+        "y_cord": 3,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 3,
+        "y": 16
+      },
+      {
+        "x_cord": 16,
+        "y_cord": 4,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 4,
+        "y": 16
+      },
+      {
+        "x_cord": 16,
+        "y_cord": 5,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 5,
+        "y": 16
+      },
+      {
+        "x_cord": 16,
+        "y_cord": 6,
+        "land_type": 0,
+        "resource_type": "Minerals",
+        "resource_amount": 11,
+        "occupied": false,
+        "x": 6,
+        "y": 16
+      },
+      {
+        "x_cord": 16,
+        "y_cord": 7,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 7,
+        "y": 16
+      },
+      {
+        "x_cord": 16,
+        "y_cord": 8,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 8,
+        "y": 16
+      },
+      {
+        "x_cord": 16,
+        "y_cord": 9,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 9,
+        "y": 16
+      },
+      {
+        "x_cord": 16,
+        "y_cord": 10,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 10,
+        "y": 16
+      },
+      {
+        "x_cord": 16,
+        "y_cord": 11,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 11,
+        "y": 16
+      },
+      {
+        "x_cord": 16,
+        "y_cord": 12,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 12,
+        "y": 16
+      },
+      {
+        "x_cord": 16,
+        "y_cord": 13,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 13,
+        "y": 16
+      },
+      {
+        "x_cord": 16,
+        "y_cord": 14,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 14,
+        "y": 16
+      },
+      {
+        "x_cord": 16,
+        "y_cord": 15,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 15,
+        "y": 16
+      },
+      {
+        "x_cord": 16,
+        "y_cord": 16,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 16,
+        "y": 16
+      },
+      {
+        "x_cord": 16,
+        "y_cord": 17,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 17,
+        "y": 16
+      },
+      {
+        "x_cord": 16,
+        "y_cord": 18,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 18,
+        "y": 16
+      },
+      {
+        "x_cord": 16,
+        "y_cord": 19,
+        "land_type": 0,
+        "resource_type": "Gold",
+        "resource_amount": 2,
+        "occupied": false,
+        "x": 19,
+        "y": 16
+      },
+      {
+        "x_cord": 16,
+        "y_cord": 20,
+        "land_type": 0,
+        "resource_type": "Fuel",
+        "resource_amount": 7,
+        "occupied": false,
+        "x": 20,
+        "y": 16
+      },
+      {
+        "x_cord": 16,
+        "y_cord": 21,
+        "land_type": 7,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 21,
+        "y": 16
+      },
+      {
+        "x_cord": 16,
+        "y_cord": 22,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 22,
+        "y": 16
+      },
+      {
+        "x_cord": 16,
+        "y_cord": 23,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 23,
+        "y": 16
+      },
+      {
+        "x_cord": 16,
+        "y_cord": 24,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 24,
+        "y": 16
+      },
+      {
+        "x_cord": 16,
+        "y_cord": 25,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 25,
+        "y": 16
+      },
+      {
+        "x_cord": 17,
+        "y_cord": 0,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 0,
+        "y": 17
+      },
+      {
+        "x_cord": 17,
+        "y_cord": 1,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 1,
+        "y": 17
+      },
+      {
+        "x_cord": 17,
+        "y_cord": 2,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 2,
+        "y": 17
+      },
+      {
+        "x_cord": 17,
+        "y_cord": 3,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 3,
+        "y": 17
+      },
+      {
+        "x_cord": 17,
+        "y_cord": 4,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 4,
+        "y": 17
+      },
+      {
+        "x_cord": 17,
+        "y_cord": 5,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 5,
+        "y": 17
+      },
+      {
+        "x_cord": 17,
+        "y_cord": 6,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 6,
+        "y": 17
+      },
+      {
+        "x_cord": 17,
+        "y_cord": 7,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 7,
+        "y": 17
+      },
+      {
+        "x_cord": 17,
+        "y_cord": 8,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 8,
+        "y": 17
+      },
+      {
+        "x_cord": 17,
+        "y_cord": 9,
+        "land_type": 0,
+        "resource_type": "Minerals",
+        "resource_amount": 7,
+        "occupied": false,
+        "x": 9,
+        "y": 17
+      },
+      {
+        "x_cord": 17,
+        "y_cord": 10,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 10,
+        "y": 17
+      },
+      {
+        "x_cord": 17,
+        "y_cord": 11,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 11,
+        "y": 17
+      },
+      {
+        "x_cord": 17,
+        "y_cord": 12,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": true,
+        "x": 12,
+        "y": 17
+      },
+      {
+        "x_cord": 17,
+        "y_cord": 13,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 13,
+        "y": 17
+      },
+      {
+        "x_cord": 17,
+        "y_cord": 14,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 14,
+        "y": 17
+      },
+      {
+        "x_cord": 17,
+        "y_cord": 15,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 15,
+        "y": 17
+      },
+      {
+        "x_cord": 17,
+        "y_cord": 16,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 16,
+        "y": 17
+      },
+      {
+        "x_cord": 17,
+        "y_cord": 17,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 17,
+        "y": 17
+      },
+      {
+        "x_cord": 17,
+        "y_cord": 18,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 18,
+        "y": 17
+      },
+      {
+        "x_cord": 17,
+        "y_cord": 19,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 19,
+        "y": 17
+      },
+      {
+        "x_cord": 17,
+        "y_cord": 20,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 20,
+        "y": 17
+      },
+      {
+        "x_cord": 17,
+        "y_cord": 21,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 21,
+        "y": 17
+      },
+      {
+        "x_cord": 17,
+        "y_cord": 22,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 22,
+        "y": 17
+      },
+      {
+        "x_cord": 17,
+        "y_cord": 23,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 23,
+        "y": 17
+      },
+      {
+        "x_cord": 17,
+        "y_cord": 24,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 24,
+        "y": 17
+      },
+      {
+        "x_cord": 17,
+        "y_cord": 25,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 25,
+        "y": 17
+      },
+      {
+        "x_cord": 18,
+        "y_cord": 0,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 0,
+        "y": 18
+      },
+      {
+        "x_cord": 18,
+        "y_cord": 1,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 1,
+        "y": 18
+      },
+      {
+        "x_cord": 18,
+        "y_cord": 2,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 2,
+        "y": 18
+      },
+      {
+        "x_cord": 18,
+        "y_cord": 3,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 3,
+        "y": 18
+      },
+      {
+        "x_cord": 18,
+        "y_cord": 4,
+        "land_type": 0,
+        "resource_type": "Minerals",
+        "resource_amount": 8,
+        "occupied": false,
+        "x": 4,
+        "y": 18
+      },
+      {
+        "x_cord": 18,
+        "y_cord": 5,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 5,
+        "y": 18
+      },
+      {
+        "x_cord": 18,
+        "y_cord": 6,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 6,
+        "y": 18
+      },
+      {
+        "x_cord": 18,
+        "y_cord": 7,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 7,
+        "y": 18
+      },
+      {
+        "x_cord": 18,
+        "y_cord": 8,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 8,
+        "y": 18
+      },
+      {
+        "x_cord": 18,
+        "y_cord": 9,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 9,
+        "y": 18
+      },
+      {
+        "x_cord": 18,
+        "y_cord": 10,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 10,
+        "y": 18
+      },
+      {
+        "x_cord": 18,
+        "y_cord": 11,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 11,
+        "y": 18
+      },
+      {
+        "x_cord": 18,
+        "y_cord": 12,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 12,
+        "y": 18
+      },
+      {
+        "x_cord": 18,
+        "y_cord": 13,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 13,
+        "y": 18
+      },
+      {
+        "x_cord": 18,
+        "y_cord": 14,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 14,
+        "y": 18
+      },
+      {
+        "x_cord": 18,
+        "y_cord": 15,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 15,
+        "y": 18
+      },
+      {
+        "x_cord": 18,
+        "y_cord": 16,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 16,
+        "y": 18
+      },
+      {
+        "x_cord": 18,
+        "y_cord": 17,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 17,
+        "y": 18
+      },
+      {
+        "x_cord": 18,
+        "y_cord": 18,
+        "land_type": 0,
+        "resource_type": "Minerals",
+        "resource_amount": 1,
+        "occupied": false,
+        "x": 18,
+        "y": 18
+      },
+      {
+        "x_cord": 18,
+        "y_cord": 19,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 19,
+        "y": 18
+      },
+      {
+        "x_cord": 18,
+        "y_cord": 20,
+        "land_type": 0,
+        "resource_type": "Fuel",
+        "resource_amount": 6,
+        "occupied": false,
+        "x": 20,
+        "y": 18
+      },
+      {
+        "x_cord": 18,
+        "y_cord": 21,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 21,
+        "y": 18
+      },
+      {
+        "x_cord": 18,
+        "y_cord": 22,
+        "land_type": 0,
+        "resource_type": "Minerals",
+        "resource_amount": 2,
+        "occupied": false,
+        "x": 22,
+        "y": 18
+      },
+      {
+        "x_cord": 18,
+        "y_cord": 23,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 23,
+        "y": 18
+      },
+      {
+        "x_cord": 18,
+        "y_cord": 24,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 24,
+        "y": 18
+      },
+      {
+        "x_cord": 18,
+        "y_cord": 25,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 25,
+        "y": 18
+      },
+      {
+        "x_cord": 19,
+        "y_cord": 0,
+        "land_type": 7,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 0,
+        "y": 19
+      },
+      {
+        "x_cord": 19,
+        "y_cord": 1,
+        "land_type": 7,
+        "resource_type": "Minerals",
+        "resource_amount": 7,
+        "occupied": false,
+        "x": 1,
+        "y": 19
+      },
+      {
+        "x_cord": 19,
+        "y_cord": 2,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 2,
+        "y": 19
+      },
+      {
+        "x_cord": 19,
+        "y_cord": 3,
+        "land_type": 0,
+        "resource_type": "Gold",
+        "resource_amount": 3,
+        "occupied": false,
+        "x": 3,
+        "y": 19
+      },
+      {
+        "x_cord": 19,
+        "y_cord": 4,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 4,
+        "y": 19
+      },
+      {
+        "x_cord": 19,
+        "y_cord": 5,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 5,
+        "y": 19
+      },
+      {
+        "x_cord": 19,
+        "y_cord": 6,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 6,
+        "y": 19
+      },
+      {
+        "x_cord": 19,
+        "y_cord": 7,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 7,
+        "y": 19
+      },
+      {
+        "x_cord": 19,
+        "y_cord": 8,
+        "land_type": 1,
+        "resource_type": "Fuel",
+        "resource_amount": 1,
+        "occupied": false,
+        "x": 8,
+        "y": 19
+      },
+      {
+        "x_cord": 19,
+        "y_cord": 9,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 9,
+        "y": 19
+      },
+      {
+        "x_cord": 19,
+        "y_cord": 10,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 10,
+        "y": 19
+      },
+      {
+        "x_cord": 19,
+        "y_cord": 11,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 11,
+        "y": 19
+      },
+      {
+        "x_cord": 19,
+        "y_cord": 12,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 12,
+        "y": 19
+      },
+      {
+        "x_cord": 19,
+        "y_cord": 13,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 13,
+        "y": 19
+      },
+      {
+        "x_cord": 19,
+        "y_cord": 14,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 14,
+        "y": 19
+      },
+      {
+        "x_cord": 19,
+        "y_cord": 15,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 15,
+        "y": 19
+      },
+      {
+        "x_cord": 19,
+        "y_cord": 16,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 16,
+        "y": 19
+      },
+      {
+        "x_cord": 19,
+        "y_cord": 17,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 17,
+        "y": 19
+      },
+      {
+        "x_cord": 19,
+        "y_cord": 18,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 18,
+        "y": 19
+      },
+      {
+        "x_cord": 19,
+        "y_cord": 19,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 19,
+        "y": 19
+      },
+      {
+        "x_cord": 19,
+        "y_cord": 20,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 20,
+        "y": 19
+      },
+      {
+        "x_cord": 19,
+        "y_cord": 21,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 21,
+        "y": 19
+      },
+      {
+        "x_cord": 19,
+        "y_cord": 22,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 22,
+        "y": 19
+      },
+      {
+        "x_cord": 19,
+        "y_cord": 23,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 23,
+        "y": 19
+      },
+      {
+        "x_cord": 19,
+        "y_cord": 24,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 24,
+        "y": 19
+      },
+      {
+        "x_cord": 19,
+        "y_cord": 25,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 25,
+        "y": 19
+      },
+      {
+        "x_cord": 20,
+        "y_cord": 0,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 0,
+        "y": 20
+      },
+      {
+        "x_cord": 20,
+        "y_cord": 1,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 1,
+        "y": 20
+      },
+      {
+        "x_cord": 20,
+        "y_cord": 2,
+        "land_type": 0,
+        "resource_type": "Fuel",
+        "resource_amount": 1,
+        "occupied": false,
+        "x": 2,
+        "y": 20
+      },
+      {
+        "x_cord": 20,
+        "y_cord": 3,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 3,
+        "y": 20
+      },
+      {
+        "x_cord": 20,
+        "y_cord": 4,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 4,
+        "y": 20
+      },
+      {
+        "x_cord": 20,
+        "y_cord": 5,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 5,
+        "y": 20
+      },
+      {
+        "x_cord": 20,
+        "y_cord": 6,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 6,
+        "y": 20
+      },
+      {
+        "x_cord": 20,
+        "y_cord": 7,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 7,
+        "y": 20
+      },
+      {
+        "x_cord": 20,
+        "y_cord": 8,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 8,
+        "y": 20
+      },
+      {
+        "x_cord": 20,
+        "y_cord": 9,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 9,
+        "y": 20
+      },
+      {
+        "x_cord": 20,
+        "y_cord": 10,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 10,
+        "y": 20
+      },
+      {
+        "x_cord": 20,
+        "y_cord": 11,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 11,
+        "y": 20
+      },
+      {
+        "x_cord": 20,
+        "y_cord": 12,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 12,
+        "y": 20
+      },
+      {
+        "x_cord": 20,
+        "y_cord": 13,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 13,
+        "y": 20
+      },
+      {
+        "x_cord": 20,
+        "y_cord": 14,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 14,
+        "y": 20
+      },
+      {
+        "x_cord": 20,
+        "y_cord": 15,
+        "land_type": 1,
+        "resource_type": "Minerals",
+        "resource_amount": 3,
+        "occupied": false,
+        "x": 15,
+        "y": 20
+      },
+      {
+        "x_cord": 20,
+        "y_cord": 16,
+        "land_type": 1,
+        "resource_type": "Minerals",
+        "resource_amount": 11,
+        "occupied": false,
+        "x": 16,
+        "y": 20
+      },
+      {
+        "x_cord": 20,
+        "y_cord": 17,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 17,
+        "y": 20
+      },
+      {
+        "x_cord": 20,
+        "y_cord": 18,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 18,
+        "y": 20
+      },
+      {
+        "x_cord": 20,
+        "y_cord": 19,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 19,
+        "y": 20
+      },
+      {
+        "x_cord": 20,
+        "y_cord": 20,
+        "land_type": 7,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 20,
+        "y": 20
+      },
+      {
+        "x_cord": 20,
+        "y_cord": 21,
+        "land_type": 7,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 21,
+        "y": 20
+      },
+      {
+        "x_cord": 20,
+        "y_cord": 22,
+        "land_type": 7,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 22,
+        "y": 20
+      },
+      {
+        "x_cord": 20,
+        "y_cord": 23,
+        "land_type": 7,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 23,
+        "y": 20
+      },
+      {
+        "x_cord": 20,
+        "y_cord": 24,
+        "land_type": 7,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 24,
+        "y": 20
+      },
+      {
+        "x_cord": 20,
+        "y_cord": 25,
+        "land_type": 7,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 25,
+        "y": 20
+      },
+      {
+        "x_cord": 21,
+        "y_cord": 0,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 0,
+        "y": 21
+      },
+      {
+        "x_cord": 21,
+        "y_cord": 1,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 1,
+        "y": 21
+      },
+      {
+        "x_cord": 21,
+        "y_cord": 2,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 2,
+        "y": 21
+      },
+      {
+        "x_cord": 21,
+        "y_cord": 3,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 3,
+        "y": 21
+      },
+      {
+        "x_cord": 21,
+        "y_cord": 4,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 4,
+        "y": 21
+      },
+      {
+        "x_cord": 21,
+        "y_cord": 5,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": true,
+        "x": 5,
+        "y": 21
+      },
+      {
+        "x_cord": 21,
+        "y_cord": 6,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 6,
+        "y": 21
+      },
+      {
+        "x_cord": 21,
+        "y_cord": 7,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 7,
+        "y": 21
+      },
+      {
+        "x_cord": 21,
+        "y_cord": 8,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 8,
+        "y": 21
+      },
+      {
+        "x_cord": 21,
+        "y_cord": 9,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 9,
+        "y": 21
+      },
+      {
+        "x_cord": 21,
+        "y_cord": 10,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 10,
+        "y": 21
+      },
+      {
+        "x_cord": 21,
+        "y_cord": 11,
+        "land_type": 0,
+        "resource_type": "Gold",
+        "resource_amount": 1,
+        "occupied": false,
+        "x": 11,
+        "y": 21
+      },
+      {
+        "x_cord": 21,
+        "y_cord": 12,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 12,
+        "y": 21
+      },
+      {
+        "x_cord": 21,
+        "y_cord": 13,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 13,
+        "y": 21
+      },
+      {
+        "x_cord": 21,
+        "y_cord": 14,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 14,
+        "y": 21
+      },
+      {
+        "x_cord": 21,
+        "y_cord": 15,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 15,
+        "y": 21
+      },
+      {
+        "x_cord": 21,
+        "y_cord": 16,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 16,
+        "y": 21
+      },
+      {
+        "x_cord": 21,
+        "y_cord": 17,
+        "land_type": 1,
+        "resource_type": "Minerals",
+        "resource_amount": 8,
+        "occupied": false,
+        "x": 17,
+        "y": 21
+      },
+      {
+        "x_cord": 21,
+        "y_cord": 18,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 18,
+        "y": 21
+      },
+      {
+        "x_cord": 21,
+        "y_cord": 19,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 19,
+        "y": 21
+      },
+      {
+        "x_cord": 21,
+        "y_cord": 20,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 20,
+        "y": 21
+      },
+      {
+        "x_cord": 21,
+        "y_cord": 21,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 21,
+        "y": 21
+      },
+      {
+        "x_cord": 21,
+        "y_cord": 22,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 22,
+        "y": 21
+      },
+      {
+        "x_cord": 21,
+        "y_cord": 23,
+        "land_type": 0,
+        "resource_type": "Fuel",
+        "resource_amount": 1,
+        "occupied": false,
+        "x": 23,
+        "y": 21
+      },
+      {
+        "x_cord": 21,
+        "y_cord": 24,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 24,
+        "y": 21
+      },
+      {
+        "x_cord": 21,
+        "y_cord": 25,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 25,
+        "y": 21
+      },
+      {
+        "x_cord": 22,
+        "y_cord": 0,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 0,
+        "y": 22
+      },
+      {
+        "x_cord": 22,
+        "y_cord": 1,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 1,
+        "y": 22
+      },
+      {
+        "x_cord": 22,
+        "y_cord": 2,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 2,
+        "y": 22
+      },
+      {
+        "x_cord": 22,
+        "y_cord": 3,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 3,
+        "y": 22
+      },
+      {
+        "x_cord": 22,
+        "y_cord": 4,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 4,
+        "y": 22
+      },
+      {
+        "x_cord": 22,
+        "y_cord": 5,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 5,
+        "y": 22
+      },
+      {
+        "x_cord": 22,
+        "y_cord": 6,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 6,
+        "y": 22
+      },
+      {
+        "x_cord": 22,
+        "y_cord": 7,
+        "land_type": 7,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 7,
+        "y": 22
+      },
+      {
+        "x_cord": 22,
+        "y_cord": 8,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 8,
+        "y": 22
+      },
+      {
+        "x_cord": 22,
+        "y_cord": 9,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 9,
+        "y": 22
+      },
+      {
+        "x_cord": 22,
+        "y_cord": 10,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 10,
+        "y": 22
+      },
+      {
+        "x_cord": 22,
+        "y_cord": 11,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 11,
+        "y": 22
+      },
+      {
+        "x_cord": 22,
+        "y_cord": 12,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 12,
+        "y": 22
+      },
+      {
+        "x_cord": 22,
+        "y_cord": 13,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 13,
+        "y": 22
+      },
+      {
+        "x_cord": 22,
+        "y_cord": 14,
+        "land_type": 0,
+        "resource_type": "Minerals",
+        "resource_amount": 12,
+        "occupied": false,
+        "x": 14,
+        "y": 22
+      },
+      {
+        "x_cord": 22,
+        "y_cord": 15,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 15,
+        "y": 22
+      },
+      {
+        "x_cord": 22,
+        "y_cord": 16,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 16,
+        "y": 22
+      },
+      {
+        "x_cord": 22,
+        "y_cord": 17,
+        "land_type": 1,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 17,
+        "y": 22
+      },
+      {
+        "x_cord": 22,
+        "y_cord": 18,
+        "land_type": 0,
+        "resource_type": "Gold",
+        "resource_amount": 1,
+        "occupied": false,
+        "x": 18,
+        "y": 22
+      },
+      {
+        "x_cord": 22,
+        "y_cord": 19,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 19,
+        "y": 22
+      },
+      {
+        "x_cord": 22,
+        "y_cord": 20,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 20,
+        "y": 22
+      },
+      {
+        "x_cord": 22,
+        "y_cord": 21,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 21,
+        "y": 22
+      },
+      {
+        "x_cord": 22,
+        "y_cord": 22,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 22,
+        "y": 22
+      },
+      {
+        "x_cord": 22,
+        "y_cord": 23,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 23,
+        "y": 22
+      },
+      {
+        "x_cord": 22,
+        "y_cord": 24,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 24,
+        "y": 22
+      },
+      {
+        "x_cord": 22,
+        "y_cord": 25,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 25,
+        "y": 22
+      },
+      {
+        "x_cord": 23,
+        "y_cord": 0,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 0,
+        "y": 23
+      },
+      {
+        "x_cord": 23,
+        "y_cord": 1,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 1,
+        "y": 23
+      },
+      {
+        "x_cord": 23,
+        "y_cord": 2,
+        "land_type": 0,
+        "resource_type": "Gold",
+        "resource_amount": 4,
+        "occupied": false,
+        "x": 2,
+        "y": 23
+      },
+      {
+        "x_cord": 23,
+        "y_cord": 3,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 3,
+        "y": 23
+      },
+      {
+        "x_cord": 23,
+        "y_cord": 4,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 4,
+        "y": 23
+      },
+      {
+        "x_cord": 23,
+        "y_cord": 5,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 5,
+        "y": 23
+      },
+      {
+        "x_cord": 23,
+        "y_cord": 6,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 6,
+        "y": 23
+      },
+      {
+        "x_cord": 23,
+        "y_cord": 7,
+        "land_type": 7,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 7,
+        "y": 23
+      },
+      {
+        "x_cord": 23,
+        "y_cord": 8,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 8,
+        "y": 23
+      },
+      {
+        "x_cord": 23,
+        "y_cord": 9,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 9,
+        "y": 23
+      },
+      {
+        "x_cord": 23,
+        "y_cord": 10,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 10,
+        "y": 23
+      },
+      {
+        "x_cord": 23,
+        "y_cord": 11,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 11,
+        "y": 23
+      },
+      {
+        "x_cord": 23,
+        "y_cord": 12,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 12,
+        "y": 23
+      },
+      {
+        "x_cord": 23,
+        "y_cord": 13,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 13,
+        "y": 23
+      },
+      {
+        "x_cord": 23,
+        "y_cord": 14,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 14,
+        "y": 23
+      },
+      {
+        "x_cord": 23,
+        "y_cord": 15,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 15,
+        "y": 23
+      },
+      {
+        "x_cord": 23,
+        "y_cord": 16,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 16,
+        "y": 23
+      },
+      {
+        "x_cord": 23,
+        "y_cord": 17,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 17,
+        "y": 23
+      },
+      {
+        "x_cord": 23,
+        "y_cord": 18,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 18,
+        "y": 23
+      },
+      {
+        "x_cord": 23,
+        "y_cord": 19,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 19,
+        "y": 23
+      },
+      {
+        "x_cord": 23,
+        "y_cord": 20,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 20,
+        "y": 23
+      },
+      {
+        "x_cord": 23,
+        "y_cord": 21,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 21,
+        "y": 23
+      },
+      {
+        "x_cord": 23,
+        "y_cord": 22,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 22,
+        "y": 23
+      },
+      {
+        "x_cord": 23,
+        "y_cord": 23,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 23,
+        "y": 23
+      },
+      {
+        "x_cord": 23,
+        "y_cord": 24,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 24,
+        "y": 23
+      },
+      {
+        "x_cord": 23,
+        "y_cord": 25,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 25,
+        "y": 23
+      },
+      {
+        "x_cord": 24,
+        "y_cord": 0,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 0,
+        "y": 24
+      },
+      {
+        "x_cord": 24,
+        "y_cord": 1,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 1,
+        "y": 24
+      },
+      {
+        "x_cord": 24,
+        "y_cord": 2,
+        "land_type": 0,
+        "resource_type": "Minerals",
+        "resource_amount": 15,
+        "occupied": true,
+        "x": 2,
+        "y": 24
+      },
+      {
+        "x_cord": 24,
+        "y_cord": 3,
+        "land_type": 0,
+        "resource_type": "Gold",
+        "resource_amount": 2,
+        "occupied": false,
+        "x": 3,
+        "y": 24
+      },
+      {
+        "x_cord": 24,
+        "y_cord": 4,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 4,
+        "y": 24
+      },
+      {
+        "x_cord": 24,
+        "y_cord": 5,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 5,
+        "y": 24
+      },
+      {
+        "x_cord": 24,
+        "y_cord": 6,
+        "land_type": 0,
+        "resource_type": "Fuel",
+        "resource_amount": 1,
+        "occupied": false,
+        "x": 6,
+        "y": 24
+      },
+      {
+        "x_cord": 24,
+        "y_cord": 7,
+        "land_type": 7,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 7,
+        "y": 24
+      },
+      {
+        "x_cord": 24,
+        "y_cord": 8,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 8,
+        "y": 24
+      },
+      {
+        "x_cord": 24,
+        "y_cord": 9,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 9,
+        "y": 24
+      },
+      {
+        "x_cord": 24,
+        "y_cord": 10,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 10,
+        "y": 24
+      },
+      {
+        "x_cord": 24,
+        "y_cord": 11,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 11,
+        "y": 24
+      },
+      {
+        "x_cord": 24,
+        "y_cord": 12,
+        "land_type": 0,
+        "resource_type": "Gold",
+        "resource_amount": 2,
+        "occupied": false,
+        "x": 12,
+        "y": 24
+      },
+      {
+        "x_cord": 24,
+        "y_cord": 13,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 13,
+        "y": 24
+      },
+      {
+        "x_cord": 24,
+        "y_cord": 14,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 14,
+        "y": 24
+      },
+      {
+        "x_cord": 24,
+        "y_cord": 15,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 15,
+        "y": 24
+      },
+      {
+        "x_cord": 24,
+        "y_cord": 16,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 16,
+        "y": 24
+      },
+      {
+        "x_cord": 24,
+        "y_cord": 17,
+        "land_type": 0,
+        "resource_type": "Minerals",
+        "resource_amount": 8,
+        "occupied": false,
+        "x": 17,
+        "y": 24
+      },
+      {
+        "x_cord": 24,
+        "y_cord": 18,
+        "land_type": 0,
+        "resource_type": "Minerals",
+        "resource_amount": 15,
+        "occupied": false,
+        "x": 18,
+        "y": 24
+      },
+      {
+        "x_cord": 24,
+        "y_cord": 19,
+        "land_type": 0,
+        "resource_type": "Minerals",
+        "resource_amount": 9,
+        "occupied": false,
+        "x": 19,
+        "y": 24
+      },
+      {
+        "x_cord": 24,
+        "y_cord": 20,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 20,
+        "y": 24
+      },
+      {
+        "x_cord": 24,
+        "y_cord": 21,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 21,
+        "y": 24
+      },
+      {
+        "x_cord": 24,
+        "y_cord": 22,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 22,
+        "y": 24
+      },
+      {
+        "x_cord": 24,
+        "y_cord": 23,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 23,
+        "y": 24
+      },
+      {
+        "x_cord": 24,
+        "y_cord": 24,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 24,
+        "y": 24
+      },
+      {
+        "x_cord": 24,
+        "y_cord": 25,
+        "land_type": 0,
+        "resource_type": "Minerals",
+        "resource_amount": 9,
+        "occupied": false,
+        "x": 25,
+        "y": 24
+      },
+      {
+        "x_cord": 25,
+        "y_cord": 0,
+        "land_type": 0,
+        "resource_type": "Minerals",
+        "resource_amount": 3,
+        "occupied": false,
+        "x": 0,
+        "y": 25
+      },
+      {
+        "x_cord": 25,
+        "y_cord": 1,
+        "land_type": 0,
+        "resource_type": "Minerals",
+        "resource_amount": 8,
+        "occupied": false,
+        "x": 1,
+        "y": 25
+      },
+      {
+        "x_cord": 25,
+        "y_cord": 2,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 2,
+        "y": 25
+      },
+      {
+        "x_cord": 25,
+        "y_cord": 3,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 3,
+        "y": 25
+      },
+      {
+        "x_cord": 25,
+        "y_cord": 4,
+        "land_type": 0,
+        "resource_type": "Gold",
+        "resource_amount": 3,
+        "occupied": true,
+        "x": 4,
+        "y": 25
+      },
+      {
+        "x_cord": 25,
+        "y_cord": 5,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": true,
+        "x": 5,
+        "y": 25
+      },
+      {
+        "x_cord": 25,
+        "y_cord": 6,
+        "land_type": 0,
+        "resource_type": "Gold",
+        "resource_amount": 1,
+        "occupied": false,
+        "x": 6,
+        "y": 25
+      },
+      {
+        "x_cord": 25,
+        "y_cord": 7,
+        "land_type": 7,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 7,
+        "y": 25
+      },
+      {
+        "x_cord": 25,
+        "y_cord": 8,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 8,
+        "y": 25
+      },
+      {
+        "x_cord": 25,
+        "y_cord": 9,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 9,
+        "y": 25
+      },
+      {
+        "x_cord": 25,
+        "y_cord": 10,
+        "land_type": 0,
+        "resource_type": "Minerals",
+        "resource_amount": 2,
+        "occupied": false,
+        "x": 10,
+        "y": 25
+      },
+      {
+        "x_cord": 25,
+        "y_cord": 11,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 11,
+        "y": 25
+      },
+      {
+        "x_cord": 25,
+        "y_cord": 12,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 12,
+        "y": 25
+      },
+      {
+        "x_cord": 25,
+        "y_cord": 13,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 13,
+        "y": 25
+      },
+      {
+        "x_cord": 25,
+        "y_cord": 14,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 14,
+        "y": 25
+      },
+      {
+        "x_cord": 25,
+        "y_cord": 15,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 15,
+        "y": 25
+      },
+      {
+        "x_cord": 25,
+        "y_cord": 16,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 16,
+        "y": 25
+      },
+      {
+        "x_cord": 25,
+        "y_cord": 17,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 17,
+        "y": 25
+      },
+      {
+        "x_cord": 25,
+        "y_cord": 18,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 18,
+        "y": 25
+      },
+      {
+        "x_cord": 25,
+        "y_cord": 19,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 19,
+        "y": 25
+      },
+      {
+        "x_cord": 25,
+        "y_cord": 20,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 20,
+        "y": 25
+      },
+      {
+        "x_cord": 25,
+        "y_cord": 21,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 21,
+        "y": 25
+      },
+      {
+        "x_cord": 25,
+        "y_cord": 22,
+        "land_type": 0,
+        "resource_type": "Minerals",
+        "resource_amount": 7,
+        "occupied": false,
+        "x": 22,
+        "y": 25
+      },
+      {
+        "x_cord": 25,
+        "y_cord": 23,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 23,
+        "y": 25
+      },
+      {
+        "x_cord": 25,
+        "y_cord": 24,
+        "land_type": 0,
+        "resource_type": "Fuel",
+        "resource_amount": 5,
+        "occupied": false,
+        "x": 24,
+        "y": 25
+      },
+      {
+        "x_cord": 25,
+        "y_cord": 25,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 25,
+        "y": 25
+      },
+      {
+        "x_cord": 26,
+        "y_cord": 0,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 0,
+        "y": 26
+      },
+      {
+        "x_cord": 26,
+        "y_cord": 1,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 1,
+        "y": 26
+      },
+      {
+        "x_cord": 26,
+        "y_cord": 2,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 2,
+        "y": 26
+      },
+      {
+        "x_cord": 26,
+        "y_cord": 3,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 3,
+        "y": 26
+      },
+      {
+        "x_cord": 26,
+        "y_cord": 4,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 4,
+        "y": 26
+      },
+      {
+        "x_cord": 26,
+        "y_cord": 5,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 5,
+        "y": 26
+      },
+      {
+        "x_cord": 26,
+        "y_cord": 6,
+        "land_type": 0,
+        "resource_type": "Gold",
+        "resource_amount": 3,
+        "occupied": false,
+        "x": 6,
+        "y": 26
+      },
+      {
+        "x_cord": 26,
+        "y_cord": 7,
+        "land_type": 7,
+        "resource_type": "Minerals",
+        "resource_amount": 9,
+        "occupied": false,
+        "x": 7,
+        "y": 26
+      },
+      {
+        "x_cord": 26,
+        "y_cord": 8,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 8,
+        "y": 26
+      },
+      {
+        "x_cord": 26,
+        "y_cord": 9,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 9,
+        "y": 26
+      },
+      {
+        "x_cord": 26,
+        "y_cord": 10,
+        "land_type": 0,
+        "resource_type": "Gold",
+        "resource_amount": 2,
+        "occupied": false,
+        "x": 10,
+        "y": 26
+      },
+      {
+        "x_cord": 26,
+        "y_cord": 11,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 11,
+        "y": 26
+      },
+      {
+        "x_cord": 26,
+        "y_cord": 12,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 12,
+        "y": 26
+      },
+      {
+        "x_cord": 26,
+        "y_cord": 13,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 13,
+        "y": 26
+      },
+      {
+        "x_cord": 26,
+        "y_cord": 14,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 14,
+        "y": 26
+      },
+      {
+        "x_cord": 26,
+        "y_cord": 15,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 15,
+        "y": 26
+      },
+      {
+        "x_cord": 26,
+        "y_cord": 16,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 16,
+        "y": 26
+      },
+      {
+        "x_cord": 26,
+        "y_cord": 17,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 17,
+        "y": 26
+      },
+      {
+        "x_cord": 26,
+        "y_cord": 18,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 18,
+        "y": 26
+      },
+      {
+        "x_cord": 26,
+        "y_cord": 19,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 19,
+        "y": 26
+      },
+      {
+        "x_cord": 26,
+        "y_cord": 20,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 20,
+        "y": 26
+      },
+      {
+        "x_cord": 26,
+        "y_cord": 21,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 21,
+        "y": 26
+      },
+      {
+        "x_cord": 26,
+        "y_cord": 22,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 22,
+        "y": 26
+      },
+      {
+        "x_cord": 26,
+        "y_cord": 23,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 23,
+        "y": 26
+      },
+      {
+        "x_cord": 26,
+        "y_cord": 24,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 24,
+        "y": 26
+      },
+      {
+        "x_cord": 26,
+        "y_cord": 25,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 25,
+        "y": 26
+      },
+      {
+        "x_cord": 27,
+        "y_cord": 0,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 0,
+        "y": 27
+      },
+      {
+        "x_cord": 27,
+        "y_cord": 1,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 1,
+        "y": 27
+      },
+      {
+        "x_cord": 27,
+        "y_cord": 2,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 2,
+        "y": 27
+      },
+      {
+        "x_cord": 27,
+        "y_cord": 3,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 3,
+        "y": 27
+      },
+      {
+        "x_cord": 27,
+        "y_cord": 4,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 4,
+        "y": 27
+      },
+      {
+        "x_cord": 27,
+        "y_cord": 5,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 5,
+        "y": 27
+      },
+      {
+        "x_cord": 27,
+        "y_cord": 6,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 6,
+        "y": 27
+      },
+      {
+        "x_cord": 27,
+        "y_cord": 7,
+        "land_type": 7,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 7,
+        "y": 27
+      },
+      {
+        "x_cord": 27,
+        "y_cord": 8,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 8,
+        "y": 27
+      },
+      {
+        "x_cord": 27,
+        "y_cord": 9,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 9,
+        "y": 27
+      },
+      {
+        "x_cord": 27,
+        "y_cord": 10,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 10,
+        "y": 27
+      },
+      {
+        "x_cord": 27,
+        "y_cord": 11,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 11,
+        "y": 27
+      },
+      {
+        "x_cord": 27,
+        "y_cord": 12,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 12,
+        "y": 27
+      },
+      {
+        "x_cord": 27,
+        "y_cord": 13,
+        "land_type": 7,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 13,
+        "y": 27
+      },
+      {
+        "x_cord": 27,
+        "y_cord": 14,
+        "land_type": 0,
+        "resource_type": "Fuel",
+        "resource_amount": 9,
+        "occupied": false,
+        "x": 14,
+        "y": 27
+      },
+      {
+        "x_cord": 27,
+        "y_cord": 15,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 15,
+        "y": 27
+      },
+      {
+        "x_cord": 27,
+        "y_cord": 16,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 16,
+        "y": 27
+      },
+      {
+        "x_cord": 27,
+        "y_cord": 17,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 17,
+        "y": 27
+      },
+      {
+        "x_cord": 27,
+        "y_cord": 18,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 18,
+        "y": 27
+      },
+      {
+        "x_cord": 27,
+        "y_cord": 19,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 19,
+        "y": 27
+      },
+      {
+        "x_cord": 27,
+        "y_cord": 20,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 20,
+        "y": 27
+      },
+      {
+        "x_cord": 27,
+        "y_cord": 21,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 21,
+        "y": 27
+      },
+      {
+        "x_cord": 27,
+        "y_cord": 22,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 22,
+        "y": 27
+      },
+      {
+        "x_cord": 27,
+        "y_cord": 23,
+        "land_type": 0,
+        "resource_type": "Gold",
+        "resource_amount": 2,
+        "occupied": false,
+        "x": 23,
+        "y": 27
+      },
+      {
+        "x_cord": 27,
+        "y_cord": 24,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 24,
+        "y": 27
+      },
+      {
+        "x_cord": 27,
+        "y_cord": 25,
+        "land_type": 0,
+        "resource_type": null,
+        "resource_amount": 0,
+        "occupied": false,
+        "x": 25,
+        "y": 27
+      }
+    ]
+  },
+  "camera": {
+    "x": 0,
+    "y": 0
+  }
+}

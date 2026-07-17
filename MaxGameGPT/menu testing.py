@@ -23,18 +23,32 @@ while running:
     #game.draw(screen, font)
     pygame.display.flip()
 
-    buttons = []
-    # Create button rects
-    for i, label in enumerate(labels):
-        rect = pygame.Rect(
-            0 + 20,
-            50 + i * (C.UNIT_PROP_HEIGHT + C.PADDING),
-            C.UNIT_MENU_WIDTH - 40,
-            C.BTN_HEIGHT
-        )
-        buttons.append((label, rect))
+    options_labels = ["Pause", "Save", "Load", "Exit"]
+    options_buttons = []
 
-    for label, rect in buttons:
+    # Create options rects
+    for i, label in enumerate(options_labels):
+        rect = pygame.Rect(
+            0 + i * (30 + 7),
+            5,
+            30,
+            20
+        )
+        options_buttons.append((label, rect))
+
+
+    #pygame.draw.rect(screen, C.MENU_BG, (0, 0, C.UNIT_MENU_WIDTH, C.OPTIONS_MENU_HEIGHT))
+
+    font = pygame.font.SysFont(None, 14)
+
+    # Mouse position
+    mx, my = pygame.mouse.get_pos()
+
+    for label, rect in options_buttons:
+        # Hover effect
+        color = C.BTN_HOVER if rect.collidepoint(mx, my) else (100, 100, 100)
+        pygame.draw.rect(screen, color, rect, border_radius=3)
+
         # Draw text
         text = font.render(label, True, C.TEXT_COLOR)
-        screen.blit(text, (rect.x + 20, rect.y + 15))
+        screen.blit(text, (rect.x + 4, rect.y + 4))

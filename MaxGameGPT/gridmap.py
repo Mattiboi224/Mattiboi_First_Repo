@@ -162,5 +162,46 @@ class GridMap:
                 else:
                     resource_amount = self.transposed_resources_amounts[i][j]
                 tile_map[i][j] = Tiles(i, j, transposed[i][j], self.transposed_resources_tiles[i][j], resource_amount)
+        
+        self.tile_map = tile_map
 
         return tile_map
+    
+    def to_dict(self):
+        sparse = []
+        for y, row in enumerate(self.tile_map):
+            for x, tile in enumerate(row):
+                if tile is not None:
+                    d = tile.to_dict()
+                    d["x"], d["y"] = x, y
+                    sparse.append(d)
+        return {"w": self.w, "h": self.h, "tiles": sparse}
+
+
+    #land_type: int
+    #resource_type: str
+    #resource_amount: int
+
+    @classmethod
+    def from_dict(cls, d):
+        gm = cls()
+        gm.w = d["w"]
+        gm.h = d["h"]
+        gm.tile_map = [[None for _ in range(gm.w)] for _ in range(gm.h)]
+        for td in d["tiles"]:
+            x, y = td["x"], td["y"]
+            gm.tile_map[y][x] = Tiles.from_dict(td)
+        return gm
+    
+        #     # Split fields into init-accepted vs init=False
+        # init_fields = {f.name for f in fields(cls) if f.init}
+        # non_init_fields = [f.name for f in fields(cls) if not f.init]
+
+        # # Build the object using only what __init__ accepts
+        # filtered = {k: v for k, v in d.items() if k in init_fields}
+        # obj = cls(**filtered)
+
+        # # Restore whatever __post_init__ would've computed, using saved values instead
+        # for name in non_init_fields:
+        #     if name in d:
+        #         setattr(obj, name, d[name])

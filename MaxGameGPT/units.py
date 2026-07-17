@@ -1,17 +1,33 @@
 import pygame
 import math
+from dataclasses import dataclass, field, asdict
 
 from entity import Entity
 import Config as C
 import util as m
 
-# pyright: ignore[reportMissingImports]
-
+@dataclass(eq=False)  # eq=False: keep default identity comparison, don't
+                       # let dataclass generate __eq__ from pygame Surfaces/Rects
 class Unit(Entity):
-    def __init__(self, team, x, y, name="Soldier"):
-        super().__init__(team, x, y, name, radius=12)
+    name: str = "Soldier"
 
-        stats = C.ENTITY_STATS[name]
+    # --- Runtime-only fields (not part of the constructor call) ---
+    path: list = field(default_factory=list, init=False)
+    path_px: list = field(default_factory=list, init=False)
+    target: object = field(default=None, init=False)
+    attack_cooldown: float = field(default=0.0, init=False)
+    selected: bool = field(default=False, init=False)
+ 
+    harvesting: bool = field(default=False, init=False)
+    harvest_timer: float = field(default=0.0, init=False)
+    carry: int = field(default=0, init=False)
+    old_res: object = field(default=None, init=False)
+    current_angle: float = field(default=0, init=False)
+
+    def __post_init__(self):
+        super().__post_init__()
+
+        stats = C.ENTITY_STATS[self.name]
         self.attacking_unit = stats.get("attacking_unit", False)
         self.building_unit = stats.get("building_unit", False)
         self.transfer_unit = stats.get("transfer_unit", False)
@@ -31,21 +47,6 @@ class Unit(Entity):
 
         self.carry_max = stats.get("cargo", 0)
 
-
-
-        self.path = []
-        self.path_px = []
-        self.target = None
-        self.attack_cooldown = 0.0
-        self.selected = False
-
-        # Harvesting
-        self.harvesting = False
-        self.harvest_timer = 0.0
-        self.carry = 0
-        self.old_res = None
-        self.current_angle = 0
-
         self.local_labels = ['Move', 'Stop']
 
         if self.attacking_unit:
@@ -58,14 +59,11 @@ class Unit(Entity):
         if self.building_unit:
             self.local_labels.append('Build')
 
-        
-        
-
         self.rects = []
         for i in range(len(self.labels)):   # or a fixed number of buttons
             rect = pygame.Rect(
                 20,
-                10 + i * (C.UNIT_PROP_HEIGHT),
+                40 + 10 + i * (C.UNIT_PROP_HEIGHT),
                 C.UNIT_MENU_WIDTH - 40,
                 C.BTN_HEIGHT
             )
@@ -114,7 +112,6 @@ class Unit(Entity):
         self.calculate_angle()
 
 
-
     def try_attack(self, enemy, dt):
         d = m.dist(self.pos(), enemy.pos())
         if d <= self.range and self.attack_cooldown <= 0:
@@ -145,7 +142,7 @@ class Unit(Entity):
             pygame.draw.rect(surf, (200,200,200), rect, 2)
 
             # Draw Box in top corner showing hp, speed, ammo, and carry/shots
-            pygame.draw.rect(surf, C.MENU_BG, (0, 0, C.UNIT_MENU_WIDTH, C.UNIT_MENU_HEIGHT))
+            pygame.draw.rect(surf, C.MENU_BG, (0, 40, C.UNIT_MENU_WIDTH, C.UNIT_MENU_HEIGHT))
             
             buttons = list(zip(self.labels, self.rects))
 

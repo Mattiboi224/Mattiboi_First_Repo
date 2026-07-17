@@ -5,6 +5,7 @@ import PIL.Image as Image
 WIDTH, HEIGHT = 1024, 704
 MENU_WIDTH = 192
 
+OPTIONS_MENU_HEIGHT = 30
 UNIT_MENU_WIDTH = 128
 UNIT_MENU_HEIGHT = 128
 BOTTOM_MENU_HEIGHT = 32
@@ -119,6 +120,7 @@ ENTITY_STATS = {
     "Soldier": {
         "Name": "Soldier",
         "kind": "soldier",
+        "radius": 16,
         "category": "unit",
         "builds_from": "barracks",
         "cost": COST_SOLDIER,
@@ -136,6 +138,7 @@ ENTITY_STATS = {
     "Tank": {
         "Name": "Tank",
         "kind": "tank",
+        "radius": 16,
         "category": "unit",
         "builds_from": "tank_factory",
         "cost": COST_TANK,
@@ -153,6 +156,7 @@ ENTITY_STATS = {
     "Ammo Truck": {
         "Name": "Ammo Truck",
         "kind": "ammo_truck",
+        "radius": 16,
         "category": "unit",
         "builds_from": "tank_factory",
         "cost": COST_AMMO_TRUCK,
@@ -171,6 +175,7 @@ ENTITY_STATS = {
     "Constructor": {
         "Name": "Constructor",
         "kind": "constructor",
+        "radius": 16,
         "category": "unit",
         "builds_from": "tank_factory",
         "cost": COST_CONSTRUCTOR,
@@ -194,6 +199,7 @@ ENTITY_STATS = {
     "Base": {
         "Name": "Base",
         "kind": "base",
+        "radius": 16,
         "category": "building",
         "cost": COST_BASE,
         "hp": 500,
@@ -203,10 +209,12 @@ ENTITY_STATS = {
         "storage_amount": 500,
         "resource_storage_type": "Minerals",
         "power_given": 1,
+        #"power_required": True, # Will add back in when we can transfer power completely to plant
     },
     "Barracks": {
         "Name": "Barracks",
         "kind": "barracks",
+        "radius": 16,
         "category": "building",
         "cost": COST_BARRACKS,
         "hp": 250,
@@ -214,10 +222,12 @@ ENTITY_STATS = {
         "build_time": 5.0,
         "colour_to_be_converted": (104, 114, 78),
         "power_used": 1,
+        "power_required": True,
     },
     "Tank Factory": {
         "Name": "Tank Factory",
         "kind": "tank_factory",
+        "radius": 16,
         "category": "building",
         "cost": COST_TANK_FACTORY,
         "hp": 300,
@@ -225,10 +235,12 @@ ENTITY_STATS = {
         "build_time": 6.0,
         "colour_to_be_converted": (74, 84, 58),
         "power_used": 2,
+        "power_required": True,
     },
     "Storage Unit": {
         "Name": "Storage Unit",
         "kind": "storage_unit",
+        "radius": 16,
         "category": "building",
         "cost": COST_STORAGE_UNIT,
         "hp": 100,
@@ -242,6 +254,7 @@ ENTITY_STATS = {
     "Fuel Tank": {
         "Name": "Fuel Tank",
         "kind": "fuel_tank",
+        "radius": 16,
         "category": "building",
         "cost": COST_FUEL_TANK,
         "hp": 100,
@@ -254,6 +267,7 @@ ENTITY_STATS = {
     "Gold Vault": {
         "Name": "Gold Vault",
         "kind": "gold_vault",
+        "radius": 16,
         "category": "building",
         "cost": COST_GOLD_VAULT,
         "hp": 100,
@@ -266,6 +280,7 @@ ENTITY_STATS = {
     "Power Plant": {
         "Name": "Power Plant",
         "kind": "power_plant",
+        "radius": 16,
         "category": "building",
         "cost": COST_POWER_PLANT,
         "hp": 100,
@@ -273,6 +288,9 @@ ENTITY_STATS = {
         "build_time": 3.0,
         "colour_to_be_converted": (200, 170, 40),
         "power_given": 10,
+        "power_supply": True,
+        "depletion_time": 3.0,
+        "resource_used": 1
     },
 }
 

@@ -9,6 +9,7 @@ from units import Unit
 from building import Building
 from menu import Menu
 from player import Player
+import json
 
 class Game:
     def __init__(self):
@@ -73,6 +74,27 @@ class Game:
 
         # AI
         self.ai_timers = {team: 0.0 for team in C.AI_TEAMS}
+
+    def save_game(self, filename):
+        state = {
+            "player": [p.to_dict() for p in self.player_mat],
+            "units": [u.to_dict() for u in self.units],
+            "buildings": [b.to_dict() for b in self.buildings],
+            "gridmap": self.grid.to_dict(),  # handles its own tile matrix internally
+            "camera": {"x": self.camera_x, "y": self.camera_y},
+        }
+        with open(filename, "w") as f:
+            json.dump(state, f, indent=2)
+
+    def load_game(self, filename):
+        with open(filename) as f:
+            state = json.load(f)
+        self.player = [Player.from_dict(p) for p in state["player"]]
+        self.units = [Unit.from_dict(u) for u in state["units"]]
+        self.buildings = [Building.from_dict(b) for b in state["buildings"]]
+        self.gridmap = GridMap.from_dict(state["gridmap"])
+        self.camera_x = state["camera"]["x"]
+        self.camera_y = state["camera"]["y"]
 
     # ---- Spawning ----
     def spawn_unit(self, team, x, y, name):
@@ -207,39 +229,26 @@ class Game:
                     h.occupied = False
             
     def recalculate_storage_capacity(self, team):
-        for i in self.player_mat:
-            if i.team != team: continue
-            
-            i.storage_money = sum(
-                b.storage_amount for b in self.buildings if b.team == team and b.storage and not b.dead and not b.sold and b.resource_storage_type == "Minerals"
-            )
-            i.storage_fuel = sum(
-                b.storage_amount for b in self.buildings if b.team == team and b.storage and not b.dead and not b.sold and b.resource_storage_type == "Fuel"
-            )
-            i.storage_gold = sum(
-                b.storage_amount for b in self.buildings if b.team == team and b.storage and not b.dead and not b.sold and b.resource_storage_type == "Gold"
-            )
+        
+        team.storage_money = sum(
+            b.storage_amount for b in self.buildings if b.team == team.team and b.storage and not b.dead and not b.sold and b.resource_storage_type == "Minerals"
+        )
+        team.storage_fuel = sum(
+            b.storage_amount for b in self.buildings if b.team == team.team and b.storage and not b.dead and not b.sold and b.resource_storage_type == "Fuel"
+        )
+        team.storage_gold = sum(
+            b.storage_amount for b in self.buildings if b.team == team.team and b.storage and not b.dead and not b.sold and b.resource_storage_type == "Gold"
+        )
 
     def recalculate_power_capacity(self, team):
-        for i in self.player_mat:
-            if i.team != team: continue
-            
-            i.power_usage = sum(
-                b.power_used for b in self.buildings if b.team == team and not b.dead and not b.sold
-            )
+        
+        team.total_power = sum(
+            b.power_given for b in self.buildings if b.team == team.team and not b.dead and not b.sold
+        )
 
-            i.total_power = sum(
-                b.power_given for b in self.buildings if b.team == team and not b.dead and not b.sold
-            )
-
-            if team == 0:
-                print(i.power_usage)
-
-            # for b in self.buildings:
-            #     if b.dead or b.sold: continue
-            #     if b.team != 0: continue
-            #     print(b.power_used)
-
+        team.power_usage = sum(
+            b.power_used for b in self.buildings if b.team == team.team and not b.dead and not b.sold
+        )
 
 
     # ---- Commands ----
@@ -276,8 +285,8 @@ class Game:
                 b.update(dt, self)
 
         for i in self.player_mat:
-            self.recalculate_storage_capacity(i.team)
-            self.recalculate_power_capacity(i.team)
+            self.recalculate_storage_capacity(i)
+            self.recalculate_power_capacity(i)
 
         # AI
         self.update_ai(dt)
@@ -475,10 +484,10 @@ class Game:
 
         # UI
         pygame.draw.rect(surf, (0,0,0), (0, C.HEIGHT, C.WIDTH, C.BOTTOM_MENU_HEIGHT))
-        money_text = font.render(f"Money: {self.player_mat[C.PLAYER_TEAM].money}/{self.player_mat[C.PLAYER_TEAM].storage_money}  "
-                                 f"Fuel: {self.player_mat[C.PLAYER_TEAM].fuel}/{self.player_mat[C.PLAYER_TEAM].storage_fuel}   "
-                                 f"Gold: {self.player_mat[C.PLAYER_TEAM].gold}/{self.player_mat[C.PLAYER_TEAM].storage_gold}   "
-                                 f"Power: {self.player_mat[C.PLAYER_TEAM].power_used}/{self.player_mat[C.PLAYER_TEAM].total_power}", True, (255,255,255))
+        money_text = font.render(f"Money: {int(self.player_mat[C.PLAYER_TEAM].money)}/{self.player_mat[C.PLAYER_TEAM].storage_money}  "
+                                 f"Fuel:  {int(self.player_mat[C.PLAYER_TEAM].fuel)}/{self.player_mat[C.PLAYER_TEAM].storage_fuel}   "
+                                 f"Gold:  {int(self.player_mat[C.PLAYER_TEAM].gold)}/{self.player_mat[C.PLAYER_TEAM].storage_gold}   "
+                                 f"Power: {int(self.player_mat[C.PLAYER_TEAM].power_usage)}/{self.player_mat[C.PLAYER_TEAM].total_power}", True, (255,255,255))
         surf.blit(money_text, (6, C.HEIGHT+8))
 
         mx, my = pygame.mouse.get_pos()
