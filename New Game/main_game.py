@@ -1,72 +1,45 @@
-from player import Player
+
 import Config as C
 import random
+from game import Game as Game
+import pygame
 
-# Map is a matrix
-# Then each row is the row in which you can go
-# Total Length is about 50
+pygame.init()
+screen = pygame.display.set_mode((C.WIDTH, C.HEIGHT+28))
+pygame.display.set_caption("La Flamme Rouge")
+clock = pygame.time.Clock()
+font = pygame.font.SysFont(None, 22)
 
-player_list = []
-
-total_teams = 1 + C.NO_OF_AI_PLAYERS
-
-# Create the Teams
-for i in range(total_teams):
-    if i == C.PLAYER_TEAM:
-        player_list.append(Player(i, True))
-    else:
-        player_list.append(Player(i, False))
-
-# Create the map
-grid_map = []
-
-for i in range(C.MAP_LENGTH):
-    j = random.randint(0,1)
-
-    if i <= C.STARTING_LENGTH:
-        j = 2
-    blank_list = ["" for _ in range(j + 2)]
-    grid_map.append(blank_list)
-
-
-# Determine starting positions
-for i in range(len(player_list * 2)):
-
-    # First Round Randomly pick the ride
-    if i <= len(player_list):
-        choose_the_rider = random.choice([0,1])
-
-    if i >= len(player_list):
-        i -= len(player_list)
-        if not player_list[i].climber_loc:
-            choose_the_rider = player_list[i].CLIMBER
-
-        else:
-            choose_the_rider = player_list[i].SPRINTER
-
-    building = True
-    while building:
-        starting_row = random.randint(0,C.STARTING_LENGTH)
-        start_position_on_row = random.randint(0, len(grid_map[starting_row]) - 1)
-
-        if not grid_map[starting_row][start_position_on_row]:
-            grid_map[starting_row][start_position_on_row] = player_list[i].colour
-            building = False
-
-    if choose_the_rider == player_list[i].CLIMBER:
-        player_list[i].climber_loc = [starting_row, start_position_on_row]
-    else:
-        player_list[i].sprinter_loc = [starting_row, start_position_on_row]
+game = Game()
 
 running = True
-#while running:
-for i in range(10):
+while running:
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
     
-    rider_locs = []
-    for i in player_list:
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1:  # left
 
-        rider_locs.append([i.climber_locs, 'Climber', i.team])
-        rider_locs.append([i.sprinter_loc, 'Sprinter', i.team])
+                #rider_locs = []
+                for i in game.player_list:
 
-        
+                    game.move_racer(i, 'Climber')
+                    game.move_racer(i, 'Sprinter')
+
+                game.assess_slip_streaming()
+
+
+    screen.fill((30, 30, 30))
+    game.draw(screen)
+
+    # Update the display
+    pygame.display.flip()
+
+
+pygame.quit()
+
+    
+
 

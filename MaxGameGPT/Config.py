@@ -34,7 +34,7 @@ TEXT_COLOR = (230, 230, 230)
 # Left Menu Settings
 UNIT_MENU_BG = (245, 236, 106)
 BTN_HEIGHT = 60
-PADDING = 20
+PADDING = 15
 
 UNIT_PROP_HEIGHT = 20
 
@@ -60,6 +60,10 @@ COST_FUEL_TANK = 50
 COST_GOLD_VAULT = 50
 COST_CONSTRUCTOR = 10
 COST_POWER_PLANT = 10
+COST_MISSILE_CRAWLER = 200
+COST_GUN_TURRET = 50
+COST_POWER_STATION = 50
+COST_SURVEYOR = 10
 
 # Image Locations
 BASE_FOLDER = "assets"
@@ -77,10 +81,10 @@ def entity_image_path(kind, category):
 # Infiltrator
 
 # Ground Supply Units # 24
-# Armoured Personnel Carrier, Bulldoser, Constructor, Mine Layer, Engineer, Repair Unit, Scanner, Surveyor, Gold Truck, Fuel Truck
+# Armoured Personnel Carrier, Bulldoser, Mine Layer, Engineer, Repair Unit, Scanner, Surveyor, Gold Truck, Fuel Truck
 
 # Ground Warfare Units # 25
-# Assault Gun, Rocket Launcher, Missile Crawler, Mobile Anti Aircraft, Scout
+# Rocket Launcher, Missile Crawler, Mobile Anti Aircraft, Scout
 
 # Sea Warfare Units # 26
 # Corvette, Escort, Gunboat, Missile Cruiser, Submarine
@@ -101,13 +105,13 @@ def entity_image_path(kind, category):
 # Land Mine, Sea Mine
 
 # Defensive Buildings # 34
-# Radar, Anti Aircraft, Gun Turret, Artillery, Missile Launcher
+# Radar, Anti Aircraft, Artillery, Missile Launcher
 
 # Factory Buildings # 35
 # Light Vehicle Plant, Air Units Plant, Shipyard
 
 # Supply Buildings # 36
-# Power Generator, Power Station
+# Completed
 
 # Depots # 37
 # Landing Pad, Barracks, Depot, Hanger, Dock
@@ -120,7 +124,7 @@ ENTITY_STATS = {
     "Soldier": {
         "Name": "Soldier",
         "kind": "soldier",
-        "radius": 16,
+        "radius": TILE // 2,
         "category": "unit",
         "builds_from": "barracks",
         "cost": COST_SOLDIER,
@@ -138,7 +142,7 @@ ENTITY_STATS = {
     "Tank": {
         "Name": "Tank",
         "kind": "tank",
-        "radius": 16,
+        "radius": TILE // 2,
         "category": "unit",
         "builds_from": "tank_factory",
         "cost": COST_TANK,
@@ -153,10 +157,28 @@ ENTITY_STATS = {
         "colour_to_be_converted": (74, 98, 48),
         "attacking_unit": True,
     },
+    "Missile Crawler": {
+        "Name": "Missile Crawler",
+        "kind": "missile_crawler",
+        "radius": TILE // 2,
+        "category": "unit",
+        "builds_from": "tank_factory",
+        "cost": COST_MISSILE_CRAWLER,
+        "hp": 50,
+        "atk": 60,
+        "range": 7 * TILE,
+        "speed": 30,   # px/s
+        "ammo": 5,
+        "armour": 2,
+        "shots": 1,
+        "build_time": 10.0,
+        "colour_to_be_converted": (200, 170, 40),
+        "attacking_unit": True,
+    },
     "Ammo Truck": {
         "Name": "Ammo Truck",
         "kind": "ammo_truck",
-        "radius": 16,
+        "radius": TILE // 2,
         "category": "unit",
         "builds_from": "tank_factory",
         "cost": COST_AMMO_TRUCK,
@@ -175,7 +197,7 @@ ENTITY_STATS = {
     "Constructor": {
         "Name": "Constructor",
         "kind": "constructor",
-        "radius": 16,
+        "radius": TILE // 2,
         "category": "unit",
         "builds_from": "tank_factory",
         "cost": COST_CONSTRUCTOR,
@@ -188,7 +210,19 @@ ENTITY_STATS = {
         "building_unit": True,
         "transfer_unit": True,
     },
-
+    "Surveyor": {
+        "Name": "Surveyor",
+        "kind": "surveyor",
+        "radius": TILE // 2,
+        "category": "unit",
+        "builds_from": "tank_factory",
+        "cost": COST_SURVEYOR,
+        "hp": 10,
+        "speed": 60,   # px/s
+        "armour": 0,
+        "build_time": 1.0,
+        "colour_to_be_converted": (200, 170, 40),
+    },
     # Building stats
     "Construction": {
         "Name": "Construction",
@@ -196,16 +230,22 @@ ENTITY_STATS = {
         "category": "building",
         "colour_to_be_converted": (239, 228, 176),
     },
+    "Big Construction": {
+        "Name": "Big Construction",
+        "kind": "big_construction",
+        "category": "building",
+        "colour_to_be_converted": (168, 138, 82),
+    },
     "Base": {
         "Name": "Base",
         "kind": "base",
-        "radius": 16,
+        "radius": TILE,
         "category": "building",
         "cost": COST_BASE,
         "hp": 500,
         "armour": 5,
         "build_time": 10.0,
-        "colour_to_be_converted": (98, 80, 52),
+        "colour_to_be_converted": (96, 68, 42),
         "storage_amount": 500,
         "resource_storage_type": "Minerals",
         "power_given": 1,
@@ -214,7 +254,7 @@ ENTITY_STATS = {
     "Barracks": {
         "Name": "Barracks",
         "kind": "barracks",
-        "radius": 16,
+        "radius": TILE // 2,
         "category": "building",
         "cost": COST_BARRACKS,
         "hp": 250,
@@ -227,7 +267,7 @@ ENTITY_STATS = {
     "Tank Factory": {
         "Name": "Tank Factory",
         "kind": "tank_factory",
-        "radius": 16,
+        "radius": TILE // 2,
         "category": "building",
         "cost": COST_TANK_FACTORY,
         "hp": 300,
@@ -240,7 +280,7 @@ ENTITY_STATS = {
     "Storage Unit": {
         "Name": "Storage Unit",
         "kind": "storage_unit",
-        "radius": 16,
+        "radius": TILE // 2,
         "category": "building",
         "cost": COST_STORAGE_UNIT,
         "hp": 100,
@@ -254,7 +294,7 @@ ENTITY_STATS = {
     "Fuel Tank": {
         "Name": "Fuel Tank",
         "kind": "fuel_tank",
-        "radius": 16,
+        "radius": TILE // 2,
         "category": "building",
         "cost": COST_FUEL_TANK,
         "hp": 100,
@@ -267,7 +307,7 @@ ENTITY_STATS = {
     "Gold Vault": {
         "Name": "Gold Vault",
         "kind": "gold_vault",
-        "radius": 16,
+        "radius": TILE // 2,
         "category": "building",
         "cost": COST_GOLD_VAULT,
         "hp": 100,
@@ -280,7 +320,7 @@ ENTITY_STATS = {
     "Power Plant": {
         "Name": "Power Plant",
         "kind": "power_plant",
-        "radius": 16,
+        "radius": TILE // 2,
         "category": "building",
         "cost": COST_POWER_PLANT,
         "hp": 100,
@@ -291,6 +331,37 @@ ENTITY_STATS = {
         "power_supply": True,
         "depletion_time": 3.0,
         "resource_used": 1
+    },
+    "Gun Turret": {
+        "Name": "Gun Turret",
+        "kind": "gun_turret",
+        "radius": TILE // 2,
+        "category": "building",
+        "cost": COST_GUN_TURRET,
+        "hp": 100,
+        "armour": 5,
+        "build_time": 3.0,
+        "colour_to_be_converted": (200, 170, 40),
+        "attacking_building": True,
+        "atk": 20,
+        "range": 2 * TILE,
+        "ammo": 10,
+        "shots": 1,
+    },
+    "Power Station": {
+        "Name": "Power Station",
+        "kind": "power_station",
+        "radius": TILE,
+        "category": "building",
+        "cost": COST_POWER_STATION,
+        "hp": 100,
+        "armour": 2,
+        "build_time": 3.0,
+        "colour_to_be_converted": (200, 170, 40),
+        "power_given": 20,
+        "power_supply": True,
+        "depletion_time": 3.0,
+        "resource_used": 5
     },
 }
 

@@ -48,6 +48,28 @@ def locations_in_range(opp_range, unit):
 
     return inside_points
 
+def occupied_by_unit(unit):
+    grid_x, grid_y = unit.pos_grid()
+    
+    
+    if unit.radius == C.TILE / 2:
+        return [(grid_x, grid_y)]
+    
+    elif unit.radius == C.TILE:
+        all_data_points = []
+        all_centres = []
+        for w in range(C.MAP_WIDTH):
+            for h in range(C.MAP_HEIGHT):
+                all_data_points.append((w,h))
+                all_centres.append(tile_center(w, h))
+
+        inside_points = []
+        for i in range(len(all_centres)):
+            x, y = all_centres[i]
+            if (x - unit.x) ** 2 + (y - unit.y) ** 2 <= unit.radius ** 2:
+                inside_points.append(all_data_points[i])
+    return inside_points
+
 def convert_image_to_team(team_number, unit_type):
 
     stats = C.ENTITY_STATS[unit_type]

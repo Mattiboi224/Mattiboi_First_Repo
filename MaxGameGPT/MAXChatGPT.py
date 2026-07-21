@@ -111,6 +111,7 @@ def main():
                     if game.build_mode or game.sell_mode:
                         game.build_mode = False
                         game.sell_mode = False
+                        game.big_build_mode = False
                     else:
                         for u in game.selected_units: u.selected = False
                         game.selected_units.clear()
@@ -202,6 +203,11 @@ def main():
                                         game.build_mode = True
                                         game.build_name = stats["Name"]
 
+                                        if stats["radius"] == C.TILE:
+                                            game.big_build_mode = True
+                                        else:
+                                            game.big_build_mode = False
+
                                 elif stats["category"] == "unit":
                                     queue_unit(game, label)
 
@@ -211,7 +217,8 @@ def main():
                         b_at_point = game.building_at_point(event.pos, team=C.PLAYER_TEAM)
                         
                         b_at_point.sold = True
-                        b_at_point.Tile.occupied = False
+                        for j in b_at_point.Tile:
+                            j.occupied = False
                         
                         for name, stats in C.ENTITY_STATS.items():
                             if stats["kind"] == b_at_point.kind:
@@ -266,7 +273,11 @@ def main():
                                         dist = dist_between
                                         chosen_point = i
 
-                                game.order_move_grid(game.selected_units, chosen_point)
+                                if isinstance(u, Unit):
+                                    game.order_move_grid(game.selected_units, chosen_point)
+
+                                else:
+                                    print('Out of Range')
 
                                 game.attack_mode = False
                         
@@ -364,6 +375,7 @@ def main():
                             game.player_mat[C.PLAYER_TEAM].money -= cost
                             game.build_mode = False
                             game.ghost_valid = False
+                            game.big_build_mode = False
 
 
                     elif game.map_edit:

@@ -85,6 +85,11 @@ class GridMap:
                         key = 2
                         resource_amount = 15
 
+                    elif (j - 1, i - 1) in self.spawns:
+                        # Giving Starting Fuel
+                        key = 4
+                        resource_amount = 6
+
                     elif random.random() < RESOURCE_DENSITY:
                         key = random.choices(RESOURCE_TYPES, weights=RESOURCE_WEIGHTS, k=1)[0]
 

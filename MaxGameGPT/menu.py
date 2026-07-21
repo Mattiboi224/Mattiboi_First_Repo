@@ -9,11 +9,12 @@ class Menu:
         # Menu buttons
         self.buildings_labels = [name for name, stats in C.ENTITY_STATS.items() if stats["category"] == "building"]
         self.buildings_labels.remove("Construction")
+        self.buildings_labels.remove("Big Construction")
         self.unit_labels = [name for name, stats in C.ENTITY_STATS.items() if stats["category"] == "unit"]
         self.helpful_labels = ["Sell", "Repair"]
         self.labels = self.buildings_labels + self.unit_labels + self.helpful_labels
 
-        BTN_HEIGHT = ((C.HEIGHT - 20)// len(self.labels)) - C.PADDING
+        BTN_HEIGHT = ((C.HEIGHT - 10)// len(self.labels)) - C.PADDING
 
         #Button height = (Height / no_of_buttons) - padding
 
@@ -24,7 +25,7 @@ class Menu:
             rect = pygame.Rect(
                 C.WIDTH - C.MENU_WIDTH + 20,
                 20 + (BTN_HEIGHT + C.PADDING) * i,
-                C.MENU_WIDTH - 40,
+                C.MENU_WIDTH - 30,
                 BTN_HEIGHT
             )
             self.buttons.append((label, rect))
@@ -85,7 +86,7 @@ class Menu:
 
             # Draw text
             text = font.render(label, True, C.TEXT_COLOR)
-            screen.blit(text, (rect.x + 25, rect.y + 15))
+            screen.blit(text, (rect.x + 25, rect.y + 5))
 
             # If it has a cost add it
             if label in C.ENTITY_STATS:

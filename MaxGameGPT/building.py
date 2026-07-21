@@ -34,14 +34,41 @@ class Building(Entity):
         self.depletion_time = stats.get("depletion_time", 0)
         self.power_supply = stats.get("power_supply", False)
         self.resource_used = stats.get("resource_used", 0)
+        self.attacking_building = stats.get("attacking_building", False)
+
+        self.labels = [f'hp: {self.hp}/{self.max_hp}']
+
+        if self.power_required:
+            self.labels.append(f'power used: {self.power_used}')
+
+        if self.power_supply:
+            self.labels.append(f'power supplied: {self.power_given}')
 
         if self.no_queue:
             self.building = False
             self.build_time = 0.0
 
+        if self.attacking_building:
+            barrel_image_path = C.entity_image_path(stats["kind"] + "_barrel", stats["category"])
+            self.barrel_image = pygame.image.load(barrel_image_path).convert_alpha()
+            self.atk = stats["atk"]
+            self.range = stats["range"]
+            # Range feels better
+            self.range += 5
+            self.ammo = self.max_ammo = stats["ammo"]
+            self.shots = self.max_shots = stats["shots"]
+            self.labels.append(f'ammo: {self.ammo}/{self.max_ammo}')
+            self.labels.append(f'shots: {self.shots}/{self.max_shots}')
+            self.current_angle = 0
+            self.attack_cooldown = 0.0
 
-        build_image_convert = m.convert_image_to_team(self.team, 'Construction')
-        self.build_image = pygame.image.frombytes(build_image_convert.tobytes(), build_image_convert.size, build_image_convert.mode).convert_alpha()
+        if self.radius == C.TILE / 2:
+            build_image_convert = m.convert_image_to_team(self.team, 'Construction')
+            self.build_image = pygame.image.frombytes(build_image_convert.tobytes(), build_image_convert.size, build_image_convert.mode).convert_alpha()
+        elif self.radius == C.TILE:
+            build_image_convert = m.convert_image_to_team(self.team, 'Big Construction')
+            self.build_image = pygame.image.frombytes(build_image_convert.tobytes(), build_image_convert.size, build_image_convert.mode).convert_alpha()            
+
 
         self.resupply_time = C.MINERAL_SUPPLY_TIME
 
@@ -67,7 +94,19 @@ class Building(Entity):
             self.local_labels.append('Build')
         if self.storage:
             self.local_labels.append('X-fer')
+        if self.attacking_building:
+            self.local_labels.append('Attack')
         self.local_labels.append('Stop')
+
+        self.rects = []
+        for i in range(len(self.labels)):   # or a fixed number of buttons
+            rect = pygame.Rect(
+                20,
+                40 + 10 + i * (C.UNIT_PROP_HEIGHT),
+                C.UNIT_MENU_WIDTH - 40,
+                C.BTN_HEIGHT
+            )
+            self.rects.append(rect)
 
     def pos(self):
         return (self.x, self.y)
@@ -76,9 +115,15 @@ class Building(Entity):
         return m.to_grid(self.pos())
 
     def assign_tile(self, tiles_mat):
-        x, y = m.to_grid(self.pos())
-        self.Tile = tiles_mat[x][y]
-        self.Tile.occupied = True
+        self.Tile = []
+
+        if self.radius == C.TILE / 2:
+            x, y = m.to_grid(self.pos())
+            self.Tile.append(tiles_mat[x][y])
+        elif self.radius == C.TILE:
+            points = m.occupied_by_unit(self)
+            for x,y in points:
+                self.Tile.append(tiles_mat[x][y])
 
     def repairing(self):
         if self.repair_mode:
@@ -88,6 +133,21 @@ class Building(Entity):
     @property
     def provides_storage(self):
         return self.storage_amount
+
+    def try_attack(self, enemy, dt):
+        d = m.dist(self.pos(), enemy.pos())
+        if d <= self.range and self.attack_cooldown <= 0:
+            enemy.take_damage(self.atk)
+            self.attack_cooldown = 0.8
+            self.ammo -= 1
+
+    def calculate_angle(self, enemy):
+        
+        tx, ty = enemy.pos()
+
+        dx = tx - self.x
+        dy = ty - self.y
+        self.current_angle = math.degrees(math.atan2(-dy, dx))  # negative dy because y-axis is inverted in Pygame
 
     def update(self, dt, game):
 
@@ -113,6 +173,22 @@ class Building(Entity):
 
                 else:
                     self.power_given = 0
+
+        # Auto-target enemies in range
+        
+        if self.attacking_building and not self.building:
+            # Attack cooldown
+            if self.attack_cooldown > 0:
+                self.attack_cooldown -= dt
+
+            enemy = game.find_nearest_enemy(self.team, self.pos(), within=self.range)
+            
+            if enemy:
+                self.calculate_angle(enemy)
+                self.try_attack(enemy, dt)
+
+                return
+            
 
         # process production queue
         # When not constructing the building and when power isn't required or if power is required and it's online
@@ -151,20 +227,22 @@ class Building(Entity):
                 # Every 10 Ticks Supply Money
                 if self.resupply_time <= 0:
 
-                    if self.Tile.resource_type == 'Minerals':
-                        if self.Tile.resource_amount + game.player_mat[self.team].money <= game.player_mat[self.team].storage_money:
-                            game.player_mat[self.team].money += self.Tile.resource_amount
-                            self.resupply_time = C.MINERAL_SUPPLY_TIME
-                    
-                    elif self.Tile.resource_type == 'Fuel':
-                        if self.Tile.resource_amount + game.player_mat[self.team].fuel <= game.player_mat[self.team].storage_fuel:
-                            game.player_mat[self.team].fuel += self.Tile.resource_amount
-                            self.resupply_time = C.FUEL_SUPPLY_TIME
+                    for t in self.Tile:
 
-                    elif self.Tile.resource_type == 'Gold':
-                        if self.Tile.resource_amount + game.player_mat[self.team].money <= game.player_mat[self.team].storage_gold:
-                            game.player_mat[self.team].gold += self.Tile.resource_amount
-                            self.resupply_time = C.GOLD_SUPPLY_TIME
+                        if t.resource_type == 'Minerals':
+                            if t.resource_amount + game.player_mat[self.team].money <= game.player_mat[self.team].storage_money:
+                                game.player_mat[self.team].money += t.resource_amount
+                                self.resupply_time = C.MINERAL_SUPPLY_TIME
+                        
+                        elif t.resource_type == 'Fuel':
+                            if t.resource_amount + game.player_mat[self.team].fuel <= game.player_mat[self.team].storage_fuel:
+                                game.player_mat[self.team].fuel += t.resource_amount
+                                self.resupply_time = C.FUEL_SUPPLY_TIME
+
+                        elif t.resource_type == 'Gold':
+                            if t.resource_amount + game.player_mat[self.team].money <= game.player_mat[self.team].storage_gold:
+                                game.player_mat[self.team].gold += t.resource_amount
+                                self.resupply_time = C.GOLD_SUPPLY_TIME
 
             count_1 = 0
             if self.storage and self.storage_amount == 0 and count_1 == 0:
@@ -186,12 +264,44 @@ class Building(Entity):
 
         self.draw_health_bar(surf, camera_x, camera_y)
 
+        if self.attacking_building and not self.building:
+
+            rect = self.barrel_image.get_rect(center=(int(screen_x), int(screen_y)))
+
+            # Rotate Barrel
+            rotated_image = pygame.transform.rotate(self.barrel_image, self.current_angle)
+            new_rect = rotated_image.get_rect(center=(int(screen_x), int(screen_y)))
+
+            surf.blit(rotated_image, new_rect)
+
         if self.selected:
 
+            if self.radius == C.TILE / 2:
+
+                # Box Around Unit to show what's selected
+                rect = pygame.Rect(0,0,C.TILE,C.TILE)
+                rect.center = (screen_x, screen_y)
+                pygame.draw.rect(surf, (200,200,200), rect, 2)
+
+            elif self.radius == C.TILE:
+                rect = pygame.Rect(0,0,C.TILE * 2,C.TILE * 2)
+                rect.center = (screen_x, screen_y)
+                pygame.draw.rect(surf, (200,200,200), rect, 2)
+
+            # Draw Box in top corner showing hp, speed, ammo, and carry/shots
+            pygame.draw.rect(surf, C.MENU_BG, (0, 40, C.UNIT_MENU_WIDTH, C.UNIT_MENU_HEIGHT))
+            
+            buttons = list(zip(self.labels, self.rects))
+
+            for label, rect in buttons:
+                # Draw text
+                text = font.render(label, True, C.TEXT_COLOR)
+                surf.blit(text, (rect.x, rect.y))
+
+            # Draw a local box
             local_rect = pygame.Rect(screen_x + C.TILE, screen_y - C.TILE, C.TILE * 2, C.TILE * 2)
             pygame.draw.rect(surf, C.MENU_BG, local_rect)
         
-
             rects = []
             for i in range(len(self.local_labels)):   # or a fixed number of buttons
                 rect = pygame.Rect(

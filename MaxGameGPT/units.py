@@ -111,7 +111,6 @@ class Unit(Entity):
         
         self.calculate_angle()
 
-
     def try_attack(self, enemy, dt):
         d = m.dist(self.pos(), enemy.pos())
         if d <= self.range and self.attack_cooldown <= 0:

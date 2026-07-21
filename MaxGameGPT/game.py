@@ -42,12 +42,16 @@ class Game:
 
         # Player base
         tx, ty = spawns[0]
-        self.player_base = self.spawn_building(C.PLAYER_TEAM, *m.tile_center(tx, ty), "Base", no_queue=True)
+        px, py = m.tile_center(tx, ty)
+        self.player_base = self.spawn_building(C.PLAYER_TEAM, px + (C.TILE / 2), py + (C.TILE / 2), "Base", no_queue=True)
+        self.spawn_building(C.PLAYER_TEAM, *m.tile_center(tx + 2, ty + 1), "Power Plant", no_queue=True)
 
         # AI bases
         for i, team in enumerate(C.AI_TEAMS, start=1):
             tx, ty = spawns[i % len(spawns)]
-            self.spawn_building(team, *m.tile_center(tx, ty), "Base", no_queue=True)
+            px, py = m.tile_center(tx, ty)
+            self.spawn_building(team, px + (C.TILE / 2), py + (C.TILE / 2), "Base", no_queue=True)
+            self.spawn_building(team, *m.tile_center(tx + 2, ty + 1), "Power Plant", no_queue=True)
 
         # Selection
         self.select_start = None
@@ -62,6 +66,7 @@ class Game:
         self.map_edit = False
         self.paint_tile = C.T_WALL
         self.build_mode = False
+        self.big_build_mode = False
         self.build_kind = "barracks"  # only building type available for now
         self.ghost_valid = False
         self.ghost_pos = (0,0)
@@ -147,6 +152,7 @@ class Game:
     def find_nearest_building(self, team, pos):
         b_type = [name for name, stats in C.ENTITY_STATS.items() if stats["category"] == "building"]
         b_type.remove("Construction")
+        b_type.remove("Big Construction")
         b_type = tuple(b_type)
         best = None
         bd = 1e9
@@ -186,8 +192,6 @@ class Game:
 
         return best
 
-
-
     def unit_at_point(self, p, team=None):
         p_list = list(p)
         p_list[0] -= C.UNIT_MENU_WIDTH
@@ -219,11 +223,12 @@ class Game:
         
         for b in self.buildings:
             if b.dead or b.sold: continue
-            self.unit_locs.append(m.to_grid(b.pos()))        
+            self.unit_locs.append(m.occupied_by_unit(b))
 
+        flat = [t for sublist in self.unit_locs for t in sublist]
         for w in range(len(self.tile_map)):
             for h in self.tile_map[w]:
-                if h.pos() in self.unit_locs:
+                if h.pos() in flat:
                     h.occupied = True
                 else:
                     h.occupied = False
@@ -293,6 +298,13 @@ class Game:
 
         # Update what's occupied
         self.occupied_tiles()
+
+        if self.selected_units:
+            if self.selected_units[0].name == 'Surveyor':
+                self.resource_mode = True
+            else:
+                self.resource_mode = False
+
 
     def update_positons(self, camera_x, camera_y):
         for u in self.units:
@@ -473,14 +485,43 @@ class Game:
             px, py = m.tile_center(tx, ty)
             s_px, s_py = m.tile_center(s_tx, s_ty)
 
-            # Square on Position
-            rect = pygame.Rect(0,0,C.TILE,C.TILE)
-            rect.center = (px, py)
+            if not self.big_build_mode:
 
-            valid = m.in_bounds(s_tx, s_ty) and self.grid.tiles[s_ty][s_tx]==C.T_GRASS
-            self.ghost_valid = valid
-            self.ghost_pos = (s_px, s_py)
-            pygame.draw.rect(surf, (200,200,200) if valid else (200,80,80), rect, 2)
+                # Square on Position
+                rect = pygame.Rect(0,0,C.TILE,C.TILE)
+                rect.center = (px, py)
+
+                if s_tx >= C.MAP_WIDTH or s_tx < 0 or s_ty >= C.MAP_HEIGHT or s_ty < 0:
+                    occupied_test = False
+                else:
+                    occupied_test = not self.tile_map[s_tx][s_ty].occupied
+
+                valid = m.in_bounds(s_tx, s_ty) and self.grid.tiles[s_ty][s_tx]==C.T_GRASS and occupied_test
+                self.ghost_valid = valid
+                self.ghost_pos = (s_px, s_py)
+                pygame.draw.rect(surf, (200,200,200) if valid else (200,80,80), rect, 2)
+
+            elif self.big_build_mode:
+                # Square on Position
+                rect = pygame.Rect(0,0,C.TILE * 2, C.TILE * 2)
+                rect.center = (px + (C.TILE / 2), py + (C.TILE / 2))
+
+                if s_tx + 1 >= C.MAP_WIDTH or s_tx < 0 or s_ty + 1 >= C.MAP_HEIGHT or s_ty < 0:
+                    occupied_test = False
+                else:
+                    occupied_test = not self.tile_map[s_tx][s_ty].occupied and not self.tile_map[s_tx + 1][s_ty].occupied \
+                        and not self.tile_map[s_tx][s_ty + 1].occupied and not self.tile_map[s_tx + 1][s_ty + 1].occupied
+
+                valid = m.in_bounds(s_tx, s_ty) and m.in_bounds(s_tx + 1, s_ty) and m.in_bounds(s_tx, s_ty + 1) and m.in_bounds(s_tx + 1, s_ty + 1) \
+                    and self.grid.tiles[s_ty][s_tx]==C.T_GRASS and self.grid.tiles[s_ty + 1][s_tx]==C.T_GRASS \
+                        and self.grid.tiles[s_ty][s_tx + 1]==C.T_GRASS and self.grid.tiles[s_ty + 1][s_tx + 1]==C.T_GRASS \
+                    and occupied_test
+                
+                self.ghost_valid = valid
+                self.ghost_pos = (s_px + (C.TILE / 2), s_py + (C.TILE / 2))
+                pygame.draw.rect(surf, (200,200,200) if valid else (200,80,80), rect, 2)
+
+
 
         # UI
         pygame.draw.rect(surf, (0,0,0), (0, C.HEIGHT, C.WIDTH, C.BOTTOM_MENU_HEIGHT))
