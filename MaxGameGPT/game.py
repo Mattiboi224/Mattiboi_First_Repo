@@ -10,6 +10,8 @@ from building import Building
 from menu import Menu
 from player import Player
 import json
+from rubble import Rubble
+from minimap import Minimap
 
 class Game:
     def __init__(self):
@@ -17,8 +19,12 @@ class Game:
         self.menu = Menu()
         
         self.tile_map = self.grid.assign_tiles()
+
+        self.minimap = Minimap(self.grid, 120, 120)
+
         self.units = []
         self.buildings = []
+        self.rubbles = []
         self.total_buildings = []
         self.total_units = []
         self.money = {t: C.INITIAL_MONEY for t in [C.PLAYER_TEAM] + C.AI_TEAMS}
@@ -76,6 +82,7 @@ class Game:
         self.move_mode = False
         self.attack_mode = False
         self.transfer_mode = False
+        self.pause_mode = False
 
         # AI
         self.ai_timers = {team: 0.0 for team in C.AI_TEAMS}
@@ -214,6 +221,15 @@ class Game:
                 return b
         return None
 
+    def rubble_at_point(self, p):
+        p_list = list(p)
+        p_list[0] -= C.UNIT_MENU_WIDTH
+        p = tuple(p_list)
+        for r in reversed(self.rubbles):
+            if m.dist(p, r.pos_camera(self.camera_x, self.camera_y)) <= r.radius:
+                return r
+        return None
+
     def occupied_tiles(self):
         
         self.unit_locs = []
@@ -223,12 +239,13 @@ class Game:
         
         for b in self.buildings:
             if b.dead or b.sold: continue
+            if b.name == 'Road': continue
             self.unit_locs.append(m.occupied_by_unit(b))
 
-        flat = [t for sublist in self.unit_locs for t in sublist]
+        self.unit_locs = [t for sublist in self.unit_locs for t in sublist]
         for w in range(len(self.tile_map)):
             for h in self.tile_map[w]:
-                if h.pos() in flat:
+                if h.pos() in self.unit_locs:
                     h.occupied = True
                 else:
                     h.occupied = False
@@ -262,7 +279,7 @@ class Game:
         gx, gy = m.to_grid(dest_px)
         for u in units:
             sx, sy = m.to_grid(u.pos())
-            path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), self.unit_locs, passable=lambda t: t!=C.T_WALL and t!=C.T_WATER)
+            path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), self.unit_locs, passable=C.PASSABLE_RULES[u.movement_type])
             if path:
                 u.set_path(path)
 
@@ -275,14 +292,35 @@ class Game:
 
     # ---- Update ----
     def update(self, dt):
+        roads = [b for b in self.buildings if b.name == 'Road']
+        roads_loc = []
+        if len(roads) > 0:
+            
+            for i in roads:
+                roads_loc.append(i.pos_grid())
+
         # Update units
         for u in self.units:
             if not u.dead:
+                
+                if u.pos_grid() in roads_loc:
+                    u.speed_modifier = 2.0
+                else:
+                    u.speed_modifier = 1.0
                 u.update(dt, self)
+
+        for u in self.units:
+            if u.dead:
+                self.rubbles.append(Rubble(x=u.x, y=u.y, radius=u.radius, value=u.rubble_value))
+
+        for b in self.buildings:
+            if b.dead:
+                self.rubbles.append(Rubble(x=b.x, y=b.y, radius=b.radius, value=b.rubble_value))
 
         # Remove dead
         self.units = [u for u in self.units if not u.dead]
         self.buildings = [b for b in self.buildings if not b.dead and not b.sold]
+        self.rubbles = [r for r in self.rubbles if r.work_done <= r.clear_work]
 
         # Update buildings
         for b in self.buildings:
@@ -397,14 +435,14 @@ class Game:
                                     dest = self.find_nearest_unit(C.PLAYER_TEAM, u.pos())
                                     gx, gy = m.to_grid(dest.pos())
                                     sx, sy = m.to_grid(u.pos())
-                                    path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), self.unit_locs, passable=lambda t: t!=C.T_WALL or C.T_WATER)
+                                    path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), self.unit_locs, passable=C.PASSABLE_RULES[u.movement_type])
                                     if path:
                                         u.set_path(path)
                                 elif choice == "Building":
                                     dest = self.find_nearest_building(C.PLAYER_TEAM, u.pos())
                                     gx, gy = m.to_grid(dest.pos())
                                     sx, sy = m.to_grid(u.pos())
-                                    path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), self.unit_locs, passable=lambda t: t!=C.T_WALL or C.T_WATER)
+                                    path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), self.unit_locs, passable=C.PASSABLE_RULES[u.movement_type])
                                     if path:
                                         u.set_path(path)
                 if tank_factory:
@@ -439,14 +477,14 @@ class Game:
                                     dest = self.find_nearest_unit(C.PLAYER_TEAM, u.pos())
                                     gx, gy = m.to_grid(dest.pos())
                                     sx, sy = m.to_grid(u.pos())
-                                    path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), self.unit_locs, passable=lambda t: t!=C.T_WALL and t!=C.T_WATER)
+                                    path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), self.unit_locs, passable=C.PASSABLE_RULES[u.movement_type])
                                     if path:
                                         u.set_path(path)
                                 elif choice == "Building":
                                     dest = self.find_nearest_building(C.PLAYER_TEAM, u.pos())
                                     gx, gy = m.to_grid(dest.pos())
                                     sx, sy = m.to_grid(u.pos())
-                                    path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), self.unit_locs, passable=lambda t: t!=C.T_WALL and t!=C.T_WATER)
+                                    path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), self.unit_locs, passable=C.PASSABLE_RULES[u.movement_type])
                                     if path:
                                         u.set_path(path)
                 # Re-arm timer
@@ -458,9 +496,16 @@ class Game:
 
         self.menu.draw(surf, font)
 
+        surf.blit(self.minimap.render(self.units, self.buildings, camera_x=self.camera_x, camera_y=self.camera_y), (4, 580))
+
+        # Draw units
+        for r in self.rubbles:
+            if r.pos_camera(self.camera_x, self.camera_y)[0] < 0 or r.pos_camera(self.camera_x, self.camera_y)[0] > C.SCREEN_WIDTH or r.pos_camera(self.camera_x, self.camera_y)[1] < 0 or r.pos_camera(self.camera_x, self.camera_y)[1] > C.HEIGHT:
+                continue
+            r.draw(surf, font, self.camera_x, self.camera_y)
+
         # Draw buildings
         for b in self.buildings:
-
             if b.pos_camera(self.camera_x, self.camera_y)[0] < 0 or b.pos_camera(self.camera_x, self.camera_y)[0] > C.SCREEN_WIDTH or b.pos_camera(self.camera_x, self.camera_y)[1] < 0 or b.pos_camera(self.camera_x, self.camera_y)[1] > C.HEIGHT:
                 continue
             b.draw(surf, font, self.camera_x, self.camera_y)
@@ -544,6 +589,12 @@ class Game:
 
         if self.resource_mode:
             self.grid.draw_resources(surf, font, self.camera_x, self.camera_y)
+
+        if self.pause_mode:
+            pause_font = pygame.font.SysFont(None, 50)
+            pause_text = pause_font.render("Game Paused", True, (255, 255, 255))
+            surf.blit(pause_text, (C.SCREEN_HEIGHT / 2, C.HEIGHT / 2))
+
 
     def draw_help(self, surf, font):
         lines = [

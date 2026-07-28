@@ -33,8 +33,11 @@ class Entity(pygame.sprite.Sprite):
         self.kind = stats["kind"]
         self.image = stats["image"]
         self.radius = stats["radius"]
+        self.rubble_value = stats["rubble_value"]
 
         self.dead = False
+        self.unit_repair_mode = False
+        self.cleaned = False
 
         converted_image = m.convert_image_to_team(self.team, self.name)
         self.image = pygame.image.frombytes(converted_image.tobytes(), converted_image.size, converted_image.mode).convert_alpha()
@@ -70,6 +73,11 @@ class Entity(pygame.sprite.Sprite):
         self.hp -= (dmg - self.armour)
         if self.hp <= 0:
             self.dead = True
+
+    def repairing(self):
+        if self.unit_repair_mode:
+            if self.hp < self.max_hp:
+                self.hp += 1
 
     def pos_camera(self, camera_x, camera_y):
         return (self.x - camera_x, self.y - camera_y)

@@ -2,7 +2,7 @@ import Config as C
 from PIL import Image
 from collections import Counter
 
-image_to_open = C.ENTITY_STATS["Big Construction"]["image"]
+image_to_open = C.ENTITY_STATS["Concrete Block"]["image"]
 
 image = Image.open(image_to_open).convert("RGB")
 pixels = list(image.getdata())
@@ -14,29 +14,16 @@ print("Counts of all items:")
 for item, count in sorted(counts.items(), key=lambda x: x[1], reverse=True):
     print(f"{item}: {count}")
 
-# (96, 68, 42): 1485
-# (25, 22, 18): 431
-# (210, 175, 40): 415
-# (115, 117, 120): 325
-# (255, 255, 255): 252
-# (150, 150, 148): 188
-# (100, 40, 30): 140
-# (196, 168, 108): 113
-# (122, 122, 120): 99
-# (150, 60, 45): 90
-# (168, 138, 82): 80
-# (180, 150, 92): 74
-# (70, 71, 73): 64
-# (85, 85, 83): 60
-# (150, 152, 155): 56
-# (120, 96, 56): 48
-# (84, 58, 36): 45
-# (108, 78, 48): 37
-# (74, 50, 30): 37
-# (75, 30, 22): 36
-# (50, 36, 22): 21
+# (140, 138, 132): 676
+# (150, 148, 142): 64
+# (95, 93, 88): 62
+# (160, 158, 152): 62
+# (120, 118, 112): 54
+# (128, 126, 120): 53
+# (122, 120, 114): 44
+# (100, 98, 92): 9
 
-old = (168, 138, 82)
+old = (150, 148, 142)
 
 new = C.TEAM_COLORS[1]      # red
 

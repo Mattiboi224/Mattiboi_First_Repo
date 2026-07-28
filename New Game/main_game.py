@@ -28,6 +28,7 @@ while running:
                     game.move_racer(i, 'Climber')
                     game.move_racer(i, 'Sprinter')
 
+            elif event.button == 3: # Right
                 game.assess_slip_streaming()
 
 

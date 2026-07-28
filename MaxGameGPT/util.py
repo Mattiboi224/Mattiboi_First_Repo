@@ -95,7 +95,8 @@ def convert_image_to_team(team_number, unit_type):
 
 
 # ------------------ PATHFINDING ------------------
-def astar(grid, start, goal, occupied_tiles=set(), passable=lambda t: t != C.T_WALL and t != C.T_WATER):
+def astar(grid, start, goal, occupied_tiles=set(), passable=lambda t: True):
+    
     sx, sy = start
     gx, gy = goal
     if not in_bounds(gx, gy) or not passable(grid[gy][gx]):

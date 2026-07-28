@@ -36,13 +36,14 @@ class Building(Entity):
         self.resource_used = stats.get("resource_used", 0)
         self.attacking_building = stats.get("attacking_building", False)
 
-        self.labels = [f'hp: {self.hp}/{self.max_hp}']
+        self.stat_fields = ['name', 'hp']
 
         if self.power_required:
-            self.labels.append(f'power used: {self.power_used}')
-
+            self.stat_fields.append('power used')
         if self.power_supply:
-            self.labels.append(f'power supplied: {self.power_given}')
+            self.stat_fields.append('power supplied')
+        if self.attacking_building:
+            self.stat_fields += ['ammo', 'shots']
 
         if self.no_queue:
             self.building = False
@@ -57,18 +58,20 @@ class Building(Entity):
             self.range += 5
             self.ammo = self.max_ammo = stats["ammo"]
             self.shots = self.max_shots = stats["shots"]
-            self.labels.append(f'ammo: {self.ammo}/{self.max_ammo}')
-            self.labels.append(f'shots: {self.shots}/{self.max_shots}')
             self.current_angle = 0
             self.attack_cooldown = 0.0
 
         if self.radius == C.TILE / 2:
             build_image_convert = m.convert_image_to_team(self.team, 'Construction')
             self.build_image = pygame.image.frombytes(build_image_convert.tobytes(), build_image_convert.size, build_image_convert.mode).convert_alpha()
+            rubble_image_convert = m.convert_image_to_team(self.team, 'Rubble')
+            self.rubble_image = pygame.image.frombytes(rubble_image_convert.tobytes(), rubble_image_convert.size, rubble_image_convert.mode).convert_alpha()
         elif self.radius == C.TILE:
             build_image_convert = m.convert_image_to_team(self.team, 'Big Construction')
-            self.build_image = pygame.image.frombytes(build_image_convert.tobytes(), build_image_convert.size, build_image_convert.mode).convert_alpha()            
-
+            self.build_image = pygame.image.frombytes(build_image_convert.tobytes(), build_image_convert.size, build_image_convert.mode).convert_alpha()
+            rubble_image_convert = m.convert_image_to_team(self.team, 'Big Rubble')
+            self.rubble_image = pygame.image.frombytes(rubble_image_convert.tobytes(), rubble_image_convert.size, rubble_image_convert.mode).convert_alpha()    
+        
 
         self.resupply_time = C.MINERAL_SUPPLY_TIME
 
@@ -99,9 +102,9 @@ class Building(Entity):
         self.local_labels.append('Stop')
 
         self.rects = []
-        for i in range(len(self.labels)):   # or a fixed number of buttons
+        for i in range(len(self.stat_fields)):   # or a fixed number of buttons
             rect = pygame.Rect(
-                20,
+                10,
                 40 + 10 + i * (C.UNIT_PROP_HEIGHT),
                 C.UNIT_MENU_WIDTH - 40,
                 C.BTN_HEIGHT
@@ -125,11 +128,6 @@ class Building(Entity):
             for x,y in points:
                 self.Tile.append(tiles_mat[x][y])
 
-    def repairing(self):
-        if self.repair_mode:
-            if self.hp < self.max_hp:
-                self.hp += 1
-
     @property
     def provides_storage(self):
         return self.storage_amount
@@ -149,6 +147,17 @@ class Building(Entity):
         dy = ty - self.y
         self.current_angle = math.degrees(math.atan2(-dy, dx))  # negative dy because y-axis is inverted in Pygame
 
+    def get_labels(self):
+        text_map = {
+            'name': f'name: {self.name}',
+            'hp': f'hp: {self.hp}/{self.max_hp}',
+            'power used': f'power used: {getattr(self, "power_used", 0)}',
+            'power supplied': f'power supplied: {getattr(self, "power_given", 0)}',
+            'ammo': f'ammo: {getattr(self, "ammo", 0)}/{getattr(self, "max_ammo", 0)}',
+            'shots': f'shots: {getattr(self, "shots", 0)}/{getattr(self, "max_shots", 0)}',
+        }
+        return [text_map[f] for f in self.stat_fields]
+
     def update(self, dt, game):
 
         if self.building:
@@ -159,6 +168,9 @@ class Building(Entity):
             if self.build_time <= 0:
                 self.curr_image = self.image
                 self.building = False
+
+        if self.dead and not self.cleaned:
+            self.curr_image = self.rubble_image
         
         # Use Fuel to keep power running
         if not self.building and self.power_supply:
@@ -258,70 +270,74 @@ class Building(Entity):
     def draw(self, surf, font, camera_x, camera_y):
         screen_x = self.x - camera_x + C.UNIT_MENU_WIDTH
         screen_y = self.y - camera_y
-          
+
+
+        
         rect = self.curr_image.get_rect(center=(int(screen_x), int(screen_y)))
         surf.blit(self.curr_image, rect)
 
-        self.draw_health_bar(surf, camera_x, camera_y)
 
-        if self.attacking_building and not self.building:
+        if not self.dead:
+            self.draw_health_bar(surf, camera_x, camera_y)
 
-            rect = self.barrel_image.get_rect(center=(int(screen_x), int(screen_y)))
+            if self.attacking_building and not self.building:
 
-            # Rotate Barrel
-            rotated_image = pygame.transform.rotate(self.barrel_image, self.current_angle)
-            new_rect = rotated_image.get_rect(center=(int(screen_x), int(screen_y)))
+                rect = self.barrel_image.get_rect(center=(int(screen_x), int(screen_y)))
 
-            surf.blit(rotated_image, new_rect)
+                # Rotate Barrel
+                rotated_image = pygame.transform.rotate(self.barrel_image, self.current_angle)
+                new_rect = rotated_image.get_rect(center=(int(screen_x), int(screen_y)))
 
-        if self.selected:
+                surf.blit(rotated_image, new_rect)
 
-            if self.radius == C.TILE / 2:
+            if self.selected:
 
-                # Box Around Unit to show what's selected
-                rect = pygame.Rect(0,0,C.TILE,C.TILE)
-                rect.center = (screen_x, screen_y)
-                pygame.draw.rect(surf, (200,200,200), rect, 2)
+                if self.radius == C.TILE / 2:
 
-            elif self.radius == C.TILE:
-                rect = pygame.Rect(0,0,C.TILE * 2,C.TILE * 2)
-                rect.center = (screen_x, screen_y)
-                pygame.draw.rect(surf, (200,200,200), rect, 2)
+                    # Box Around Unit to show what's selected
+                    rect = pygame.Rect(0,0,C.TILE,C.TILE)
+                    rect.center = (screen_x, screen_y)
+                    pygame.draw.rect(surf, (200,200,200), rect, 2)
 
-            # Draw Box in top corner showing hp, speed, ammo, and carry/shots
-            pygame.draw.rect(surf, C.MENU_BG, (0, 40, C.UNIT_MENU_WIDTH, C.UNIT_MENU_HEIGHT))
+                elif self.radius == C.TILE:
+                    rect = pygame.Rect(0,0,C.TILE * 2,C.TILE * 2)
+                    rect.center = (screen_x, screen_y)
+                    pygame.draw.rect(surf, (200,200,200), rect, 2)
+
+                # Draw Box in top corner showing hp, speed, ammo, and carry/shots
+                pygame.draw.rect(surf, C.MENU_BG, (0, 40, C.UNIT_MENU_WIDTH, C.UNIT_MENU_HEIGHT))
+                
+                buttons = list(zip(self.get_labels(), self.rects))
+
+                for label, rect in buttons:
+                    # Draw text
+                    text = font.render(label, True, C.TEXT_COLOR)
+                    surf.blit(text, (rect.x, rect.y))
+
+                # Draw a local box
+                local_rect = pygame.Rect(screen_x + C.TILE, screen_y - C.TILE, C.TILE * 2, C.TILE * 2)
+                pygame.draw.rect(surf, C.MENU_BG, local_rect)
             
-            buttons = list(zip(self.labels, self.rects))
+                rects = []
+                for i in range(len(self.local_labels)):   # or a fixed number of buttons
+                    rect = pygame.Rect(
+                        screen_x + C.TILE,
+                        screen_y - C.TILE + 5 + i * 20,
+                        C.TILE * 2,
+                        15
+                    )
+                    rects.append(rect)
 
-            for label, rect in buttons:
-                # Draw text
-                text = font.render(label, True, C.TEXT_COLOR)
-                surf.blit(text, (rect.x, rect.y))
+                # Mouse position
+                mx, my = pygame.mouse.get_pos()
 
-            # Draw a local box
-            local_rect = pygame.Rect(screen_x + C.TILE, screen_y - C.TILE, C.TILE * 2, C.TILE * 2)
-            pygame.draw.rect(surf, C.MENU_BG, local_rect)
-        
-            rects = []
-            for i in range(len(self.local_labels)):   # or a fixed number of buttons
-                rect = pygame.Rect(
-                    screen_x + C.TILE,
-                    screen_y - C.TILE + 5 + i * 20,
-                    C.TILE * 2,
-                    15
-                )
-                rects.append(rect)
+                self.local_buttons = list(zip(self.local_labels, rects))
 
-            # Mouse position
-            mx, my = pygame.mouse.get_pos()
+                for label, rect in self.local_buttons:
 
-            self.local_buttons = list(zip(self.local_labels, rects))
+                    color = C.BTN_HOVER if rect.collidepoint(mx, my) else C.BTN_COLOR
+                    pygame.draw.rect(surf, color, rect, border_radius=8)
 
-            for label, rect in self.local_buttons:
-
-                color = C.BTN_HOVER if rect.collidepoint(mx, my) else C.BTN_COLOR
-                pygame.draw.rect(surf, color, rect, border_radius=8)
-
-                # Draw text
-                text = font.render(label, True, C.TEXT_COLOR)
-                surf.blit(text, (rect.x + 10, rect.y))
+                    # Draw text
+                    text = font.render(label, True, C.TEXT_COLOR)
+                    surf.blit(text, (rect.x + 10, rect.y))

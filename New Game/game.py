@@ -4,6 +4,7 @@ import random
 import util as m
 import pygame
 from tile import Tile
+from collections import defaultdict
 
 class Game:
 
@@ -92,6 +93,11 @@ class Game:
         loc[0] += card
 
         # find first empty column in the new row, else stay one row back
+
+        if loc[0] >= C.FINISH_LINE:
+            print(f'Winner {rider_type} of Team {entity.team}')
+            print(f"Played Cards are: {played}")
+            return
         row = self.grid_map[loc[0]]
         index = next((j for j, cell in enumerate(row) if cell == ''), None)
         if index is None:
@@ -105,37 +111,59 @@ class Game:
 
     def assess_slip_streaming(self):
 
-        all_rider_locs = []
+        
+
+        def build_packs(player_list):
+            all_rider_locs = []
+            for p in player_list:
+                all_rider_locs.append((p.sprinter_loc, p, 'sprinter'))
+                all_rider_locs.append((p.climber_loc, p, 'climber'))
+
+            groups = defaultdict(list)
+            for loc, rider, role in all_rider_locs:
+                groups[loc[0]].append((loc, rider, role))
+
+            packs = []
+            for pos in sorted(groups.keys()):  # ascending = back to front
+                packs.append({
+                    'riders': groups[pos],
+                    'front': pos,
+                    'back': pos,
+                })
+            return packs
+
+
+        def resolve_slipstream(packs):
+            i = 0
+            while i < len(packs) - 1:
+                trailing = packs[i]
+                leading = packs[i + 1]
+                gap = leading['back'] - trailing['front'] - 1  # empty squares between
+
+                if gap == 1:
+                    # shift trailing pack forward 1 square to close the gap
+                    for loc, rider, role in trailing['riders']:
+                        loc[0] += 1
+                    trailing['front'] += 1
+                    trailing['back'] += 1
+
+                    # merge trailing into leading (now touching/adjacent)
+                    leading['riders'] = trailing['riders'] + leading['riders']
+                    leading['back'] = trailing['back']
+
+                    del packs[i]
+                    # don't increment i — recheck the merged pack against the next one ahead
+                else:
+                    i += 1
+
+            return packs
+
+
+        packs = build_packs(self.player_list)
+        packs = resolve_slipstream(packs)
+
         for i in self.player_list:
-            all_rider_locs.append(i.sprinter_loc)
-            all_rider_locs.append(i.climber_loc)
-
-        sorted_rider_locs = sorted(all_rider_locs, key=lambda x: (-x[0], x[1]))
-
-        orig = 0
-        slip_steaming = False
-        for i in range(len(sorted_rider_locs)):
-            
-            if i == 0:
-                orig = i[0]
-                continue
-
-            # Turn off slip streaming if not in slip stream range
-            if orig - i[0] > 2:
-                orig = i[0]
-                slip_steaming = False
-
-            if orig - i[0]== 2 or slip_steaming == True:
-                orig = i[0]
-                # Apply Slip streaming
-                slip_steaming = True
-                i[0] += 1
-
-                
-                
-
-
-
+            i.assign_rider_to_tile(self.tile_map)
 
     def generate_map(self):
 

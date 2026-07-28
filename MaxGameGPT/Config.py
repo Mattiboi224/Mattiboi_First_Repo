@@ -47,6 +47,25 @@ INITIAL_FUEL = 0
 INITIAL_GOLD = 0
 SELL_PERCENTAGE = 0.5
 
+# Tile types
+T_GRASS = 0
+T_WALL = 1
+T_RESOURCE = 2
+T_PLAYER_LOC = 3
+T_FUEL = 4
+T_GOLD = 5
+T_BLANK = 6
+T_WATER = 7
+
+# Movement rules
+MOVE_GROUND = "ground"
+MOVE_AMPHIBIOUS = "amphibious"
+
+PASSABLE_RULES = {
+    MOVE_GROUND:      lambda t: t != T_WALL and t != T_WATER,
+    MOVE_AMPHIBIOUS:  lambda t: t != T_WALL,  # water is fine, walls aren't
+}
+
 # Costs
 COST_WORKER = 50
 COST_SOLDIER = 60
@@ -54,16 +73,22 @@ COST_BARRACKS = 75
 COST_TANK = 150
 COST_TANK_FACTORY = 100
 COST_BASE = 100
-COST_AMMO_TRUCK = 100
+COST_AMMO_TRUCK = 50
+COST_FUEL_TRUCK = 50
+COST_GOLD_TRUCK = 50
 COST_STORAGE_UNIT = 50
 COST_FUEL_TANK = 50
 COST_GOLD_VAULT = 50
 COST_CONSTRUCTOR = 10
 COST_POWER_PLANT = 10
-COST_MISSILE_CRAWLER = 200
+COST_MISSILE_CRAWLER = 150
 COST_GUN_TURRET = 50
 COST_POWER_STATION = 50
 COST_SURVEYOR = 10
+COST_ROAD = 5
+COST_CONCRETE_BLOCK = 5
+COST_REPAIR_UNIT = 25
+COST_BULLDOZER = 25
 
 # Image Locations
 BASE_FOLDER = "assets"
@@ -81,7 +106,7 @@ def entity_image_path(kind, category):
 # Infiltrator
 
 # Ground Supply Units # 24
-# Armoured Personnel Carrier, Bulldoser, Mine Layer, Engineer, Repair Unit, Scanner, Surveyor, Gold Truck, Fuel Truck
+# Armoured Personnel Carrier, Mine Layer, Engineer, Scanner
 
 # Ground Warfare Units # 25
 # Rocket Launcher, Missile Crawler, Mobile Anti Aircraft, Scout
@@ -99,7 +124,7 @@ def entity_image_path(kind, category):
 # Air Transport, AWAC
 
 # Connecting Structures # 32
-# Water Platform, Concrete Block, Bridge, Connector, Road
+# Water Platform, Bridge, Connector
 
 # Mines # 33
 # Land Mine, Sea Mine
@@ -138,6 +163,8 @@ ENTITY_STATS = {
         "build_time": 5.0,
         "colour_to_be_converted": (52, 68, 32),
         "attacking_unit": True,
+        "movement_type": MOVE_GROUND,
+        "rubble_value": 4,
     },
     "Tank": {
         "Name": "Tank",
@@ -156,6 +183,8 @@ ENTITY_STATS = {
         "build_time": 10.0,
         "colour_to_be_converted": (74, 98, 48),
         "attacking_unit": True,
+        "movement_type": MOVE_GROUND,
+        "rubble_value": 10,
     },
     "Missile Crawler": {
         "Name": "Missile Crawler",
@@ -174,6 +203,8 @@ ENTITY_STATS = {
         "build_time": 10.0,
         "colour_to_be_converted": (200, 170, 40),
         "attacking_unit": True,
+        "movement_type": MOVE_GROUND,
+        "rubble_value": 10,
     },
     "Ammo Truck": {
         "Name": "Ammo Truck",
@@ -183,16 +214,90 @@ ENTITY_STATS = {
         "builds_from": "tank_factory",
         "cost": COST_AMMO_TRUCK,
         "hp": 100,
-        "atk": 10,
         "range": 2 * TILE,
-        "speed": 30,   # px/s
-        "ammo": 5,
+        "speed": 40,   # px/s
         "armour": 0,
-        "shots": 1,
         "cargo": 50,
-        "build_time": 7.0,
+        "build_time": 6.0,
         "colour_to_be_converted": (74, 104, 40),
         "transfer_unit": True,
+        "movement_type": MOVE_GROUND,
+        "rubble_value": 15,
+    },
+    "Fuel Truck": {
+        "Name": "Fuel Truck",
+        "kind": "fuel_truck",
+        "radius": TILE // 2,
+        "category": "unit",
+        "builds_from": "tank_factory",
+        "cost": COST_FUEL_TRUCK,
+        "hp": 100,
+        "range": 2 * TILE,
+        "speed": 40,   # px/s
+        "armour": 0,
+        "cargo": 50,
+        "build_time": 6.0,
+        "colour_to_be_converted": (168, 170, 165),
+        "transfer_unit": True,
+        "movement_type": MOVE_GROUND,
+        "rubble_value": 6,
+    },
+    "Gold Truck": {
+        "Name": "Gold Truck",
+        "kind": "gold_truck",
+        "radius": TILE // 2,
+        "category": "unit",
+        "builds_from": "tank_factory",
+        "cost": COST_GOLD_TRUCK,
+        "hp": 100,
+        "range": 2 * TILE,
+        "speed": 40,   # px/s
+        "armour": 0,
+        "cargo": 50,
+        "build_time": 6.0,
+        "colour_to_be_converted": (80, 77, 70),
+        "transfer_unit": True,
+        "movement_type": MOVE_GROUND,
+        "rubble_value": 6,
+    },
+    "Repair Unit": {
+        "Name": "Repair Unit",
+        "kind": "repair_unit",
+        "radius": TILE // 2,
+        "category": "unit",
+        "builds_from": "tank_factory",
+        "cost": COST_REPAIR_UNIT,
+        "hp": 100,
+        "range": 2 * TILE,
+        "speed": 30,   # px/s
+        "armour": 0,
+        "cargo": 50,
+        "build_time": 7.0,
+        "colour_to_be_converted": (200, 120, 40),
+        "transfer_unit": True,
+        "movement_type": MOVE_GROUND,
+        "repair_unit": True,
+        "rubble_value": 10,
+    },
+    "Bulldozer": {
+        "Name": "Bulldozer",
+        "kind": "bulldozer",
+        "radius": TILE // 2,
+        "category": "unit",
+        "builds_from": "tank_factory",
+        "cost": COST_BULLDOZER,
+        "hp": 100,
+        "range": 2 * TILE,
+        "speed": 30,   # px/s
+        "armour": 0,
+        "cargo": 50,
+        "build_time": 7.0,
+        "colour_to_be_converted": (210, 165, 40),
+        "transfer_unit": True,
+        "movement_type": MOVE_GROUND,
+        "rubble_value": 10,
+        "clearing": False,
+        "clear_rate": 5
     },
     "Constructor": {
         "Name": "Constructor",
@@ -209,6 +314,8 @@ ENTITY_STATS = {
         "colour_to_be_converted": (200, 170, 40),
         "building_unit": True,
         "transfer_unit": True,
+        "movement_type": MOVE_AMPHIBIOUS,
+        "rubble_value": 10,
     },
     "Surveyor": {
         "Name": "Surveyor",
@@ -222,6 +329,8 @@ ENTITY_STATS = {
         "armour": 0,
         "build_time": 1.0,
         "colour_to_be_converted": (200, 170, 40),
+        "movement_type": MOVE_AMPHIBIOUS,
+        "rubble_value": 6,
     },
     # Building stats
     "Construction": {
@@ -249,6 +358,7 @@ ENTITY_STATS = {
         "storage_amount": 500,
         "resource_storage_type": "Minerals",
         "power_given": 1,
+        "rubble_value": 20,
         #"power_required": True, # Will add back in when we can transfer power completely to plant
     },
     "Barracks": {
@@ -263,6 +373,7 @@ ENTITY_STATS = {
         "colour_to_be_converted": (104, 114, 78),
         "power_used": 1,
         "power_required": True,
+        "rubble_value": 5,
     },
     "Tank Factory": {
         "Name": "Tank Factory",
@@ -276,6 +387,7 @@ ENTITY_STATS = {
         "colour_to_be_converted": (74, 84, 58),
         "power_used": 2,
         "power_required": True,
+        "rubble_value": 20,
     },
     "Storage Unit": {
         "Name": "Storage Unit",
@@ -289,6 +401,7 @@ ENTITY_STATS = {
         "colour_to_be_converted": (40, 38, 32),
         "storage_amount": 50,
         "resource_storage_type": "Minerals",
+        "rubble_value": 15,
         
     },
     "Fuel Tank": {
@@ -303,6 +416,7 @@ ENTITY_STATS = {
         "colour_to_be_converted": (30, 30, 28),
         "storage_amount": 50,
         "resource_storage_type": "Fuel",
+        "rubble_value": 15,
     },
     "Gold Vault": {
         "Name": "Gold Vault",
@@ -316,6 +430,7 @@ ENTITY_STATS = {
         "colour_to_be_converted": (35, 33, 30),
         "storage_amount": 50,
         "resource_storage_type": "Gold",
+        "rubble_value": 15,
     },
     "Power Plant": {
         "Name": "Power Plant",
@@ -330,7 +445,8 @@ ENTITY_STATS = {
         "power_given": 10,
         "power_supply": True,
         "depletion_time": 3.0,
-        "resource_used": 1
+        "resource_used": 1,
+        "rubble_value": 7,
     },
     "Gun Turret": {
         "Name": "Gun Turret",
@@ -347,6 +463,7 @@ ENTITY_STATS = {
         "range": 2 * TILE,
         "ammo": 10,
         "shots": 1,
+        "rubble_value": 7,
     },
     "Power Station": {
         "Name": "Power Station",
@@ -361,7 +478,46 @@ ENTITY_STATS = {
         "power_given": 20,
         "power_supply": True,
         "depletion_time": 3.0,
-        "resource_used": 5
+        "resource_used": 5,
+        "rubble_value": 7,
+    },
+    "Road": {
+        "Name": "Road",
+        "kind": "road",
+        "radius": TILE // 2,
+        "category": "building",
+        "cost": COST_ROAD,
+        "hp": 10,
+        "armour": 0,
+        "build_time": 0.1,
+        "colour_to_be_converted": (200, 170, 40),
+        "rubble_value": 2,
+    },
+    "Concrete Block": {
+        "Name": "Concrete Block",
+        "kind": "concrete_block",
+        "radius": TILE // 2,
+        "category": "building",
+        "cost": COST_CONCRETE_BLOCK,
+        "hp": 100,
+        "armour": 0,
+        "build_time": 0.1,
+        "colour_to_be_converted": (150, 148, 142),
+        "rubble_value": 2,
+    },
+    # Building stats
+    "Rubble": {
+        "Name": "Rubble",
+        "kind": "rubble",
+        "category": "common",
+        "colour_to_be_converted": (239, 228, 176),
+    },
+    # Building stats
+    "Big Rubble": {
+        "Name": "Big Rubble",
+        "kind": "big_rubble",
+        "category": "common",
+        "colour_to_be_converted": (239, 228, 176),
     },
 }
 
@@ -373,15 +529,7 @@ MINERAL_SUPPLY_TIME = 3.0
 FUEL_SUPPLY_TIME = 3.0
 GOLD_SUPPLY_TIME = 3.0
 
-# Tile types
-T_GRASS = 0
-T_WALL = 1
-T_RESOURCE = 2
-T_PLAYER_LOC = 3
-T_FUEL = 4
-T_GOLD = 5
-T_BLANK = 6
-T_WATER = 7
+
 
 # Game Map Location
 GAME_MAP = 'game_map.png'
@@ -410,6 +558,17 @@ TILE_COLORS = {
 
 TEAM_COLORS = {
     0: (80, 160, 255),   # blue
+    1: (255, 80, 80),    # red
+    2: (255, 200, 80),   # yellow
+    3: (160, 255, 120),  # green
+    4: (200, 120, 255),  # purple
+    5: (255, 120, 200),  # pink
+    6: (0, 0, 0)        # black
+}
+
+
+MINI_MAP_COLOURS = {
+    0: (100, 200, 255),   # blue
     1: (255, 80, 80),    # red
     2: (255, 200, 80),   # yellow
     3: (160, 255, 120),  # green

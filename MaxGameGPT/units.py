@@ -27,13 +27,23 @@ class Unit(Entity):
     def __post_init__(self):
         super().__post_init__()
 
+        self.speed_modifier = 1.0
+
         stats = C.ENTITY_STATS[self.name]
         self.attacking_unit = stats.get("attacking_unit", False)
         self.building_unit = stats.get("building_unit", False)
         self.transfer_unit = stats.get("transfer_unit", False)
         self.speed = self.max_speed = stats["speed"]
+        self.movement_type = stats["movement_type"]
+        self.repair_unit = stats.get("repair_unit", False)
+        self.clearing = stats.get("clearing", False)
+        self.target_rubble = None
 
-        self.labels = [f'hp: {self.hp}/{self.max_hp}', f'speed: {self.speed}/{self.max_speed}']
+        self.stat_fields = ['name', 'hp', 'speed']
+        if self.attacking_unit:
+            self.stat_fields += ['ammo', 'shots']
+        if self.transfer_unit > 0:
+            self.stat_fields.append('carry')
 
         if self.attacking_unit:
             self.atk = stats["atk"]
@@ -42,10 +52,9 @@ class Unit(Entity):
             self.range += 5
             self.ammo = self.max_ammo = stats["ammo"]
             self.shots = self.max_shots = stats["shots"]
-            self.labels.append(f'ammo: {self.ammo}/{self.max_ammo}')
-            self.labels.append(f'shots: {self.shots}/{self.max_shots}')
 
         self.carry_max = stats.get("cargo", 0)
+        self.clear_rate = stats.get("clear_rate", 0)
 
         self.local_labels = ['Move', 'Stop']
 
@@ -54,13 +63,15 @@ class Unit(Entity):
 
         if self.transfer_unit > 0:
             self.local_labels.append('X-fer')
-            self.labels.append(f'carry: {self.carry}/{self.carry_max}')
+
+        if self.repair_unit:
+            self.local_labels.append('Repair')
         
         if self.building_unit:
             self.local_labels.append('Build')
 
         self.rects = []
-        for i in range(len(self.labels)):   # or a fixed number of buttons
+        for i in range(len(self.stat_fields)):   # or a fixed number of buttons
             rect = pygame.Rect(
                 20,
                 40 + 10 + i * (C.UNIT_PROP_HEIGHT),
@@ -81,7 +92,19 @@ class Unit(Entity):
             dy = ty - self.y
             self.current_angle = math.degrees(math.atan2(-dy, dx))  # negative dy because y-axis is inverted in Pygame
 
+    def get_labels(self):
+        text_map = {
+            'name': f'name: {self.name}',
+            'hp': f'hp: {self.hp}/{self.max_hp}',
+            'speed': f'speed: {self.speed}/{self.max_speed}',
+            'ammo': f'ammo: {getattr(self, "ammo", 0)}/{getattr(self, "max_ammo", 0)}',
+            'shots': f'shots: {getattr(self, "shots", 0)}/{getattr(self, "max_shots", 0)}',
+            'carry': f'carry: {self.carry}/{self.carry_max}',
+        }
+        return [text_map[f] for f in self.stat_fields]    
+
     def update(self, dt, game):
+
         # Attack cooldown
         if self.attack_cooldown > 0:
             self.attack_cooldown -= dt
@@ -95,11 +118,22 @@ class Unit(Entity):
             if d < 4:
                 self.path_px.pop(0)
             else:
-                vx = dx / d * self.speed
-                vy = dy / d * self.speed
+                vx = dx / d * self.speed * self.speed_modifier
+                vy = dy / d * self.speed * self.speed_modifier
                 self.x += vx * dt
                 self.y += vy * dt
 
+        if self.target_rubble is not None:
+            if math.dist(self.pos(), self.target_rubble.pos()) <= 5.0:
+                self.clearing = True
+        
+        # Bulldoser Mechanic
+        if self.clearing:
+            self.target_rubble.work_done += self.clear_rate * dt
+            if self.target_rubble.work_done >= self.target_rubble.clear_work:
+                self.carry += self.target_rubble.value
+                self.target_rubble = None
+                self.clearing = False
 
         # Auto-target enemies in range
         if not self.harvesting and self.attacking_unit:
@@ -143,7 +177,7 @@ class Unit(Entity):
             # Draw Box in top corner showing hp, speed, ammo, and carry/shots
             pygame.draw.rect(surf, C.MENU_BG, (0, 40, C.UNIT_MENU_WIDTH, C.UNIT_MENU_HEIGHT))
             
-            buttons = list(zip(self.labels, self.rects))
+            buttons = list(zip(self.get_labels(), self.rects))
 
             for label, rect in buttons:
                 # Draw text

@@ -12,8 +12,6 @@
 # Create a screen for construction with unit stats
     # Note this pauses the screen
 # Make losing ammo mean finding ammo trucks to resupply
-# Change some buildings to 2x2 or 3x3
-# Add base defence turrets
 # Upgrade AI
 # Add more units
 # Add Radar/Fog of war
@@ -26,7 +24,6 @@
 
 
 import os, textwrap, json, math, random, sys, time
-import util as m
 
 ##code = r'''# grid_rts.py
 # A minimal grid-based base-building game prototype in Pygame
@@ -105,7 +102,11 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
 
-            elif event.type == pygame.KEYDOWN:
+            elif event.type == pygame.KEYDOWN and game.pause_mode:
+                if event.key == pygame.K_p:
+                    game.pause_mode = not game.pause_mode
+
+            elif event.type == pygame.KEYDOWN and not game.pause_mode:
                 if event.key == pygame.K_ESCAPE:
                     # cancel build mode or clear selection
                     if game.build_mode or game.sell_mode:
@@ -167,7 +168,7 @@ def main():
                         if rect.collidepoint(event.pos):
 
                             if label == 'Pause':
-                                pass
+                                game.pause_mode = not game.pause_mode
 
                             elif label == 'Save':
                                 game.save_game("save_game01.json")
@@ -184,7 +185,7 @@ def main():
                         if not rect.collidepoint(event.pos):
                             continue 
                         
-                        if rect.collidepoint(event.pos):
+                        if rect.collidepoint(event.pos) and not game.pause_mode:
 
                             if label == "Sell":
                                 game.sell_mode = True
@@ -213,7 +214,7 @@ def main():
 
 
                     # Sell the Building
-                    if game.building_at_point(event.pos, team=C.PLAYER_TEAM) is not None and game.sell_mode:
+                    if game.building_at_point(event.pos, team=C.PLAYER_TEAM) is not None and game.sell_mode and not game.pause_mode:
                         b_at_point = game.building_at_point(event.pos, team=C.PLAYER_TEAM)
                         
                         b_at_point.sold = True
@@ -228,7 +229,7 @@ def main():
                         game.ghost_valid = False
 
                     # Repair the building
-                    elif game.building_at_point(event.pos, team=C.PLAYER_TEAM) is not None and game.repair_mode:
+                    elif game.building_at_point(event.pos, team=C.PLAYER_TEAM) is not None and game.repair_mode and not game.pause_mode:
                         b_at_point = game.building_at_point(event.pos, team=C.PLAYER_TEAM)
                             
                         # If missing health
@@ -241,14 +242,28 @@ def main():
                         game.repair_mode = False
                         game.ghost_valid = False
 
-                    elif game.move_mode:
+                    # Repair the unit
+                    elif game.unit_at_point(event.pos, team=C.PLAYER_TEAM) is not None and game.repair_mode and not game.pause_mode:
+                        b_at_point = game.unit_at_point(event.pos, team=C.PLAYER_TEAM)
+                            
+                        # If missing health
+                        if b_at_point.hp < b_at_point.max_hp and game.player_mat[C.PLAYER_TEAM].money > 0:
+                            hp_diff = b_at_point.max_hp - b_at_point.hp
+                            hp_diff = hp_diff // 2
+                            game.player_mat[C.PLAYER_TEAM].money -= hp_diff
+                            b_at_point.hp = b_at_point.max_hp
+                            
+                        game.repair_mode = False
+                        game.ghost_valid = False
+
+                    elif game.move_mode and not game.pause_mode:
                         # Move selected units to clicked position
                         tx, ty = UT.to_grid(event.pos)
                         tx -= C.UNIT_MENU_WIDTH // C.TILE
                         game.order_move_grid(game.selected_units, (tx, ty))
                         game.move_mode = False
 
-                    elif game.attack_mode:
+                    elif game.attack_mode and not game.pause_mode:
                         enemy = game.unit_at_point(event.pos, team=None)
                         if enemy is None:
                             enemy = game.building_at_point(event.pos, team=None)
@@ -260,7 +275,7 @@ def main():
 
                             for u in game.selected_units:
                                 u.target = enemy
-                                ava_locs = m.locations_in_range(u.range, enemy)
+                                ava_locs = UT.locations_in_range(u.range, enemy)
 
                                 for i in ava_locs:
                                     # If Filled Skip
@@ -284,18 +299,20 @@ def main():
                         else:
                             game.attack_mode = False
 
-                    elif game.transfer_mode:
+                    elif game.transfer_mode and not game.pause_mode:
                         for u in game.selected_units:
                             if isinstance(u, Unit) and u.carry > 0:
-
                                 if game.unit_at_point(event.pos, team=None) is not None:
                                     target_unit = game.unit_at_point(event.pos, team=None)
-                                    if target_unit.team == C.PLAYER_TEAM and target_unit.transfer_unit:
+                                    # Tranfer between Transfer Units of Same Type
+                                    if target_unit.team == C.PLAYER_TEAM and target_unit.transfer_unit and target_unit.name == u.name:
                                         # Transfer resources to the desired_unit with carry
                                         target_unit.carry = min(target_unit.carry_max, target_unit.carry + u.carry)
                                         u.carry = 0
                                         game.transfer_mode = False
-                                    elif target_unit.team == C.PLAYER_TEAM and target_unit.ammo < target_unit.max_ammo:
+
+                                    # Refill ammo of unit
+                                    elif target_unit.team == C.PLAYER_TEAM and target_unit.ammo < target_unit.max_ammo and not target_unit.transfer_unit and u.name == 'Ammo Truck':
                                         # Transfer resources to the unit
                                         transfer_amount = min(u.carry, target_unit.max_ammo - target_unit.ammo)
                                         target_unit.ammo += transfer_amount
@@ -303,36 +320,59 @@ def main():
                                         game.transfer_mode = False
                                     else:
                                         game.transfer_mode = False
-                                
+
+                                # Give Resources to Base
                                 elif game.building_at_point(event.pos, team=None) is not None:
                                     target_building = game.building_at_point(event.pos, team=None)
-                                    if target_building.team == C.PLAYER_TEAM and target_building.storage:
+                                    if target_building.team == C.PLAYER_TEAM and target_building.storage and u.name == 'Ammo Truck':
                                         # Transfer resources to the building
                                         #target_building.resources += u.carry
                                         game.player_mat[C.PLAYER_TEAM].money += u.carry
                                         u.carry = 0
                                         game.transfer_mode = False
+                                    elif target_building.team == C.PLAYER_TEAM and target_building.storage and u.name == 'Fuel Truck':
+                                        # Transfer resources to the building
+                                        #target_building.resources += u.carry
+                                        game.player_mat[C.PLAYER_TEAM].fuel += u.carry
+                                        u.carry = 0
+                                        game.transfer_mode = False
+                                    elif target_building.team == C.PLAYER_TEAM and target_building.storage and u.name == 'Gold Truck':
+                                        # Transfer resources to the building
+                                        #target_building.resources += u.carry
+                                        game.player_mat[C.PLAYER_TEAM].gold += u.carry
+                                        u.carry = 0
+                                        game.transfer_mode = False
                                     else:
                                         game.transfer_mode = False
                                 
                                 else:
                                     game.transfer_mode = False
 
-                            if isinstance(u, Building) and u.storage and game.player_mat[C.PLAYER_TEAM].money > 0:
-                                # Transfer resources to nearest unit
+                            if isinstance(u, Building) and u.storage: 
+                                # Transfer building's resources to selected unit
                                 if game.unit_at_point(event.pos, team=None) is not None:
                                     target_unit = game.unit_at_point(event.pos, team=None)
-                                    if target_unit.team == C.PLAYER_TEAM and target_unit.kind == "ammo_truck":
+                                    if target_unit.team == C.PLAYER_TEAM and target_unit.kind == "ammo_truck" and game.player_mat[C.PLAYER_TEAM].money > 0:
                                         # Transfer resources to the ammo truck
                                         target_unit.carry = min(target_unit.carry_max, target_unit.carry + game.player_mat[C.PLAYER_TEAM].money)
-                                        u.carry = 0
+                                        game.player_mat[C.PLAYER_TEAM].money -= target_unit.carry
+                                        game.transfer_mode = False
+                                    elif target_unit.team == C.PLAYER_TEAM and target_unit.kind == "fuel_truck" and game.player_mat[C.PLAYER_TEAM].fuel > 0:
+                                        # Transfer resources to the ammo truck
+                                        target_unit.carry = min(target_unit.carry_max, target_unit.carry + game.player_mat[C.PLAYER_TEAM].fuel)
+                                        game.player_mat[C.PLAYER_TEAM].fuel -= target_unit.carry
+                                        game.transfer_mode = False
+                                    elif target_unit.team == C.PLAYER_TEAM and target_unit.kind == "gold_truck" and game.player_mat[C.PLAYER_TEAM].gold > 0:
+                                        # Transfer resources to the ammo truck
+                                        target_unit.carry = min(target_unit.carry_max, target_unit.carry + game.player_mat[C.PLAYER_TEAM].gold)
+                                        game.player_mat[C.PLAYER_TEAM].gold -= target_unit.carry
                                         game.transfer_mode = False
                                     else:
                                         game.transfer_mode = False
                                 else:
                                     game.transfer_mode = False
 
-                    elif game.selected_units and not game.build_mode and not game.sell_mode and not game.repair_mode:
+                    elif game.selected_units and not game.build_mode and not game.sell_mode and not game.repair_mode and not game.pause_mode:
                         for label, rect in game.selected_units[0].local_buttons:
                             if rect.collidepoint(event.pos):
                                 if label == "Move":
@@ -364,7 +404,7 @@ def main():
                         else:
                             game.select_start = event.pos
                     
-                    elif game.build_mode and game.build_name in C.ENTITY_STATS:
+                    elif game.build_mode and game.build_name in C.ENTITY_STATS and not game.pause_mode:
                         
                         cost = C.ENTITY_STATS[game.build_name]["cost"]
 
@@ -377,8 +417,7 @@ def main():
                             game.ghost_valid = False
                             game.big_build_mode = False
 
-
-                    elif game.map_edit:
+                    elif game.map_edit and not game.pause_mode:
                         tx, ty = UT.to_grid(event.pos)
                         # paint chosen tile (or grass with middle click, but here: toggle between selected and grass with shift)
                         if UT.in_bounds(tx, ty):
@@ -391,7 +430,7 @@ def main():
                         game.select_start = event.pos
                         #game.selection_rect = pygame.Rect(event.pos, (0,0))
 
-                elif event.button == 3:  # right
+                elif event.button == 3 and not game.pause_mode:  # right
                     if game.map_edit:
                         # right click sets grass
                         tx, ty = UT.to_grid(event.pos)
@@ -406,12 +445,41 @@ def main():
                             for u in game.selected_units:
                                 if u.attacking_unit:
                                     u.target = enemy
+
+                        elif game.selected_units and game.rubble_at_point(event.pos) is not None:
+                            for u in game.selected_units:
+                                r = game.rubble_at_point(event.pos)
+                                if u.name == 'Bulldozer':
+                                    ava_locs = UT.locations_in_range(2 * C.TILE, u)
+                                    dist = math.inf
+                                    for i in ava_locs:
+                                        # If Filled Skip
+                                        if i in game.unit_locs:
+                                            continue
+
+                                        dist_between = math.dist(i, u.pos_grid())
+
+                                        if dist_between < dist:
+                                            dist = dist_between
+                                            chosen_point = i
+                                    print(chosen_point)
+                                    game.order_move_grid(game.selected_units, chosen_point)
+                                    print(u.path_px)
+                                    print(r.pos())
+                                    u.path_px.append(r.pos())
+                                    u.target_rubble = r
+                                else:
+                                    tx, ty = UT.to_grid(event.pos)
+                                    tx -= C.UNIT_MENU_WIDTH // C.TILE
+                                    game.order_move_grid(game.selected_units, (tx, ty))
+                            pass
+
                         else:
                             tx, ty = UT.to_grid(event.pos)
                             tx -= C.UNIT_MENU_WIDTH // C.TILE
                             game.order_move_grid(game.selected_units, (tx, ty))
 
-            elif event.type == pygame.MOUSEBUTTONUP:
+            elif event.type == pygame.MOUSEBUTTONUP and not game.pause_mode:
                 if event.button == 1 and game.select_start:
 
                     # finalize selection
@@ -474,7 +542,8 @@ def main():
             game.camera_y = min(game.camera_y + game.camera_speed, game.grid.h * C.TILE - C.HEIGHT)
 
         # ------------- UPDATE -------------
-        game.update(dt)
+        if not game.pause_mode:
+            game.update(dt)
 
         # ------------- DRAW -------------
         screen.fill((30, 30, 30))

@@ -114,6 +114,12 @@ class GridMap:
     def passable(self, tx, ty):
         return m.in_bounds(tx, ty) and self.tiles[ty][tx] != C.T_WALL and self.tiles[ty][tx] != C.T_WATER
 
+    def iter_tiles(self):
+        """Yield every Tiles object in the map, row by row."""
+        for row in self.tiles:  # assuming self.tiles is a 2D list
+            for tile in row:
+                yield tile
+
     def draw(self, surf, camera_x, camera_y):
         screen_w, screen_h = surf.get_size()
 
@@ -156,9 +162,6 @@ class GridMap:
         self.transposed_resources_amounts = [[row[i] for row in self.resource_amounts] for i in range(len(self.resource_amounts[0]))]
 
         tile_map = [[0 for _ in range(self.h)] for _ in range(self.w)]
-
-        #print(tile_map[22][0])
-
 
         for i in range(self.w):
             for j in range(self.h):
