@@ -118,7 +118,15 @@ class Game:
         return u
 
     def spawn_building(self, team, x, y, name, no_queue=False):
-        b = Building(team, x, y, name, no_queue)
+        stats = C.ENTITY_STATS[name]
+        building_cls = C.BUILDING_CLASSES.get(name, Building)
+
+        b = building_cls(
+            x=x,
+            y=y,
+            name=name,
+            no_queue=no_queue
+        )
         b.assign_tile(self.tile_map)
         self.buildings.append(b)
         self.total_buildings.append(b)  ## Used in End Game Stats

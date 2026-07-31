@@ -1,4 +1,5 @@
 import PIL.Image as Image
+from landmine import Landmine
 
 # ------------------ CONFIG ------------------
 # Screen Width and Height
@@ -89,6 +90,7 @@ COST_ROAD = 5
 COST_CONCRETE_BLOCK = 5
 COST_REPAIR_UNIT = 25
 COST_BULLDOZER = 25
+COST_LAND_MINE = 10
 
 # Image Locations
 BASE_FOLDER = "assets"
@@ -143,6 +145,10 @@ def entity_image_path(kind, category):
 
 # Research and Colonisation Buildings # 38
 # Habitat, Research Centre, Gold Refinery
+
+BUILDING_CLASSES = {
+    "Land Mine": Landmine,
+}
 
 ENTITY_STATS = {
     # Unit Stats
@@ -504,6 +510,23 @@ ENTITY_STATS = {
         "build_time": 0.1,
         "colour_to_be_converted": (150, 148, 142),
         "rubble_value": 2,
+    },
+    "Land Mine": {
+        "Name": "Land Mine",
+        "kind": "land_mine",
+        "radius": TILE // 2,
+        "category": "building",
+        "cost": COST_LAND_MINE,
+        "hp": 100,
+        "armour": 0,
+        "build_time": 0.1,
+        "colour_to_be_converted": (255, 242, 0),
+        "rubble_value": 2,
+        "damage": 100,
+        "explosive": True,
+        "stealth": True,
+        "blast_radius": 2.0,
+        "trigger_radius": 1.0,
     },
     # Building stats
     "Rubble": {

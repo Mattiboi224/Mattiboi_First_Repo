@@ -36,6 +36,7 @@ class Building(Entity):
         self.resource_used = stats.get("resource_used", 0)
         self.attacking_building = stats.get("attacking_building", False)
 
+
         self.stat_fields = ['name', 'hp']
 
         if self.power_required:
