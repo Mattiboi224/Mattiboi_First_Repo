@@ -12,6 +12,7 @@ from player import Player
 import json
 from rubble import Rubble
 from minimap import Minimap
+from landmine import Landmine
 
 class Game:
     def __init__(self):
@@ -41,10 +42,14 @@ class Game:
                 self.player_mat.append(Player(i))
 
         # Place bases
-        spawns = [(1,1), (C.GRID_W-3, C.GRID_H-3), (C.GRID_W-3, 2), (2, C.GRID_H-3), (C.GRID_W//2, C.GRID_H-3)]
+        #spawns = [(1,1), (C.GRID_W-3, C.GRID_H-3), (C.GRID_W-3, 2), (2, C.GRID_H-3), (C.GRID_W//2, C.GRID_H-3)]
         if len(self.grid.spawns) != 0:
             spawns = self.grid.spawns
         random.shuffle(spawns)
+
+        self.BUILDING_CLASSES = {
+            "Land Mine": Landmine,
+        }
 
         # Player base
         tx, ty = spawns[0]
@@ -87,6 +92,8 @@ class Game:
         # AI
         self.ai_timers = {team: 0.0 for team in C.AI_TEAMS}
 
+
+
     def save_game(self, filename):
         state = {
             "player": [p.to_dict() for p in self.player_mat],
@@ -119,9 +126,10 @@ class Game:
 
     def spawn_building(self, team, x, y, name, no_queue=False):
         stats = C.ENTITY_STATS[name]
-        building_cls = C.BUILDING_CLASSES.get(name, Building)
+        building_cls = self.BUILDING_CLASSES.get(name, Building)
 
         b = building_cls(
+            team=team,
             x=x,
             y=y,
             name=name,
@@ -247,7 +255,7 @@ class Game:
         
         for b in self.buildings:
             if b.dead or b.sold: continue
-            if b.name == 'Road': continue
+            if b.name in ['Road', 'Bridge', 'Water Platform']: continue
             self.unit_locs.append(m.occupied_by_unit(b))
 
         self.unit_locs = [t for sublist in self.unit_locs for t in sublist]
@@ -280,6 +288,26 @@ class Game:
             b.power_used for b in self.buildings if b.team == team.team and not b.dead and not b.sold
         )
 
+    def entity_at(self, x, y):
+        for ent in self.buildings:  # or self.entities, whatever your master list is called
+            tx, ty = ent.pos_grid()
+            if tx == x and ty == y:
+                return ent
+        return None
+
+    def effective_tile(self, x, y):
+        ent = self.entity_at(x, y)
+        if ent is not None and ent.name == "Bridge":
+            return C.T_BRIDGE
+        if ent is not None and ent.name == "Water Platform":
+            return C.T_WATER_PLATFORM
+        return self.grid.tiles[y][x]
+
+    def build_effective_grid(self):
+        return [
+            [self.effective_tile(x, y) for x in range(C.MAP_WIDTH)]
+             for y in range(C.MAP_HEIGHT)
+        ]
 
     # ---- Commands ----
     def order_move(self, units, dest_px):
@@ -287,7 +315,7 @@ class Game:
         gx, gy = m.to_grid(dest_px)
         for u in units:
             sx, sy = m.to_grid(u.pos())
-            path = m.astar(self.grid.tiles, (sx, sy), (gx, gy), self.unit_locs, passable=C.PASSABLE_RULES[u.movement_type])
+            path = m.astar(self.build_effective_grid(), (sx, sy), (gx, gy), self.unit_locs, passable=C.PASSABLE_RULES[u.movement_type])
             if path:
                 u.set_path(path)
 
@@ -316,6 +344,10 @@ class Game:
                 else:
                     u.speed_modifier = 1.0
                 u.update(dt, self)
+
+        for building in self.buildings:
+            if isinstance(building, Landmine):
+                building.check_trigger(self)
 
         for u in self.units:
             if u.dead:
@@ -516,7 +548,10 @@ class Game:
         for b in self.buildings:
             if b.pos_camera(self.camera_x, self.camera_y)[0] < 0 or b.pos_camera(self.camera_x, self.camera_y)[0] > C.SCREEN_WIDTH or b.pos_camera(self.camera_x, self.camera_y)[1] < 0 or b.pos_camera(self.camera_x, self.camera_y)[1] > C.HEIGHT:
                 continue
-            b.draw(surf, font, self.camera_x, self.camera_y)
+            if isinstance(b, Landmine):
+                b.draw(surf, font, self.camera_x, self.camera_y, C.PLAYER_TEAM)
+            else:
+                b.draw(surf, font, self.camera_x, self.camera_y)
 
         # Draw units
         for u in self.units:
@@ -544,12 +579,18 @@ class Game:
                 rect = pygame.Rect(0,0,C.TILE,C.TILE)
                 rect.center = (px, py)
 
+                valid_terrain = C.ENTITY_STATS[self.build_name]["valid_terrain"]
+
                 if s_tx >= C.MAP_WIDTH or s_tx < 0 or s_ty >= C.MAP_HEIGHT or s_ty < 0:
                     occupied_test = False
                 else:
-                    occupied_test = not self.tile_map[s_tx][s_ty].occupied
+                    ent = self.entity_at(s_tx, s_ty)
+                    if ent is not None and ent.name in ["Bridge", "Water Platform"]:
+                        occupied_test = True
+                    else:
+                        occupied_test = not self.tile_map[s_tx][s_ty].occupied
 
-                valid = m.in_bounds(s_tx, s_ty) and self.grid.tiles[s_ty][s_tx]==C.T_GRASS and occupied_test
+                valid = m.in_bounds(s_tx, s_ty) and self.effective_tile(s_tx, s_ty) in valid_terrain and occupied_test
                 self.ghost_valid = valid
                 self.ghost_pos = (s_px, s_py)
                 pygame.draw.rect(surf, (200,200,200) if valid else (200,80,80), rect, 2)
@@ -559,15 +600,29 @@ class Game:
                 rect = pygame.Rect(0,0,C.TILE * 2, C.TILE * 2)
                 rect.center = (px + (C.TILE / 2), py + (C.TILE / 2))
 
+                valid_terrain = C.ENTITY_STATS[self.build_name]["valid_terrain"]
+
+
                 if s_tx + 1 >= C.MAP_WIDTH or s_tx < 0 or s_ty + 1 >= C.MAP_HEIGHT or s_ty < 0:
                     occupied_test = False
                 else:
-                    occupied_test = not self.tile_map[s_tx][s_ty].occupied and not self.tile_map[s_tx + 1][s_ty].occupied \
-                        and not self.tile_map[s_tx][s_ty + 1].occupied and not self.tile_map[s_tx + 1][s_ty + 1].occupied
+                    ent_tf = self.entity_at(s_tx, s_ty)
+                    ent_tr = self.entity_at(s_tx + 1, s_ty)
+                    ent_bf = self.entity_at(s_tx, s_ty + 1)
+                    ent_br = self.entity_at(s_tx + 1, s_ty + 1)
+
+                    if (ent_tf is None or ent_tf.name in ["Water Platform"]) and \
+                        (ent_tr is None or ent_tr.name in ["Water Platform"]) and \
+                            (ent_bf is None or ent_bf.name in ["Water Platform"]) and \
+                                (ent_br is None or ent_br.name in ["Water Platform"]):
+                        occupied_test = True
+                    else:
+                        occupied_test = not self.tile_map[s_tx][s_ty].occupied and not self.tile_map[s_tx + 1][s_ty].occupied \
+                            and not self.tile_map[s_tx][s_ty + 1].occupied and not self.tile_map[s_tx + 1][s_ty + 1].occupied
 
                 valid = m.in_bounds(s_tx, s_ty) and m.in_bounds(s_tx + 1, s_ty) and m.in_bounds(s_tx, s_ty + 1) and m.in_bounds(s_tx + 1, s_ty + 1) \
-                    and self.grid.tiles[s_ty][s_tx]==C.T_GRASS and self.grid.tiles[s_ty + 1][s_tx]==C.T_GRASS \
-                        and self.grid.tiles[s_ty][s_tx + 1]==C.T_GRASS and self.grid.tiles[s_ty + 1][s_tx + 1]==C.T_GRASS \
+                    and self.effective_tile(s_tx, s_ty) in valid_terrain and self.effective_tile(s_tx + 1, s_ty) in valid_terrain \
+                        and self.effective_tile(s_tx, s_ty + 1) in valid_terrain and self.effective_tile(s_tx + 1, s_ty + 1) in valid_terrain \
                     and occupied_test
                 
                 self.ghost_valid = valid

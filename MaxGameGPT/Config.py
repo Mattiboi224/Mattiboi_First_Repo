@@ -1,5 +1,4 @@
 import PIL.Image as Image
-from landmine import Landmine
 
 # ------------------ CONFIG ------------------
 # Screen Width and Height
@@ -11,6 +10,9 @@ UNIT_MENU_WIDTH = 128
 UNIT_MENU_HEIGHT = 128
 BOTTOM_MENU_HEIGHT = 32
 TILE = 32
+
+# Use Manual or Generated Map
+AUTO_GENERATE_MAP = True
 
 SCREEN_WIDTH = WIDTH - MENU_WIDTH - UNIT_MENU_WIDTH
 SCREEN_HEIGHT = HEIGHT - BOTTOM_MENU_HEIGHT
@@ -42,6 +44,7 @@ UNIT_PROP_HEIGHT = 20
 PLAYER_TEAM = 0
 NUM_AI = 2             # number of AI opponents
 AI_TEAMS = list(range(1, 1 + NUM_AI))
+NO_OF_SPAWNS = NUM_AI + 1  # number of spawn points (including player)
 
 INITIAL_MONEY = 200
 INITIAL_FUEL = 0
@@ -57,14 +60,18 @@ T_FUEL = 4
 T_GOLD = 5
 T_BLANK = 6
 T_WATER = 7
+T_BRIDGE = 8
+T_WATER_PLATFORM = 9
 
 # Movement rules
 MOVE_GROUND = "ground"
 MOVE_AMPHIBIOUS = "amphibious"
+MOVE_WATER = "water"
 
 PASSABLE_RULES = {
-    MOVE_GROUND:      lambda t: t != T_WALL and t != T_WATER,
+    MOVE_GROUND:      lambda t: t == T_BRIDGE or t == T_WATER_PLATFORM or (t != T_WALL and t != T_WATER),
     MOVE_AMPHIBIOUS:  lambda t: t != T_WALL,  # water is fine, walls aren't
+    MOVE_WATER:      lambda t: t == T_WATER or t == T_BRIDGE,
 }
 
 # Costs
@@ -72,7 +79,9 @@ COST_WORKER = 50
 COST_SOLDIER = 60
 COST_BARRACKS = 75
 COST_TANK = 150
+COST_GUNBOAT = 150
 COST_TANK_FACTORY = 100
+COST_SHIPYARD = 100
 COST_BASE = 100
 COST_AMMO_TRUCK = 50
 COST_FUEL_TRUCK = 50
@@ -87,6 +96,8 @@ COST_GUN_TURRET = 50
 COST_POWER_STATION = 50
 COST_SURVEYOR = 10
 COST_ROAD = 5
+COST_BRIDGE = 5
+COST_WATER_PLATFORM = 5
 COST_CONCRETE_BLOCK = 5
 COST_REPAIR_UNIT = 25
 COST_BULLDOZER = 25
@@ -126,10 +137,10 @@ def entity_image_path(kind, category):
 # Air Transport, AWAC
 
 # Connecting Structures # 32
-# Water Platform, Bridge, Connector
+# Water Platform, Connector
 
 # Mines # 33
-# Land Mine, Sea Mine
+# Sea Mine
 
 # Defensive Buildings # 34
 # Radar, Anti Aircraft, Artillery, Missile Launcher
@@ -145,10 +156,6 @@ def entity_image_path(kind, category):
 
 # Research and Colonisation Buildings # 38
 # Habitat, Research Centre, Gold Refinery
-
-BUILDING_CLASSES = {
-    "Land Mine": Landmine,
-}
 
 ENTITY_STATS = {
     # Unit Stats
@@ -338,6 +345,27 @@ ENTITY_STATS = {
         "movement_type": MOVE_AMPHIBIOUS,
         "rubble_value": 6,
     },
+    "Gunboat": {
+        "Name": "Gunboat",
+        "kind": "gunboat",
+        "radius": TILE // 2,
+        "category": "unit",
+        "builds_from": "shipyard",
+        "cost": COST_GUNBOAT,
+        "hp": 150,
+        "atk": 30,
+        "range": 3 * TILE,
+        "speed": 50,   # px/s
+        "ammo": 5,
+        "armour": 5,
+        "shots": 2,
+        "build_time": 10.0,
+        "colour_to_be_converted": (74, 98, 48),
+        "attacking_unit": True,
+        "movement_type": MOVE_WATER,
+        "rubble_value": 10,
+    },
+
     # Building stats
     "Construction": {
         "Name": "Construction",
@@ -365,6 +393,7 @@ ENTITY_STATS = {
         "resource_storage_type": "Minerals",
         "power_given": 1,
         "rubble_value": 20,
+        "valid_terrain": {T_GRASS, T_WATER_PLATFORM},
         #"power_required": True, # Will add back in when we can transfer power completely to plant
     },
     "Barracks": {
@@ -380,6 +409,7 @@ ENTITY_STATS = {
         "power_used": 1,
         "power_required": True,
         "rubble_value": 5,
+        "valid_terrain": {T_GRASS, T_WATER_PLATFORM},
     },
     "Tank Factory": {
         "Name": "Tank Factory",
@@ -394,6 +424,22 @@ ENTITY_STATS = {
         "power_used": 2,
         "power_required": True,
         "rubble_value": 20,
+        "valid_terrain": {T_GRASS, T_WATER_PLATFORM},
+    },
+    "Shipyard": {
+        "Name": "Shipyard",
+        "kind": "shipyard",
+        "radius": TILE // 2,
+        "category": "building",
+        "cost": COST_SHIPYARD,
+        "hp": 300,
+        "armour": 4,
+        "build_time": 6.0,
+        "colour_to_be_converted": (74, 84, 58),
+        "power_used": 2,
+        "power_required": True,
+        "rubble_value": 20,
+        "valid_terrain": {T_WATER},
     },
     "Storage Unit": {
         "Name": "Storage Unit",
@@ -408,6 +454,7 @@ ENTITY_STATS = {
         "storage_amount": 50,
         "resource_storage_type": "Minerals",
         "rubble_value": 15,
+        "valid_terrain": {T_GRASS, T_WATER_PLATFORM},
         
     },
     "Fuel Tank": {
@@ -423,6 +470,7 @@ ENTITY_STATS = {
         "storage_amount": 50,
         "resource_storage_type": "Fuel",
         "rubble_value": 15,
+        "valid_terrain": {T_GRASS, T_WATER_PLATFORM},
     },
     "Gold Vault": {
         "Name": "Gold Vault",
@@ -437,6 +485,7 @@ ENTITY_STATS = {
         "storage_amount": 50,
         "resource_storage_type": "Gold",
         "rubble_value": 15,
+        "valid_terrain": {T_GRASS, T_WATER_PLATFORM},
     },
     "Power Plant": {
         "Name": "Power Plant",
@@ -453,6 +502,7 @@ ENTITY_STATS = {
         "depletion_time": 3.0,
         "resource_used": 1,
         "rubble_value": 7,
+        "valid_terrain": {T_GRASS, T_WATER_PLATFORM},
     },
     "Gun Turret": {
         "Name": "Gun Turret",
@@ -470,6 +520,7 @@ ENTITY_STATS = {
         "ammo": 10,
         "shots": 1,
         "rubble_value": 7,
+        "valid_terrain": {T_GRASS, T_WATER_PLATFORM},
     },
     "Power Station": {
         "Name": "Power Station",
@@ -486,6 +537,7 @@ ENTITY_STATS = {
         "depletion_time": 3.0,
         "resource_used": 5,
         "rubble_value": 7,
+        "valid_terrain": {T_GRASS, T_WATER_PLATFORM},
     },
     "Road": {
         "Name": "Road",
@@ -498,6 +550,7 @@ ENTITY_STATS = {
         "build_time": 0.1,
         "colour_to_be_converted": (200, 170, 40),
         "rubble_value": 2,
+        "valid_terrain": {T_GRASS},
     },
     "Concrete Block": {
         "Name": "Concrete Block",
@@ -510,6 +563,33 @@ ENTITY_STATS = {
         "build_time": 0.1,
         "colour_to_be_converted": (150, 148, 142),
         "rubble_value": 2,
+        "valid_terrain": {T_GRASS},
+    },
+    "Bridge": {
+        "Name": "Bridge",
+        "kind": "bridge",
+        "radius": TILE // 2,
+        "category": "building",
+        "cost": COST_BRIDGE,
+        "hp": 100,
+        "armour": 0,
+        "build_time": 0.1,
+        "colour_to_be_converted": (127, 127, 127),
+        "rubble_value": 2,
+        "valid_terrain": {T_WATER},
+    },
+    "Water Platform": {
+        "Name": "Water Platform",
+        "kind": "water_platform",
+        "radius": TILE // 2,
+        "category": "building",
+        "cost": COST_WATER_PLATFORM,
+        "hp": 100,
+        "armour": 0,
+        "build_time": 0.1,
+        "colour_to_be_converted": (200, 170, 40),
+        "rubble_value": 2,
+        "valid_terrain": {T_WATER},
     },
     "Land Mine": {
         "Name": "Land Mine",
@@ -524,9 +604,10 @@ ENTITY_STATS = {
         "rubble_value": 2,
         "damage": 100,
         "explosive": True,
-        "stealth": True,
-        "blast_radius": 2.0,
-        "trigger_radius": 1.0,
+        "hidden": True,
+        "blast_radius": 2.0 * TILE,
+        "trigger_radius": 1.0 * TILE,
+        "valid_terrain": {T_GRASS},
     },
     # Building stats
     "Rubble": {
@@ -552,17 +633,36 @@ MINERAL_SUPPLY_TIME = 3.0
 FUEL_SUPPLY_TIME = 3.0
 GOLD_SUPPLY_TIME = 3.0
 
-
-
-# Game Map Location
-GAME_MAP = 'game_map.png'
-
 # Resource Map
 RESOURCE_MAP = 'resource_map.png'
 
+# Game Map Location
+MANUAL_MAP = 'game_map.png'
+
+# Generated Map
+GENERATED_MAP = 'hybrid_map.png'
+SIZE = 32
+CELL = 1
+NOISE_SCALE = 22.0      # bigger = smoother/larger landmasses
+NOISE_OCTAVES = 3
+NOISE_PERSISTENCE = 0.55
+NOISE_LACUNARITY = 2.0
+WATER_THRESHOLD = -0.02 # lower = less water
+EDGE_MARGIN = 1     # min tiles from map border a spawn can be placed
+
+SMOOTH_PASSES = 2        # cellular automata cleanup passes
+
+MIN_SPAWN_DIST = 15
+
+if AUTO_GENERATE_MAP:
+    MAP_PATH = GENERATED_MAP
+else:
+    MAP_PATH = MANUAL_MAP
+
 # Adding Image
-image = Image.open(GAME_MAP)
+image = Image.open(MAP_PATH)
 MAP_WIDTH, MAP_HEIGHT = image.size
+
 
 
 TILE_COLORS = {

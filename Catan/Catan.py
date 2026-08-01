@@ -178,7 +178,7 @@ class Catan:
         #for turn in range(50):
         win_con = 0
         def isterminal():
-            for i in self.self.team_mat:
+            for i in self.team_mat:
                 if i.current_points > win_con:
                     win_con = i.current_points
             
@@ -907,8 +907,7 @@ def choose_move(main_game: Catan, model: nn.Module, epsilon=0.2):
 
     return best_move
 
-for i in Catan.team_mat:
-    print(i.resources)
+catan = Catan()
 
 print('Ended Game')
 

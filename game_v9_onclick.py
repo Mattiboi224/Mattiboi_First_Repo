@@ -316,6 +316,7 @@ def play_game(boss, battle_count, player_level, player_bonus, armour, \
                 
             if protection > 0:
                 def protection_position(x,y):
+                    print(x,y)
                     nonlocal protection_usage, high_low
                     if x >= -350 and x <= -300 and y <= 60 and y >= 10:
                         protection_usage = "Y"
@@ -329,9 +330,30 @@ def play_game(boss, battle_count, player_level, player_bonus, armour, \
                         high_low = "L"
 
                 screen.onclick(protection_position)
-                
+
+                c = 1                
                 while protection_counter != 1:
                     #protection_usage = textinput("Protecting 1/2 Enemies Damage", "Would you like to you a protection? Y/N")
+                    if protection_usage == "Y" and high_low is not None and c == 1:
+                        print('Protection Activated')
+                        protection -= 1
+                        protection_active = 1
+                        protection_counter = 0
+                        protection_usage = None
+                        announcer.clear()
+                        announcer.home()
+                        announcer.write('Protection Used', False, align="center", font=("Arial", 15, "normal"))
+                        protectionturtle.clear()
+                        protection_drawing = 0
+                        c = 0
+                        break
+                    elif protection_usage == "N" and high_low is not None and c == 1:
+                        protectionturtle.clear()
+                        protection_drawing = 0
+                        c = 0
+                        break
+                    elif high_low is not None and protection_usage is None:
+                        break
 
                     while high_low is None and protection_usage is None:
                         screen.update()
@@ -339,23 +361,7 @@ def play_game(boss, battle_count, player_level, player_bonus, armour, \
                     while high_low is None and protection_usage is not None:
                         screen.update()
 
-                    if protection_usage == "Y" and high_low is None:
-                        protection -= 1
-                        protection_active = 1
-                        #break
-                        protection_counter = 0
-                        protection_usage = None
-                        announcer.clear()
-                        announcer.home()
-                        announcer.write('Protection Used', False, align="center", font=("Arial", 15, "normal"))
-                        protectionturtle.clear()
-                        continue
-                    elif protection_usage == "N":
-                        protectionturtle.clear()
-                        protection_drawing = 0
-                        continue
-                    elif high_low is not None:
-                        break
+
 
             else:
                 def attack_position(x,y):

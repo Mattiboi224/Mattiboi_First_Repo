@@ -210,10 +210,17 @@ class Building(Entity):
                 self.queue_time -= dt
                 if self.queue_time <= 0:
                     unit_type = self.queue.pop(0)
+                    move_type = C.ENTITY_STATS[unit_type]["movement_type"]
                     # spawn near the building
-                    r = 64
+                    base_r = 64
                     spawn_point = True
-                    while spawn_point:
+                    gx = gy = None
+                    attempts = 0
+                    max_attempts = 60
+
+                    while spawn_point and attempts < max_attempts:
+                        attempts += 1
+                        r = base_r * (1 + attempts // 20)
                         angle = random.random() * math.tau
                         px = self.x + math.cos(angle) * r
                         py = self.y + math.sin(angle) * r
@@ -224,12 +231,22 @@ class Building(Entity):
                             continue
                         if game.tile_map[gx][gy].occupied:
                             continue
-                        if game.grid.tiles[gy][gx] == C.T_WALL or game.grid.tiles[gy][gx] == C.T_WATER:
-                            continue
+
+                        tile = game.grid.tiles[gy][gx]
+                        if move_type == "water":
+                            if tile != C.T_WATER:
+                                continue
+                        elif move_type == "ground":
+                            if tile == C.T_WATER:
+                                continue
                         spawn_point = False
 
-                    tx, ty = m.tile_center(gx, gy)
-                    game.spawn_unit(self.team, tx, ty, unit_type)
+                    if gx is not None and not spawn_point:
+                        tx, ty = m.tile_center(gx, gy)
+                        game.spawn_unit(self.team, tx, ty, unit_type)
+                    else:
+                        self.queue.insert(0, unit_type)
+
                     # reset timer if more remain
                     if self.queue:
                         self.queue_time = C.ENTITY_STATS[self.queue[0]]["build_time"]

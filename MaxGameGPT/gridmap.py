@@ -1,3 +1,4 @@
+
 import util as m
 import random
 import pygame
@@ -5,6 +6,8 @@ import Config as C
 from tiles import Tiles
 from PIL import Image
 from collections import Counter
+from opensimplex import OpenSimplex
+import numpy as np
 
 # ------------------ GRID/MAP ------------------
 class GridMap:
@@ -18,20 +21,26 @@ class GridMap:
 
         # map_width, map_height = image.size
 
-        self.w = C.MAP_WIDTH
-        self.h = C.MAP_HEIGHT
+        if C.AUTO_GENERATE_MAP:
+            tile_array, spawn_points = self.generate_map(seed=None)
+            self.save_png(tile_array, C.GENERATED_MAP)
+            print(f"Generated {C.SIZE}x{C.SIZE} map with spawns at: {spawn_points}")
+            image = Image.open(C.MAP_PATH)
+            MAP_WIDTH, MAP_HEIGHT = image.size
+
+        else:
+            image = Image.open(C.MAP_PATH)
+            MAP_WIDTH, MAP_HEIGHT = image.size
+
+        self.w = MAP_WIDTH
+        self.h = MAP_HEIGHT
         self.tiles = [[C.T_GRASS for _ in range(self.w)] for _ in range(self.h)]
         self.resource_tiles = [[C.T_GRASS for _ in range(self.w)] for _ in range(self.h)]
         self.resource_amounts = [[C.T_GRASS for _ in range(self.w)] for _ in range(self.h)]
 
-        # scatter some walls/resources
-        #for _ in range(150):
-        #    x = random.randrange(self.w)
-        #    y = random.randrange(self.h)
-        #    self.tiles[y][x] = random.choice([C.T_GRASS, C.T_GRASS, C.T_GRASS, C.T_WALL, C.T_RESOURCE])
         
         # Get Game Map
-        pixels = list(C.image.getdata())
+        pixels = list(image.getdata())        
         rgb_pixel = [t[:3] for t in pixels]
         self.spawns = []
         
@@ -41,10 +50,10 @@ class GridMap:
                     if value == rgb_pixel[j + i * self.w]:
 
                         # If Spawn, Note it and change it back grass
-                        if key == 3:
+                        if key == C.T_PLAYER_LOC:
                         #    key = 1
                             self.spawns.append((j,i))
-                            key = 0
+                            key = C.T_GRASS
                         self.tiles[i][j] = key
 
         if RESOURCE_MAP == True:
@@ -58,14 +67,14 @@ class GridMap:
 
                     for key, value in C.TILE_COLORS.items():
                         if value == rgb_pixel[j + i * self.w]:
-                            if key == 6:
+                            if key == C.T_WATER:
                                 resource_amount = 0
                             
-                            elif key in (2, 4) and (j, i) not in self.spawns:
+                            elif key in (C.T_RESOURCE, C.T_FUEL) and (j, i) not in self.spawns:
                                 resource_amount = random.randint(1, 8)
-                            elif key in (2, 4) and (j, i) in self.spawns:
+                            elif key in (C.T_RESOURCE, C.T_FUEL) and (j, i) in self.spawns:
                                 resource_amount = 15
-                            elif key == 5 and (j, i) not in self.spawns:
+                            elif key == C.T_GOLD and (j, i) not in self.spawns:
                                 resource_amount = random.randint(1, 4)
                             
                             self.resource_tiles[i][j] = key
@@ -74,7 +83,7 @@ class GridMap:
         else:
             # Random Resource Spawn
             RESOURCE_DENSITY = 0.12  # % of tiles that get a resource
-            RESOURCE_TYPES = [2, 4, 5]  # weight these however you like
+            RESOURCE_TYPES = [C.T_RESOURCE, C.T_FUEL, C.T_GOLD]  # weight these however you like
             RESOURCE_WEIGHTS = [1, 1, 1]
 
             for i in range(self.h):
@@ -82,30 +91,34 @@ class GridMap:
 
                     if (j, i) in self.spawns:
                         # Spawn tiles always get a guaranteed resource
-                        key = 2
+                        key = C.T_RESOURCE
                         resource_amount = 15
 
                     elif (j - 1, i - 1) in self.spawns:
                         # Giving Starting Fuel
-                        key = 4
+                        key = C.T_FUEL
                         resource_amount = 6
 
                     elif random.random() < RESOURCE_DENSITY:
                         key = random.choices(RESOURCE_TYPES, weights=RESOURCE_WEIGHTS, k=1)[0]
 
-                        if key in (2, 4):
+                        if key in (C.T_RESOURCE, C.T_FUEL):
                             resource_amount = random.randint(1, 12)
-                        elif key == 5:
+                        elif key == C.T_GOLD:
                             resource_amount = random.randint(1, 4)
 
                     else:
-                        key = 6
+                        key = C.T_BLANK
                         resource_amount = 0
 
                     self.resource_tiles[i][j] = key
                     self.resource_amounts[i][j] = resource_amount
 
         self.count = 0
+
+    @property
+    def get_tile(self):
+        return self.x, self.y
 
     def toggle_at(self, tx, ty, ttype):
         if m.in_bounds(tx, ty):
@@ -201,15 +214,134 @@ class GridMap:
             gm.tile_map[y][x] = Tiles.from_dict(td)
         return gm
     
-        #     # Split fields into init-accepted vs init=False
-        # init_fields = {f.name for f in fields(cls) if f.init}
-        # non_init_fields = [f.name for f in fields(cls) if not f.init]
 
-        # # Build the object using only what __init__ accepts
-        # filtered = {k: v for k, v in d.items() if k in init_fields}
-        # obj = cls(**filtered)
+    def generate_water_mask(self, seed: int) -> np.ndarray:
+        """Simplex noise thresholded into a boolean water/land mask.
 
-        # # Restore whatever __post_init__ would've computed, using saved values instead
-        # for name in non_init_fields:
-        #     if name in d:
-        #         setattr(obj, name, d[name])
+        OpenSimplex has no built-in octaves/persistence support like the
+        old `noise` library did, so octaves are summed manually here to
+        get the same layered "fractal noise" look.
+        """
+        gen = OpenSimplex(seed=seed)
+        mask = np.zeros((C.SIZE, C.SIZE), dtype=bool)
+        for y in range(C.SIZE):
+            for x in range(C.SIZE):
+                amplitude = 1.0
+                frequency = 1.0
+                total = 0.0
+                max_amplitude = 0.0
+                for _ in range(C.NOISE_OCTAVES):
+                    total += gen.noise2(
+                        x / C.NOISE_SCALE * frequency,
+                        y / C.NOISE_SCALE * frequency,
+                    ) * amplitude
+                    max_amplitude += amplitude
+                    amplitude *= C.NOISE_PERSISTENCE
+                    frequency *= C.NOISE_LACUNARITY
+                n = total / max_amplitude  # normalize back to roughly [-1, 1]
+                mask[y, x] = n < C.WATER_THRESHOLD
+        return mask
+
+
+    def smooth_mask(self, mask: np.ndarray, passes: int = C.SMOOTH_PASSES) -> np.ndarray:
+        """Cellular-automata majority smoothing to remove stray speckle
+        and clean up jagged coastlines left by raw noise thresholding."""
+        for _ in range(passes):
+            new_mask = mask.copy()
+            for y in range(C.SIZE):
+                for x in range(C.SIZE):
+                    water_neighbors = 0
+                    for dy in (-1, 0, 1):
+                        for dx in (-1, 0, 1):
+                            if dy == 0 and dx == 0:
+                                continue
+                            yy, xx = y + dy, x + dx
+                            if 0 <= yy < C.SIZE and 0 <= xx < C.SIZE:
+                                water_neighbors += mask[yy, xx]
+                    # slightly asymmetric threshold: water tiles need fewer
+                    # water neighbors to survive than land tiles need to flip
+                    if mask[y, x]:
+                        new_mask[y, x] = water_neighbors >= 5
+                    else:
+                        new_mask[y, x] = water_neighbors >= 6
+            mask = new_mask
+        return mask
+
+
+    def place_spawns(self, is_grass: np.ndarray, water_mask: np.ndarray,
+                    n: int = C.NO_OF_SPAWNS,
+                    min_dist: int = C.MIN_SPAWN_DIST,
+                    edge_margin: int = C.EDGE_MARGIN) -> list[tuple[int, int]]:
+        """Greedily pick spawn tiles on grass that are mutually far apart,
+        at least `edge_margin` tiles from the map border, and not touching
+        water (checked over the 8 surrounding neighbors)."""
+
+        def touches_water(y: int, x: int) -> bool:
+            for dy in (-1, 0, 1):
+                for dx in (-1, 0, 1):
+                    yy, xx = y + dy, x + dx
+                    if 0 <= yy < C.SIZE and 0 <= xx < C.SIZE and water_mask[yy, xx]:
+                        return True
+            return False
+
+        candidates = [
+            (y, x) for y, x in zip(*np.where(is_grass))
+            if edge_margin <= y < C.SIZE - edge_margin
+            and edge_margin <= x < C.SIZE - edge_margin
+            and not touches_water(y, x)
+        ]
+        random.shuffle(candidates)
+
+        spawns: list[tuple[int, int]] = []
+        for p in candidates:
+            if all((p[0] - s[0]) ** 2 + (p[1] - s[1]) ** 2 >= min_dist ** 2
+                for s in spawns):
+                spawns.append(p)
+            if len(spawns) >= n:
+                break
+
+        # Fallback: if the map is too cramped/watery to fit `n` spawns at
+        # min_dist apart, relax the distance requirement rather than
+        # silently returning fewer spawns than requested.
+        if len(spawns) < n and candidates:
+            spawns = []
+            relaxed_dist = min_dist
+            while len(spawns) < n and relaxed_dist > 0:
+                spawns = []
+                for p in candidates:
+                    if all((p[0] - s[0]) ** 2 + (p[1] - s[1]) ** 2 >= relaxed_dist ** 2
+                        for s in spawns):
+                        spawns.append(p)
+                    if len(spawns) >= n:
+                        break
+                relaxed_dist -= 2
+
+        return spawns
+
+
+    def generate_map(self, seed: int | None = None) -> tuple[np.ndarray, list[tuple[int, int]]]:
+        """Returns (SIZE x SIZE x 3 uint8 array, list of spawn (y, x) tiles)."""
+        if seed is None:
+            seed = random.randint(0, 999_999)
+        random.seed(seed)
+
+        water_mask = self.generate_water_mask(seed)
+        water_mask = self.smooth_mask(water_mask)
+        is_grass = ~water_mask
+
+        arr = np.zeros((C.SIZE, C.SIZE, 3), dtype='uint8')
+        arr[water_mask] = C.TILE_COLORS[C.T_WATER]
+        arr[is_grass] = C.TILE_COLORS[C.T_GRASS]
+
+        spawns = self.place_spawns(is_grass, water_mask)
+        for (y, x) in spawns:
+            arr[y, x] = C.TILE_COLORS[C.T_PLAYER_LOC]
+
+        return arr, spawns
+
+
+    def save_png(self, arr: np.ndarray, path: str, cell: int = C.CELL) -> None:
+        img = Image.fromarray(arr, 'RGB')
+        if cell != 1:
+            img = img.resize((C.SIZE * cell, C.SIZE * cell), Image.NEAREST)
+        img.save(path)
